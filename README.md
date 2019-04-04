@@ -1,6 +1,6 @@
 # zsh_custom
 
-My personal [omz][oh-my-zsh] custom directory for ZSH shell happiness.
+My personal [omz][oh-my-zsh] custom directory (`$ZSH_CUSTOM`) for ZSH shell happiness.
 
 ## Installation
 
@@ -34,10 +34,18 @@ cd $brainstormr
 
 ## Plugins
 
-External plugins are downloaded via the bin/clone_plugins.sh script
+Custom plugins go in the plugins folder. Oh-my-zsh allows overriding its plugins
+or making new ones.
+
+External plugins are as simple as doing a `git clone --depth 1`. A script for
+downloading my favorite ones is in the bin/clone_plugins.sh script.
 
 ```zsh
 $ZSH_CUSTOM/bin/clone_plugins.sh
 ```
+
+## Themes
+
+Custom themes go in the themes folder.
 
 [omz]: https://github.com/robbyrussell/oh-my-zsh
