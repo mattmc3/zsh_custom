@@ -1,0 +1,7 @@
+.DS_Store
+plugins/async
+plugins/fast-syntax-highlighting
+plugins/zsh-autosuggestions
+plugins/zsh-completions
+plugins/zsh-history-substring-search
+plugins/zsh-syntax-highlighting
