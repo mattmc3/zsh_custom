@@ -1,8 +1,16 @@
 # zsh_custom
 
-My personal oh-my-zsh custom directory for ZSH shell happiness.
+My personal [omz][oh-my-zsh] custom directory for ZSH shell happiness.
 
 ## Installation
+
+### Pre-reqs
+
+Install [omz][oh-my-zsh]:
+
+```zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+```
 
 ```zsh
 # be sure to install oh-my-zsh first
@@ -31,3 +39,5 @@ External plugins are downloaded via the bin/clone_plugins.sh script
 ```zsh
 $ZSH_CUSTOM/bin/clone_plugins.sh
 ```
+
+[omz]: https://github.com/robbyrussell/oh-my-zsh
