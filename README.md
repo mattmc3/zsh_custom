@@ -12,10 +12,25 @@ Install [oh-my-zsh](omz):
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 ```
 
+### Install this repo in $ZSH_CUSTOM
+
+You can replace the oh-my-zsh $ZSH_CUSTOM directory (~/.oh-my-zsh/custom)
+
 ```zsh
 # be sure to install oh-my-zsh first
 export ZSH_CUSTOM="${ZSH_CUSTOM:-~/.oh-my-zsh/custom}"
 rm -rfi "$ZSH_CUSTOM"
+git clone git@github.com:mattmc3/zsh_custom.git "$ZSH_CUSTOM"
+```
+
+Or, you can make a new one:
+
+```zsh
+# Edit your ~/.zshrc and add this line, replacing any existing ZSH_CUSTOM
+export ZSH_CUSTOM="~/path/to/my/zsh_custom"
+
+# Reload zsh and clone to the folder
+source ~/.zshrc
 git clone git@github.com:mattmc3/zsh_custom.git "$ZSH_CUSTOM"
 ```
 
