@@ -1,12 +1,12 @@
 # zsh_custom
 
-My personal [omz][oh-my-zsh] custom directory (`$ZSH_CUSTOM`) for ZSH shell happiness.
+My personal [oh-my-zsh](omz) custom directory (`$ZSH_CUSTOM`) for ZSH shell happiness.
 
 ## Installation
 
 ### Pre-reqs
 
-Install [omz][oh-my-zsh]:
+Install [oh-my-zsh](omz):
 
 ```zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
