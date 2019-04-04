@@ -1,44 +1,24 @@
+source "$ZSH"/plugins/common-aliases/common-aliases.plugin.zsh
+
 # https://medium.com/@webprolific/getting-started-with-dotfiles-43c3602fd789#.vh7hhm6th
 # https://github.com/webpro/dotfiles/blob/master/system/.alias
 # https://github.com/mathiasbynens/dotfiles/blob/master/.aliases
 
 # zsh only aliases {{{
-alias 1='cd -'
-alias 2='cd -2'
-alias 3='cd -3'
-alias 4='cd -4'
-alias 5='cd -5'
-alias 6='cd -6'
-alias 7='cd -7'
-alias 8='cd -8'
-alias 9='cd -9'
-
 alias cd..='cd ..'
 alias -g ..2='../..'
 alias -g ..3='../../..'
 alias -g ..4='../../../..'
 alias -g ..5='../../../../..'
-alias -g ...='../..'
-alias -g ....='../../..'
-alias -g .....='../../../..'
-alias -g ......='../../../../..'
+
 alias zshrc='ide "${ZDOTDIR:-$HOME}"/.zshrc'
 alias reload='source "${ZDOTDIR:-$HOME}"/.zshrc'
 
 # zsh pipes
-alias -g H='| head'
-alias -g T='| tail'
-alias -g G='| grep -E'
 alias -g S='| sort'
-alias -g L='| less'
-alias -g M='| more'
-# }}}
+
 
 # mask built-ins with better defaults
-alias cp='cp -i'
-alias mv='mv -i'
-alias rm='rm -i'
-alias ls='ls -GF'
 alias grep='grep  --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}'
 alias ping='ping -c 5'
 
@@ -48,13 +28,12 @@ alias mvi='mv -i'
 alias rmi='rm -i'
 
 #alias rm='echo "STOP using rm! Use \"safe-rm\" instead. Removing anyway." && safe-rm "$@"'
-alias del='safe-rm -i'
+#alias del='safe-rm -i'
 
 # single character shortcuts - be sparing!
 alias _='sudo'
 alias c='clear'
 alias d='dirs -v | head -10'
-alias g='git'
 alias v='nvim'
 alias h='history'
 
@@ -63,9 +42,6 @@ alias vi='nvim'
 alias vim='nvim'
 alias oldvim='\vim'
 alias cl='clear'
-alias py2='python2'
-alias py3='python3'
-alias py='python3'
 alias afind='ack -il'
 alias md='mkdir -p'
 alias rd=rmdir
@@ -76,13 +52,13 @@ alias zz=exit
 alias globurl='noglob urlglobber '
 
 # ls
+alias ls='ls -GF'
 alias ll='ls -lFh'
 alias l='ls -F'
 alias la='ls -lAFh'
 alias ldot='ls -ld .*'
 
 # fix typos
-alias cs='cd'  # darn colemak
 alias quit='exit'
 
 # tools
