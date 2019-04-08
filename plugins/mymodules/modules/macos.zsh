@@ -1,11 +1,6 @@
-source "$ZSH"/plugins/osx/osx.plugin.zsh
-
 alias lmk="say 'Process complete.'"
 alias showfiles="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
 alias hidefiles="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
-
-alias bcu="brew cu"
-alias pubkey="more ~/.ssh/id_rsa.pub | pbcopy | echo '=> Public key copied to clipboard.'"
 
 # Recursively clean files
 alias cleands="find . -name '.DS_Store' -depth -exec rm {} \;"

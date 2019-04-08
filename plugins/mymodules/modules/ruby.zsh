@@ -1,5 +1,3 @@
-source "$ZSH"/plugins/ruby/ruby.plugin.zsh
-
 gem_export() {
   gem list --local
 }

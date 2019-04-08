@@ -1,5 +1,3 @@
-source "$ZSH"/plugins/vscode/vscode.plugin.zsh
-
 vscode_export() {
   code --list-extensions
 }

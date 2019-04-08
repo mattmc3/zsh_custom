@@ -1,5 +1,3 @@
-source "$ZSH"/plugins/brew/brew.plugin.zsh
-
 export HOMEBREW_CASK_OPTS="${HOMEBREW_CASK_OPTS:---appdir=/Applications}"
 alias bcu="brew cu"
 

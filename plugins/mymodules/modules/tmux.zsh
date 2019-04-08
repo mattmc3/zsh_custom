@@ -1,5 +1,3 @@
-source "$ZSH"/plugins/tmux/tmux.plugin.zsh
-
 # tmux sucks at modern and uses -f instead of knowing about XDG
 if [[ -z "$XDG_CONFIG_HOME" ]]; then
   export TMUX_CONFIG="$HOME"/.tmux.conf

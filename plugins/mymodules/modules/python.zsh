@@ -1,5 +1,3 @@
-source "$ZSH"/plugins/python/python.plugin.zsh
-
 # python
 export WORKON_HOME="${WORKON_HOME:-$HOME/.virtualenvs}"
 
