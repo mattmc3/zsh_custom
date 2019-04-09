@@ -27,7 +27,7 @@ Or, you can make a new one:
 
 ```zsh
 # Edit your ~/.zshrc and add this line, replacing any existing ZSH_CUSTOM
-export ZSH_CUSTOM="~/path/to/my/zsh_custom"
+export ZSH_CUSTOM="~/.zsh_custom"
 
 # Reload zsh and clone to the folder
 source ~/.zshrc
