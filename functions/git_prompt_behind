@@ -1,0 +1,6 @@
+# $ZSH/lib/git.zsh
+
+# Outputs if current branch is behind remote
+if [[ -n "$(command git rev-list HEAD..origin/$(git_current_branch) 2> /dev/null)" ]]; then
+  echo "$ZSH_THEME_GIT_PROMPT_BEHIND"
+fi

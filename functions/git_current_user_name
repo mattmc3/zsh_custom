@@ -1,0 +1,5 @@
+# $ZSH/lib/git.zsh
+
+# Outputs the name of the current user
+# Usage example: $(git_current_user_name)
+command git config user.name 2>/dev/null

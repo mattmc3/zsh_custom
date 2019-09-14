@@ -1,0 +1,34 @@
+# $ZSH/lib/clipboard.zsh
+
+# clippaste - "Paste" data from clipboard to stdout
+#
+# Usage:
+#
+#   clippaste   - writes clipboard's contents to stdout
+#
+#   clippaste | <command>    - pastes contents and pipes it to another process
+#
+#   clippaste > <file>      - paste contents to a file
+#
+# Examples:
+#
+#   # Pipe to another process
+#   clippaste | grep foo
+#
+#   # Paste to a file
+#   clippaste > file.txt
+emulate -L zsh
+if [[ $OSTYPE == darwin* ]]; then
+  pbpaste
+elif [[ $OSTYPE == cygwin* ]]; then
+  cat /dev/clipboard
+else
+  if (( $+commands[xclip] )); then
+    xclip -out -selection clipboard
+  elif (( $+commands[xsel] )); then
+    xsel --clipboard --output
+  else
+    print "clipcopy: Platform $OSTYPE not supported or xclip/xsel not installed" >&2
+    return 1
+  fi
+fi

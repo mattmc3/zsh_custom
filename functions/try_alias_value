@@ -1,0 +1,13 @@
+# $ZSH/lib/functions.zsh
+#
+# Try to get the value of an alias,
+# otherwise return the input.
+#
+# Arguments:
+#    1. alias - The alias to get its value from
+# STDOUT:
+#    The value of alias $1, or $1 if there is no alias $1.
+# Return value:
+#    Always 0
+#
+alias_value "$1" || echo "$1"

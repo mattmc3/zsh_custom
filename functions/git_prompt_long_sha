@@ -1,0 +1,5 @@
+# $ZSH/lib/git.zsh
+
+# Formats prompt string for current git commit long SHA
+local SHA
+SHA=$(command git rev-parse HEAD 2> /dev/null) && echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$SHA$ZSH_THEME_GIT_PROMPT_SHA_AFTER"

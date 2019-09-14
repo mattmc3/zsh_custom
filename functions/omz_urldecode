@@ -1,0 +1,50 @@
+# $ZSH/lib/functions.zsh
+
+# Required for $langinfo
+zmodload zsh/langinfo
+
+
+# URL-decode a string
+#
+# Decodes a RFC 2396 URL-encoded (%-escaped) string.
+# This decodes the '+' and '%' escapes in the input string, and leaves
+# other characters unchanged. Does not enforce that the input is a
+# valid URL-encoded string. This is a convenience to allow callers to
+# pass in a full URL or similar strings and decode them for human
+# presentation.
+#
+# Outputs the encoded string on stdout.
+# Returns nonzero if encoding failed.
+#
+# Usage:
+#   omz_urldecode <urlstring>  - prints decoded string followed by a newline
+emulate -L zsh
+local encoded_url=$1
+
+# Work bytewise, since URLs escape UTF-8 octets
+local caller_encoding=$langinfo[CODESET]
+local LC_ALL=C
+export LC_ALL
+
+# Change + back to ' '
+local tmp=${encoded_url:gs/+/ /}
+# Protect other escapes to pass through the printf unchanged
+tmp=${tmp:gs/\\/\\\\/}
+# Handle %-escapes by turning them into `\xXX` printf escapes
+tmp=${tmp:gs/%/\\x/}
+local decoded
+eval "decoded=\$'$tmp'"
+
+# Now we have a UTF-8 encoded string in the variable. We need to re-encode
+# it if caller is in a non-UTF-8 locale.
+local safe_encodings
+safe_encodings=(UTF-8 utf8 US-ASCII)
+if [[ -z ${safe_encodings[(r)$caller_encoding]} ]]; then
+  decoded=$(echo -E "$decoded" | iconv -f UTF-8 -t $caller_encoding)
+  if [[ $? != 0 ]]; then
+    echo "Error converting string from UTF-8 to $caller_encoding" >&2
+    return 1
+  fi
+fi
+
+echo -E "$decoded"
