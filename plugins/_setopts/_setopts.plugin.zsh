@@ -1,20 +1,31 @@
 # no autocorrect
-unsetopt correct
-unsetopt correctall
+unsetopt CORRECT
+unsetopt CORRECTALL
 
 # changing directories
-setopt auto_cd
-setopt auto_pushd
-setopt pushd_ignore_dups
-setopt pushd_minus
+setopt AUTO_CD
+setopt AUTO_PUSHD
+setopt PUSHD_IGNORE_DUPS
+setopt PUSHD_MINUS
 
 # I/O
 # Allow comments even in interactive shells.
-setopt no_flow_control
+setopt NO_FLOW_CONTROL
 
 # prompting
-setopt prompt_subst
+setopt PROMPT_SUBST
 
 # zle
-setopt emacs
-setopt no_beep  # quiet!
+setopt EMACS
+setopt NO_BEEP  # quiet!
+
+# completions
+setopt COMPLETE_IN_WORD    # Complete from both ends of a word.
+setopt ALWAYS_TO_END       # Move cursor to the end of a completed word.
+setopt PATH_DIRS           # Perform path search even on command names with slashes.
+setopt AUTO_MENU           # Show completion menu on a successive tab press.
+setopt AUTO_LIST           # Automatically list choices on ambiguous completion.
+setopt AUTO_PARAM_SLASH    # If completed parameter is a directory, add a trailing slash.
+setopt EXTENDED_GLOB       # Needed for file modification glob modifiers with compinit
+unsetopt MENU_COMPLETE     # Do not autoselect the first completion entry.
+unsetopt FLOW_CONTROL      # Disable start/stop characters in shell editor.
