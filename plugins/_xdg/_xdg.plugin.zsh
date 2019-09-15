@@ -7,3 +7,18 @@ export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-$HOME/.xdg}"
+export USE_XDG_DIRS=true
+
+
+#
+# less
+#
+export LESSKEY="$XDG_CONFIG_HOME"/less/lesskey
+export LESSHISTFILE="$XDG_CACHE_HOME"/less/history
+[[ -f "$LESSHISTFILE" ]] || { mkdir -p $(dirname "$LESSHISTFILE") && touch $LESSHISTFILE }
+
+#
+# readline
+#
+export INPUTRC="$XDG_CONFIG_HOME"/readline/inputrc
+[[ -f "$INPUTRC" ]] || { mkdir -p $(dirname "$INPUTRC") && touch $INPUTRC }
