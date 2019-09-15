@@ -1,5 +1,11 @@
 # python
-export WORKON_HOME="${WORKON_HOME:-$HOME/.virtualenvs}"
+if [[ -z $WORKON_HOME ]]; then
+  if [[ $USE_XDG_DIRS = true ]]; then
+    export WORKON_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/venvs"
+  else
+    export WORKON_HOME="$HOME/.virtualenvs"
+  fi
+fi
 
 alias py2='python2'
 alias py3='python3'
@@ -14,16 +20,13 @@ workon() {
   [[ -z "$1" ]] && { echo "Expecting workon project name"; return 1; }
   source "$WORKON_HOME/$1/bin/activate"
 }
+# python: tab complete for workon dir (virtualenv)
+compdef '_files -W "$WORKON_HOME"' workon &> /dev/null
 
 pyclean() {
   find . -type f -name "*.py[co]" -delete
   find . -type d -name "__pycache__" -delete
 }
-
-if [[ -n $ZSH_VERSION ]]; then
-  # python: tab complete for workon dir (virtualenv)
-  compdef '_files -W "$WORKON_HOME"' workon &> /dev/null
-fi
 
 pip_export() {
   __pip_export "pip" "$@"
