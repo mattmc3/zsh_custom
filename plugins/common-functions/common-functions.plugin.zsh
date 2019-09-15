@@ -1,6 +1,3 @@
-# functions - only put things here that really should be loaded with each and
-# every shell instance
-
 up() {
   if [[ "$#" < 1 ]] ; then
     cd ..
@@ -13,24 +10,11 @@ up() {
   fi
 }
 
-shellname() {
-  ps -p $$ -ocomm= | sed -E -e 's/^.*[\/\-]//'
+# 'ls' after 'cd'
+# https://stackoverflow.com/questions/3964068/zsh-automatically-run-ls-after-every-cd
+function chpwd() {
+  if [[ "$LS_AFTER_CD" == "true" ]]; then
+    emulate -L zsh
+    ls
+  fi
 }
-
-# benchmark
-function benchmark() {
-  for i in $(seq 1 10); do
-    /usr/bin/time zsh -i -c exit
-  done
-}
-
-if [[ -n $ZSH_VERSION ]]; then
-  # 'ls' after 'cd'
-  # https://stackoverflow.com/questions/3964068/zsh-automatically-run-ls-after-every-cd
-  function chpwd() {
-    if [[ "$LS_AFTER_CD" == "true" ]]; then
-      emulate -L zsh
-      ls
-    fi
-  }
-fi
