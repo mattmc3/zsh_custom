@@ -1,2 +1,1 @@
-# no changes currently
-source $ZSH/lib/key-bindings.zsh
+# moved to a plugin
