@@ -79,6 +79,8 @@ alias po=popd
 alias pu=pushd
 alias zz=exit
 alias globurl='noglob urlglobber '
+alias pubkey="more ~/.ssh/id_rsa.pub | pbcopy | echo '=> Public key copied to clipboard.'"
+alias autorotate="jhead -autorot"
 
 # ls
 alias ll='ls -lFh'
@@ -117,3 +119,4 @@ alias fd='find . -type d -name'
 alias ff='find . -type f -name'
 alias dud='du -d 1 -h'
 alias duf='du -sh *'
+alias zbench="for i in \$(seq 1 10); do; /usr/bin/time zsh -i -c exit; done"
