@@ -13,3 +13,6 @@
 [submodule "plugins/history-substring-search/zsh-history-substring-search"]
 	path = plugins/history-substring-search/zsh-history-substring-search
 	url = https://github.com/zsh-users/zsh-history-substring-search.git
+[submodule "themes/spaceship-prompt"]
+	path = themes/spaceship-prompt
+	url = https://github.com/denysdovhan/spaceship-prompt.git
