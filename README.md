@@ -14,23 +14,26 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/mas
 
 ### Install this repo in $ZSH_CUSTOM
 
-You can replace the oh-my-zsh $ZSH_CUSTOM directory (~/.oh-my-zsh/custom)
+Make a `$ZSH_CUSTOM` directory:
 
 ```zsh
-# be sure to install oh-my-zsh first
-export ZSH_CUSTOM="${ZSH_CUSTOM:-~/.oh-my-zsh/custom}"
-rm -rfi "$ZSH_CUSTOM"
+# Clone this repo
+export ZSH_CUSTOM="$HOME/.zsh_custom"
 git clone git@github.com:mattmc3/zsh_custom.git "$ZSH_CUSTOM"
+
+# Edit your ~/.zshrc and add the ZSH_CUSTOM you just made to it
+export ZSH_CUSTOM="$HOME/.zsh_custom"
+
+# relaunch zsh
+zsh
 ```
 
-Or, you can make a new one:
+You could also replace the oh-my-zsh $ZSH_CUSTOM directory (`~/.oh-my-zsh/custom`)
 
 ```zsh
-# Edit your ~/.zshrc and add this line, replacing any existing ZSH_CUSTOM
-export ZSH_CUSTOM="~/.zsh_custom"
-
-# Reload zsh and clone to the folder
-source ~/.zshrc
+# if OMZ is installed already, then you should have a default ZSH_CUSTOM
+# that points to ~/.oh-my-zsh/custom
+rm -rfi "$ZSH_CUSTOM"
 git clone git@github.com:mattmc3/zsh_custom.git "$ZSH_CUSTOM"
 ```
 
@@ -52,12 +55,8 @@ cd $brainstormr
 Custom plugins go in the plugins folder. Oh-my-zsh allows overriding its plugins
 or making new ones.
 
-External plugins are as simple as doing a `git clone --depth 1`. A script for
-downloading my favorite ones is in the bin/clone_plugins.sh script.
-
-```zsh
-$ZSH_CUSTOM/bin/clone_plugins.sh
-```
+External plugins are handled as git submodules. Or, alternatively, doing a
+`git clone --depth 1`.
 
 ## Themes
 
