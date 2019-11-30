@@ -1,3 +1,5 @@
+# I don't care for all the aliases in the existing omz git plugin
+
 alias get="git"
 alias g="git"
 alias gadd="git add ."

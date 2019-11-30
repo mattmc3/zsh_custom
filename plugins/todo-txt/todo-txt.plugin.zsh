@@ -1,4 +1,4 @@
-if [[ $USE_XDG_DIRS == true ]]; then
+if [[ -n "$XDG_CONFIG_HOME" ]]; then
   export TODOTXT_CFG_FILE="$XDG_CONFIG_HOME"/todo-txt/config
 else
   export TODOTXT_CFG_FILE="$HOME"/.todo/config

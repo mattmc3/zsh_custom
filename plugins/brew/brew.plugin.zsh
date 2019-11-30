@@ -1,3 +1,6 @@
+# the builtin omz brew plugin is not any good
+# override the whole thing
+
 export HOMEBREW_NO_ANALYTICS=1
 export HOMEBREW_CASK_OPTS="${HOMEBREW_CASK_OPTS:---appdir=/Applications}"
 alias bcu="brew cu"

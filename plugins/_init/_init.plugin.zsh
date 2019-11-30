@@ -1,3 +1,6 @@
+##
+# Options
+
 # no autocorrect
 unsetopt CORRECT
 unsetopt CORRECTALL
@@ -29,3 +32,21 @@ setopt AUTO_PARAM_SLASH    # If completed parameter is a directory, add a traili
 setopt EXTENDED_GLOB       # Needed for file modification glob modifiers with compinit
 unsetopt MENU_COMPLETE     # Do not autoselect the first completion entry.
 unsetopt FLOW_CONTROL      # Disable start/stop characters in shell editor.
+
+##
+# XDG
+# https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
+# https://wiki.archlinux.org/index.php/XDG_Base_Directory
+export XDG_CONFIG_HOME=~/.config
+export XDG_CACHE_HOME=~/.cache
+export XDG_DATA_HOME=~/.local/share
+export XDG_RUNTIME_DIR=~/.xdg
+
+# less
+export LESSKEY="$XDG_CONFIG_HOME"/less/lesskey
+export LESSHISTFILE="$XDG_CACHE_HOME"/less/history
+[[ -f "$LESSHISTFILE" ]] || { mkdir -p $(dirname "$LESSHISTFILE") && touch $LESSHISTFILE }
+
+# readline
+export INPUTRC="$XDG_CONFIG_HOME"/readline/inputrc
+[[ -f "$INPUTRC" ]] || { mkdir -p $(dirname "$INPUTRC") && touch $INPUTRC }

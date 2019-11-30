@@ -18,7 +18,7 @@ export DOTFILES=$HOME/.config/dotfiles
 export ZSH=${ZDOTDIR:-$HOME}/.oh-my-zsh
 
 if [[ ! -d "$ZSH" ]]; then
-  git clone https://github.com/robbyrussell/oh-my-zsh.git --depth=1 "$ZSH"
+  git clone https://github.com/ohmyzsh/ohmyzsh.git --depth=1 "$ZSH"
 fi
 
 # Would you like to use another custom folder than $ZSH/custom?
@@ -95,39 +95,43 @@ HIST_STAMPS="yyyy-mm-dd"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
 	# first
-  _setopts
-	_xdg
+  _init
   async
 
 	# omz
   colored-man-pages
+  history
+  extract
+  copyfile
+  copydir
+  sublime
   z
 
   # custom
+  aliases
   autosuggestions
   brew
+  cdls
   colemak
-  common-aliases
-  common-functions
+  aliases
   completions
   dotfiles
-  fast-syntax-highlighting
   git
   golang
   groovy
-  history
   history-substring-search
   java
   jupyter
-  key-bindings
   lpass
   macos
   python
   ruby
-  sublime
+  safe-rm
   tmux
   todo-txt
+  up
   vscode
+  zfunctions
 
   # last
   fast-syntax-highlighting
@@ -183,9 +187,5 @@ path=(
 
 typeset -gxU path
 
-# add functions
-fpath=(~/.config/zsh/functions $fpath);
-autoload -U ~/.config/zsh/functions/*(.:t)
-
 # machine specific settings
-[[ -f "${DOTFILES}"/local/zsh/zsh/zshrc.local.zsh ]] && . "${DOTFILES}"/local/zsh/zsh/zshrc.local.zsh
+[[ -f "${ZDOTDIR:-$HOME}"/.zshrc.local ]] && . "${ZDOTDIR:-$HOME}"/.zshrc.local

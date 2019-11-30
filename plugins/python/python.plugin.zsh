@@ -1,6 +1,6 @@
 # python
 if [[ -z $WORKON_HOME ]]; then
-  if [[ $USE_XDG_DIRS = true ]]; then
+  if [[ -n "$XDG_DATA_HOME" ]]; then
     export WORKON_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/venvs"
   else
     export WORKON_HOME="$HOME/.virtualenvs"

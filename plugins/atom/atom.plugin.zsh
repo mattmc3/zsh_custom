@@ -1,6 +1,4 @@
-export VISUAL="${VISUAL:-atom}"
-
-if [[ $USE_XDG_DIRS == true ]]; then
+if [[ -n "$XDG_CONFIG_HOME" ]]; then
   export ATOM_HOME="$XDG_CONFIG_HOME"/atom
 else
   export ATOM_HOME="$HOME"/.atom
