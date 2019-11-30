@@ -9,7 +9,7 @@ My personal [oh-my-zsh](omz) custom directory (`$ZSH_CUSTOM`) for ZSH shell happ
 Install [oh-my-zsh](omz):
 
 ```zsh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ```
 
 ### Install this repo in $ZSH_CUSTOM
@@ -18,11 +18,11 @@ Make a `$ZSH_CUSTOM` directory:
 
 ```zsh
 # Clone this repo
-export ZSH_CUSTOM="$HOME/.zsh_custom"
+export ZSH_CUSTOM="${ZDOTDIR:-$HOME}/.zsh_custom"
 git clone git@github.com:mattmc3/zsh_custom.git "$ZSH_CUSTOM"
 
 # Edit your ~/.zshrc and add the ZSH_CUSTOM you just made to it
-export ZSH_CUSTOM="$HOME/.zsh_custom"
+export ZSH_CUSTOM="${ZDOTDIR:-$HOME}/.zsh_custom"
 
 # relaunch zsh
 zsh
@@ -62,4 +62,4 @@ External plugins are handled as git submodules. Or, alternatively, doing a
 
 Custom themes go in the themes folder.
 
-[omz]: https://github.com/robbyrussell/oh-my-zsh
+[omz]: https://github.com/ohmyzsh/ohmyzsh
