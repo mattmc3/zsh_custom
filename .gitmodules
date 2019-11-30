@@ -13,3 +13,6 @@
 [submodule "themes/spaceship-prompt"]
 	path = themes/spaceship-prompt
 	url = https://github.com/denysdovhan/spaceship-prompt.git
+[submodule "plugins/safe-rm/shell-safe-rm"]
+	path = plugins/safe-rm/shell-safe-rm
+	url = https://github.com/kaelzhang/shell-safe-rm.git
