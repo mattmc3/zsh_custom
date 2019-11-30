@@ -1,5 +1,0 @@
-# $ZSH/lib/git.zsh
-
-# Outputs the email of the current user
-# Usage example: $(git_current_user_email)
-command git config user.email 2>/dev/null

@@ -1,2 +1,0 @@
-# $ZSH/lib/functions.zsh
-mkdir -p $@ && cd ${@:$#}

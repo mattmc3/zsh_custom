@@ -1,9 +1,0 @@
-# $ZSH/lib/git.zsh
-
-# Gets the number of commits ahead from remote
-if command git rev-parse --git-dir &>/dev/null; then
-  local commits="$(git rev-list --count @{upstream}..HEAD 2>/dev/null)"
-  if [[ -n "$commits" && "$commits" != 0 ]]; then
-    echo "$ZSH_THEME_GIT_COMMITS_AHEAD_PREFIX$commits$ZSH_THEME_GIT_COMMITS_AHEAD_SUFFIX"
-  fi
-fi
