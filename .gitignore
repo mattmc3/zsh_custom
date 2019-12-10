@@ -2,3 +2,4 @@
 external/
 *.zwc
 *.zwc.old
+themes/*/
