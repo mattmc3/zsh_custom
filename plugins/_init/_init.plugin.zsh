@@ -50,3 +50,9 @@ export LESSHISTFILE="$XDG_CACHE_HOME"/less/history
 # readline
 export INPUTRC="$XDG_CONFIG_HOME"/readline/inputrc
 [[ -f "$INPUTRC" ]] || { mkdir -p $(dirname "$INPUTRC") && touch $INPUTRC }
+
+# omz admin
+function omzup {
+  env ZSH=$ZSH ZSH_CACHE_DIR=$ZSH_CACHE_DIR DISABLE_UPDATE_PROMPT=true zsh -f $ZSH/tools/check_for_upgrade.sh
+  find $ZSH_CUSTOM -type d -name .git -prune -print -execdir git pull \;
+}
