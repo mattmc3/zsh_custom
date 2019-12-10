@@ -1,6 +1,8 @@
-# the original file has a ton of garbage just to set a simple grep alias
-if [[ "$OSTYPE" == darwin* ]]; then
-  alias grep="grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}"
+_grep_alias_cache=("$ZSH_CACHE_DIR"/grep_alias.zsh(Nm-24))
+if (( $#_grep_alias_cache )); then
+  source "$ZSH_CACHE_DIR"/grep_alias.zsh
 else
-  . $ZSH/lib/grep.zsh
+  source "$ZSH"/lib/grep.zsh
+  echo "alias $(alias grep)" >| "$ZSH_CACHE_DIR"/grep_alias.zsh
 fi
+unset _grep_alias_cache
