@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := help
 
 submodules:
-	git submodule -q foreach git pull -q origin master
+	git submodule update --recursive --remote
 
 help:
 	@echo "help"
