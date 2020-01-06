@@ -5,4 +5,7 @@ else
   export _Z_DATA="$HOME"/.z
 fi
 
-source $ZSH/plugins/z/z.plugin.zsh
+if [[ ! -d "${0:A:h}/external" ]]; then
+  git clone --depth=1 --recursive https://github.com/rupa/z.git "${0:A:h}/external"
+fi
+source "${0:A:h}/external/z.sh"
