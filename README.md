@@ -17,12 +17,17 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 Make a `$ZSH_CUSTOM` directory:
 
 ```zsh
-# Clone this repo
+# clone this repo
 export ZSH_CUSTOM="${ZDOTDIR:-$HOME}/.zsh_custom"
 git clone git@github.com:mattmc3/zsh_custom.git "$ZSH_CUSTOM"
 
-# Edit your ~/.zshrc and add the ZSH_CUSTOM you just made to it
+# For oh-my-zsh...
+# edit your ~/.zshrc and add the ZSH_CUSTOM you just made to it
 export ZSH_CUSTOM="${ZDOTDIR:-$HOME}/.zsh_custom"
+
+# Or, for prezto...
+# edit your .zpreztorc
+zstyle ':prezto:load' pmodule-dirs ${ZDOTDIR:-$HOME}/.zsh_custom/plugins
 
 # relaunch zsh
 zsh
