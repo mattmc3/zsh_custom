@@ -22,13 +22,13 @@ function gacp {
     return 1
   fi
 
-  curbranch=$(git rev-parse --abbrev-ref HEAD)
+  curbranch=$(git -C "$PWD" rev-parse --abbrev-ref HEAD)
   if [[ $? -ne 0 ]]; then
     echo "gacp: Not in a git repo" >&2
     return 1
   fi
 
-  if [[ "$curbranch" = "master" ]]
+  if [[ "$curbranch" = "master" ]]; then
     while true; do
       read "?You are about to add/commit/push to master. Are you sure? [y/n] " yn
       case $yn in
@@ -37,8 +37,9 @@ function gacp {
         * ) echo "Please answer yes or no.";;
       esac
     done
+  fi
 
-    git add .
-    git commit -am "$1"
-    git push
+  git add .
+  git commit -am "$1"
+  git push
 }
