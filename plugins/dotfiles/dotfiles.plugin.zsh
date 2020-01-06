@@ -3,4 +3,4 @@ if [[ -z $XDG_CONFIG_HOME ]]; then
 else
   export DOTFILES="${DOTFILES:-$XDG_CONFIG_HOME/dotfiles}"
 fi
-alias dotf='cd "$DOTFILES"'
+alias dotf='cd "$DOTFILES" && $VISUAL .'
