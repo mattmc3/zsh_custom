@@ -105,7 +105,7 @@ alias get="git"
 alias gadd="git add ."
 alias gcm="git checkout master"
 alias gcd="git checkout develop"
-alias gcb="git checkout -b"
+# alias gcb="git checkout -b"
 alias sourcetree='open -a SourceTree'
 
 # jupyter
