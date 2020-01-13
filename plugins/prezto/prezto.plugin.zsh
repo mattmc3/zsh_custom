@@ -1,1 +1,1 @@
-# todo
+# alias preztoup='git -C "$ZPREZTODIR" pull'
