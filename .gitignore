@@ -3,3 +3,4 @@ external/
 *.zwc
 *.zwc.old
 themes/*/
+prompt_spaceship_setup
