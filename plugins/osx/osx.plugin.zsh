@@ -1,5 +1,5 @@
 # extend rather than override
-zstyle -t ":prezto:module:_prezto" loaded 'yes' && prezto-extend-module osx
+zstyle -t ":prezto:module:prezto" loaded 'yes' && prezto-extend-module osx
 
 alias lmk="say 'Process complete.'"
 alias showfiles="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"

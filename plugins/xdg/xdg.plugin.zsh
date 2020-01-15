@@ -41,6 +41,7 @@ export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME/jupyter"
 ### less ------------------------------------------------------------------- {{{
 export LESSKEY="$XDG_CONFIG_HOME/less/lesskey"
 export LESSHISTFILE="$XDG_CACHE_HOME/less/history"
+[[ -f "$LESSHISTFILE" ]] || { mkdir -p $(dirname "$LESSHISTFILE") && touch $LESSHISTFILE }
 
 
 ### libdvdcss -------------------------------------------------------------- {{{
@@ -65,6 +66,7 @@ export PGSERVICEFILE="$XDG_CONFIG_HOME/pg/pg_service.conf"
 
 ### readline --------------------------------------------------------------- {{{
 export INPUTRC="$XDG_CONFIG_HOME/readline/inputrc"
+[[ -f "$INPUTRC" ]] || { mkdir -p $(dirname "$INPUTRC") && touch $INPUTRC }
 
 
 ### ruby ------------------------------------------------------------------- {{{
