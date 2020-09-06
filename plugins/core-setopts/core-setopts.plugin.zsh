@@ -1,5 +1,5 @@
 # http://zsh.sourceforge.net/Doc/Release/Options.html
-echo "setopts"
+
 # Changing Directories
 # http://zsh.sourceforge.net/Doc/Release/Options.html#Changing-Directories
 setopt auto_cd                 # if a command isn't valid, but is a directory, cd to that dir
