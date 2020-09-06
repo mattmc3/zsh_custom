@@ -1,6 +1,3 @@
-# extend rather than override
-# zstyle -t ":prezto:module:prezto" loaded 'yes' && prezto-extend-module python
-
 # python
 if [[ -z $WORKON_HOME ]]; then
   if [[ -n "$XDG_DATA_HOME" ]]; then
@@ -19,10 +16,6 @@ alias pyfind='find . -name "*.py"'
 alias pygrep='grep --include="*.py"'
 alias pyva="source .venv/bin/activate"
 
-workon() {
-  [[ -z "$1" ]] && { echo "Expecting workon project name"; return 1; }
-  source "$WORKON_HOME/$1/bin/activate"
-}
 # python: tab complete for workon dir (virtualenv)
 compdef '_files -W "$WORKON_HOME"' workon &> /dev/null
 
