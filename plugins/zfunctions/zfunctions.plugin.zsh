@@ -1,9 +1,7 @@
 # Adds support for a ${ZDOTDIR:-$HOME}/zfunctions directory to contain
 # lazy-loaded zsh functions
 
-_dotprefix="."
-[[ -n "$ZDOTDIR" ]] && _dotprefix=""
-ZFUNCDIR="${ZFUNCDIR:-${ZDOTDIR:-$HOME}}"/${_dotprefix}zfunctions
+ZFUNCDIR="${ZFUNCDIR:-${ZDOTDIR:-$HOME}}"/.zfunctions
 [[ -d "$ZFUNCDIR" ]] || return 1
 
 fpath=("$ZFUNCDIR" $fpath)
