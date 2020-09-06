@@ -1,4 +1,4 @@
-_zz_completions() {
+_zz_compinit() {
   # https://github.com/sorin-ionescu/prezto/blob/master/modules/completion/init.zsh#L31-L41
   # http://zsh.sourceforge.net/Doc/Release/Completion-System.html#Use-of-compinit
   # https://gist.github.com/ctechols/ca1035271ad134841284#gistcomment-2894219
@@ -16,5 +16,5 @@ _zz_completions() {
     { [[ ! -f "$zcdc" || "$zcd" -nt "$zcdc" ]] && command rm -f "$zcdc" && zcompile "$zcd" } &!
   fi
 }
-_zz_completions
-unfunction _zz_completions
+_zz_compinit
+unfunction _zz_compinit
