@@ -1,4 +1,5 @@
-# I don't care for all the aliases in the existing omz git plugin
+0=${(%):-%N}
+extend-framework-plugin "${0:r:r}"
 
 alias get="git"
 alias gadd="git add ."

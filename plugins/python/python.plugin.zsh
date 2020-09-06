@@ -1,3 +1,6 @@
+0=${(%):-%N}
+# extend-framework-plugin "${0:r:r}"
+
 # python
 if [[ -z $WORKON_HOME ]]; then
   if [[ -n "$XDG_DATA_HOME" ]]; then

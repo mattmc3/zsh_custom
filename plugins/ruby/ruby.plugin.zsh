@@ -1,3 +1,6 @@
+0=${(%):-%N}
+extend-framework-plugin "${0:r:r}"
+
 gem_export() {
   gem list --local
 }

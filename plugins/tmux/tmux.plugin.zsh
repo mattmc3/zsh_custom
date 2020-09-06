@@ -1,5 +1,5 @@
-# extend rather than override
-zstyle -t ":prezto:module:prezto" loaded 'yes' && prezto-extend-module tmux
+0=${(%):-%N}
+extend-framework-plugin "${0:r:r}"
 
 # tmux sucks at modern and uses -f instead of knowing about XDG
 if [[ -n "$XDG_CONFIG_HOME" ]]; then
