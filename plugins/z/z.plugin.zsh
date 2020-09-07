@@ -1,8 +1,6 @@
-if [[ -n "$XDG_DATA_HOME" ]]; then
-  [[ -d "$XDG_DATA_HOME"/z ]] || mkdir -p "$XDG_DATA_HOME"/z
-  export _Z_DATA="$XDG_DATA_HOME"/z/data
-else
-  export _Z_DATA="$HOME"/.z
+if [[ -z $_Z_DATA ]]; then
+  export _Z_DATA="${XDG_DATA_HOME:-$HOME/.local/share}"/.z
+  [[ -f "$_Z_DATA" ]] || { mkdir -p $(dirname "$_Z_DATA") && touch $_Z_DATA }
 fi
 
 if [[ ! -d "${0:A:h}/external" ]]; then

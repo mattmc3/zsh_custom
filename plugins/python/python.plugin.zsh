@@ -1,13 +1,9 @@
 0=${(%):-%N}
 # extend-framework-plugin "${0:r:r}"
 
-# python
 if [[ -z $WORKON_HOME ]]; then
-  if [[ -n "$XDG_DATA_HOME" ]]; then
-    export WORKON_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/venvs"
-  else
-    export WORKON_HOME="$HOME/.virtualenvs"
-  fi
+  export WORKON_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"/venvs
+  [[ -d "$WORKON_HOME" ]] || { mkdir -p "$WORKON_HOME" }
 fi
 
 alias py2='python2'

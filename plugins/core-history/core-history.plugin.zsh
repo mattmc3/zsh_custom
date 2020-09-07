@@ -14,18 +14,12 @@ setopt hist_verify             # don't execute immediately upon history expansio
 setopt inc_append_history      # write to the history file immediately, not when the shell exits
 unsetopt share_history         # don't share history between all sessions
 
-if [[ -z "$SAVEHIST" ]] || [[ $SAVEHIST -le 1000 ]]; then
-  SAVEHIST=5000
+# you can set $SAVEHIST and $HISTSIZE to anything greater than 1000 and 2000
+# respectively, but if not we'll set the values to 5000 and 10000.
+HISTFILE="${XDG_DATA_HOME:-$HOME/.local/share}"/history
+[[ -f "$HISTFILE" ]] || { mkdir -p $(dirname "$HISTFILE") && touch $HISTFILE }
+if [[ ! -L "${ZDOTDIR:-$HOME}"/.zsh_history ]]; then
+  ln -sf "$HISTFILE" "${ZDOTDIR:-$HOME}"/.zsh_history
 fi
-if [[ -z "$HISTSIZE" ]] || [[ $HISTSIZE -le 2000 ]]; then
-  HISTSIZE=10000
-fi
-if [[ -n "$XDG_DATA_HOME" ]] && [[ -d "$XDG_DATA_HOME" ]]; then
-  [[ -d "$XDG_DATA_HOME"/zsh ]] || mkdir -p "$XDG_DATA_HOME"/zsh
-  HISTFILE="$XDG_DATA_HOME/zsh/history"
-  if [[ ! -f "${ZDOTDIR:-$HOME}/.zsh_history" ]]; then
-    ln -sf "$HISTFILE" "${ZDOTDIR:-$HOME}/.zsh_history"
-  fi
-else
-  HISTFILE="${ZDOTDIR:-$HOME}/.zsh_history"
-fi
+[[ $SAVEHIST -gt 1000 ]] || SAVEHIST=5000
+[[ $HISTSIZE -gt 2000 ]] || HISTSIZE=10000
