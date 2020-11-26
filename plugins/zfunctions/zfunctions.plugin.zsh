@@ -1,17 +1,23 @@
 # Adds support for a ${ZDOTDIR:-$HOME}/zfunctions directory to contain
 # lazy-loaded zsh functions
+if [[ -z $ZFUNCTIONS ]]; then
+  if [[ -n $ZDOTDIR ]]; then
+    ZFUNCTIONS="${ZDOTDIR}/zfunctions"
+  else
+    ZFUNCTIONS="${HOME}/.zfunctions"
+  fi
+fi
 
-ZFUNCDIR="${ZFUNCDIR:-${ZDOTDIR:-$HOME}}"/.zfunctions
-[[ -d "$ZFUNCDIR" ]] || return 1
+[[ -d "$ZFUNCTIONS" ]] || mkdir -p "$ZFUNCTIONS"
+fpath=("$ZFUNCTIONS" $fpath)
 
-fpath=("$ZFUNCDIR" $fpath)
-for _zfunc in "$ZFUNCDIR"/*(.N); do
+for _zfunc in "$ZFUNCTIONS"/*(.N); do
   autoload -Uz "$_zfunc"
 done
 unset _zfunc
 
 function funcsave {
-  ### save a function to $ZFUNCDIR for lazy loading
+  ### save a function to $ZFUNCTIONS for lazy loading
 
   # check args
   if [[ -z "$1" ]]; then
@@ -24,7 +30,7 @@ function funcsave {
   autoload +X "$1" > /dev/null
 
   # remove first/last lines (ie: 'function foo {' and '}') and de-indent one level
-  type -f "$1" | awk 'NR>2 {print prev} {gsub(/^\t/, "", $0); prev=$0}' >| "$ZFUNCDIR/$1"
+  type -f "$1" | awk 'NR>2 {print prev} {gsub(/^\t/, "", $0); prev=$0}' >| "$ZFUNCTIONS/$1"
 }
 
 function funced {
@@ -36,8 +42,8 @@ function funced {
   fi
 
   # new function definition: make a file template
-  if [[ ! -f "$ZFUNCDIR/$1" ]]; then
-    cat <<eos > "$ZFUNCDIR/$1"
+  if [[ ! -f "$ZFUNCTIONS/$1" ]]; then
+    cat <<eos > "$ZFUNCTIONS/$1"
 # Add function internals here.
 # Do NOT include function definition (ie: omit 'function $1() {').
 # See: http://zsh.sourceforge.net/Doc/Release/Functions.html#Autoloading-Functions
@@ -46,8 +52,8 @@ eos
 
   # open the function file
   if [[ -z "$VISUAL" ]]; then
-    $VISUAL "$ZFUNCDIR/$1"
+    $VISUAL "$ZFUNCTIONS/$1"
   else
-    ${EDITOR:-nano} "$ZFUNCDIR/$1"
+    ${EDITOR:-nano} "$ZFUNCTIONS/$1"
   fi
 }
