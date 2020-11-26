@@ -4,5 +4,5 @@ if ! (( $chpwd_functions[(I)chpwd_cdls] )); then
 fi
 function chpwd_cdls() {
   emulate -L zsh
-  \ls -FG
+  ls
 }
