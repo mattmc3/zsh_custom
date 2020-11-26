@@ -1,5 +1,4 @@
-0=${(%):-%N}
-extend-framework-plugin "${0:r:r}"
+source $ZSH/plugins/ruby/ruby.plugin.zsh
 
 gem_export() {
   gem list --local

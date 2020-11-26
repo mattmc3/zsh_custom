@@ -1,5 +1,4 @@
-0=${(%):-%N}
-extend-framework-plugin "${0:r:r}"
+source $ZSH/plugins/tmux/tmux.plugin.zsh
 
 # tmux sucks at modern and uses -f instead of knowing about XDG
 if [[ -n "$XDG_CONFIG_HOME" ]]; then

@@ -1,5 +1,4 @@
-0=${(%):-%N}
-extend-framework-plugin "${0:r:r}"
+source $ZSH/plugins/git/git.plugin.zsh
 
 alias get="git"
 alias gadd="git add ."

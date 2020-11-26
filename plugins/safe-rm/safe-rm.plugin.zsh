@@ -1,4 +1,3 @@
-0=${(%):-%N}
 if [[ ! -d "${0:A:h}/external" ]]; then
   git clone --depth=1 --recursive https://github.com/kaelzhang/shell-safe-rm.git "${0:A:h}/external"
 fi
