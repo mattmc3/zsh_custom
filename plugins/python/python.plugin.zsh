@@ -14,8 +14,3 @@ alias pyva="source .venv/bin/activate"
 
 # python: tab complete for workon dir (virtualenv)
 compdef '_files -W "$WORKON_HOME"' workon &> /dev/null
-
-for _f in "${0:A:h}/functions"/*(.N); do
-  autoload -Uz "$_f"
-done
-unset _f
