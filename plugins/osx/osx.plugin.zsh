@@ -1,5 +1,4 @@
-0=${(%):-%N}
-extend-framework-plugin "${0:r:r}"
+source $ZSH/plugins/osx/osx.plugin.zsh
 
 alias lmk="say 'Process complete.'"
 alias showfiles="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
