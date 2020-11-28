@@ -1,4 +1,4 @@
-source $ZSH/plugins/osx/osx.plugin.zsh
+source_base_plugin osx
 
 alias lmk="say 'Process complete.'"
 alias showfiles="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"

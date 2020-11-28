@@ -1,4 +1,4 @@
-source $ZSH/plugins/git/git.plugin.zsh
+source_base_plugin git
 
 alias get="git"
 alias gadd="git add ."

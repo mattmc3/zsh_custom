@@ -39,8 +39,6 @@ if [[ -n $ZSH_VERSION ]]; then
   alias -g M='| more'
 fi
 
-alias dotf='cd "$DOTFILES" && $VISUAL .'
-
 # mask built-ins with better defaults
 alias cp='cp -i'
 alias mv='mv -i'
@@ -130,3 +128,6 @@ alias zdot='cd $ZDOTDIR'
 
 # auto-orient images based on exif tags
 alias autorotate="jhead -autorot"
+
+alias zcust='cd "$ZSH_CUSTOM" && ${VISUAL:-code} .'
+alias dotf='cd "$DOTFILES" && ${VISUAL:-code} .'

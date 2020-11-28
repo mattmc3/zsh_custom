@@ -1,4 +1,4 @@
-source $ZSH/plugins/tmux/tmux.plugin.zsh
+source_base_plugin tmux
 
 # tmux sucks at modern and uses -f instead of knowing about XDG
 if [[ -n "$XDG_CONFIG_HOME" ]]; then

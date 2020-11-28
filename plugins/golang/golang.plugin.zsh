@@ -1,4 +1,4 @@
-source $ZSH/plugins/golang/golang.plugin.zsh
+source_base_plugin golang
 
 export GLOBALGOPATH=$HOME/Projects/golang
 export GOPATH=$GLOBALGOPATH

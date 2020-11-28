@@ -1,4 +1,4 @@
-source $ZSH/plugins/ruby/ruby.plugin.zsh
+source_base_plugin ruby
 
 gem_export() {
   gem list --local
