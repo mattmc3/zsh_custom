@@ -7,5 +7,6 @@ if [[ -z $DOTFILES ]]; then
 fi
 
 if [[ -n $DOTFILES ]]; then
+  alias cddotf='cd "$DOTFILES"'
   alias dotf='cd "$DOTFILES" && ${VISUAL:-$EDITOR} .'
 fi
