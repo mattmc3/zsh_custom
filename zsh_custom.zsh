@@ -11,7 +11,3 @@ for _p in $plugins; do
   fi
 done
 unset _p _f
-
-function source_base_plugin() {
-  source "${ZSH}/plugins/${1}/${1}.plugin.zsh"
-}

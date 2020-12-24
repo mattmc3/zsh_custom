@@ -1,3 +1,4 @@
 # lib
 
-Override oh-my-zsh lib scripts. This isn't needed unless we're using OMZ.
+Override any oh-my-zsh lib scripts by creating an equivalent file here to the
+corresponding one in `$ZSH/lib`.
