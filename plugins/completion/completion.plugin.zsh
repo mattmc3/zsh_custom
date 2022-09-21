@@ -9,7 +9,4 @@ fi
 fpath+=$ZSH_CUSTOM/.external/zsh-completions/src
 source $ZSH_CUSTOM/.external/belak/zsh-utils/completion/completion.plugin.zsh
 
-zstyle -s ':zephyr:plugins:completion' compstyle \
-  '_compstyle' || _compstyle=zshzoo
-compstyle $_compstyle
-unset _compstyle
+compstyle zshzoo
