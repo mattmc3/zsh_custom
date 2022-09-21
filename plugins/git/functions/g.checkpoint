@@ -1,0 +1,2 @@
+# vi: ft=zsh
+git add -A && git commit -m Checkpoint $(date -u +'%Y-%m-%dT%H:%M:%SZ')
