@@ -6,6 +6,9 @@ if (( $+commands[brew] )); then
   unset brew_prefix
 fi
 
+# use custom completions
+fpath=(${ZSH_CUSTOM}/completions(-/FN) $fpath)
+
 fpath+=$ZSH_CUSTOM/.external/zsh-completions/src
 source $ZSH_CUSTOM/.external/belak/zsh-utils/completion/completion.plugin.zsh
 
