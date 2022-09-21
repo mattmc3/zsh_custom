@@ -17,10 +17,11 @@ fi
   local lastupdated="$ZSH_CUSTOM/.external/.lastupdated"
 
   # clone plugins if necessary
-  if [[ ! $lastupdated -nt $ZSH_CUSTOM/.external ]]; then
+  if [[ ! $lastupdated -nt $ZSH_CUSTOM/zplugins.txt ]]; then
     local -a repos=("${(f)"$(<$ZSH_CUSTOM/zplugins.txt)"}")
     repos=(${repos:#\#*})
     plugin-clone $repos
+    [[ -f "$lastupdated" ]] && rm "$lastupdated"
   fi
 
   # update plugins weekly
