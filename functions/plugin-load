@@ -1,0 +1,13 @@
+# vi: ft=zsh
+local repo=$1; shift
+local plugdir initfile
+local -a o_defer
+if [[ "$repo" == "--defer" ]]; then
+  o_defer=("--defer")
+  repo="$1"
+fi
+plugdir=$ZSH_CUSTOM/.external/${repo:h:t}/${repo:t}
+[[ -d $plugdir ]] || plugin-clone $repo
+initfile=$plugdir/${repo:t}.plugin.zsh
+fpath+=$plugdir
+(( $#o_defer )) && zsh-defer . $initfile || . $initfile

@@ -1,0 +1,33 @@
+# vi: ft=zsh
+0=${(%):-%x}
+ZSH_CUSTOM=${ZSH_CUSTOM:-$0:A:h:h}
+
+autoload -Uz $ZSH_CUSTOM/functions/autoload-dir
+autoload-dir $ZSH_CUSTOM/functions
+
+
+if (( ! $+functions[zsh-defer] )); then
+  function zsh-defer {
+    source $ZSH_CUSTOM/.external/romkatv/zsh-defer/zsh-defer.plugin.zsh
+    zsh-defer "$@"
+  }
+fi
+
+() {
+  local lastupdated="$ZSH_CUSTOM/.external/.lastupdated"
+
+  # clone plugins if necessary
+  if [[ ! $lastupdated -nt $ZSH_CUSTOM/.external ]]; then
+    local -a repos=("${(f)"$(<$ZSH_CUSTOM/zplugins.txt)"}")
+    repos=(${repos:#\#*})
+    plugin-clone $repos
+  fi
+
+  # update plugins weekly
+  [[ -f "$lastupdated" ]] || date '+%Y-%m-%d %H:%M:%S' >"$lastupdated"
+  local -a lufiles=($lastupdated(Nmw-1))
+  if ! (( $#lufiles )); then
+    plugin-update
+    date '+%Y-%m-%d %H:%M:%S' >"$lastupdated"
+  fi
+}

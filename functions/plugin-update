@@ -1,0 +1,7 @@
+# vi: ft=zsh
+# update plugins
+emulate -L zsh; setopt local_options extended_glob no_monitor
+local d; for d in $ZSH_CUSTOM/.external/*/.git(N/); do
+  command git -C "${d:A:h}" pull --quiet --ff --depth 1 --rebase --autostash &
+done
+wait

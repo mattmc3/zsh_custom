@@ -1,0 +1,29 @@
+# vi: ft=zsh
+# utilities
+romkatv/zsh-defer
+romkatv/zsh-bench
+
+# prompts
+sindresorhus/pure
+romkatv/powerlevel10k
+
+# frameworks
+belak/zsh-utils
+ohmyzsh/ohmyzsh
+# sorin-ionescu/prezto
+
+# zsh-users fishy things
+zsh-users/zsh-autosuggestions
+zsh-users/zsh-completions
+zsh-users/zsh-history-substring-search
+zsh-users/zsh-syntax-highlighting
+
+# general
+rupa/z
+olets/zsh-window-title
+mattmc3/zman
+mattmc3/zsh-safe-rm
+
+# deferred plugins
+olets/zsh-abbr
+zdharma-continuum/fast-syntax-highlighting
