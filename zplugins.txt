@@ -22,7 +22,7 @@ zsh-users/zsh-syntax-highlighting
 rupa/z
 olets/zsh-window-title
 mattmc3/zman
-mattmc3/zsh-safe-rm
+kaelzhang/shell-safe-rm
 
 # deferred plugins
 olets/zsh-abbr
