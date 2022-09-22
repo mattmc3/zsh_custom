@@ -12,7 +12,7 @@ if [[ $ZSH_THEME == pure ]]; then
   # expand parameters in prompt variables
   prompt pure
 
-  PURE_PROMPT_SYMBOL="%%"
+  #PURE_PROMPT_SYMBOL="%%"
 
   # show exit code on right
   function precmd_pipestatus {
