@@ -34,10 +34,10 @@ plugins=(
   node
   python
   ruby
-  safe-rm
   string
   syntax-highlighting
   terminal
+  trash
   utility
   z
   zman
