@@ -12,3 +12,6 @@ alias pip3update="pip3 list --outdated | cut -d ' ' -f1 | xargs -n1 pip3 install
 alias pyfind='find . -name "*.py"'
 alias pygrep='grep --include="*.py"'
 alias pyva="source .venv/bin/activate"
+
+# jupyter
+export JUPYTER_CONFIG_DIR="${JUPYTER_CONFIG_DIR:-$XDG_CONFIG_HOME/jupyter}"
