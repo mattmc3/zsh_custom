@@ -62,6 +62,13 @@ if (( $#commands[(i)lesspipe(|.sh)] )); then
 fi
 
 #
+# Zsh
+#
+
+HISTFILE=${XDG_DATA_HOME:-$HOME/.local/share}/zsh/history
+[[ -f $HISTFILE ]] || mkdir -p ${HISTFILE:h}
+
+#
 # Misc
 #
 
