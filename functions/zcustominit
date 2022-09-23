@@ -1,10 +1,9 @@
 # vi: ft=zsh
 0=${(%):-%x}
 ZSH_CUSTOM=${ZSH_CUSTOM:-$0:A:h:h}
-
-autoload -Uz $ZSH_CUSTOM/functions/autoload-dir
-autoload-dir $ZSH_CUSTOM/functions
-
+ZFUNCDIR=$ZSH_CUSTOM/functions
+autoload -Uz $ZFUNCDIR/autoload-dir
+autoload-dir $ZFUNCDIR
 
 if (( ! $+functions[zsh-defer] )); then
   function zsh-defer {
