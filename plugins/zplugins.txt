@@ -1,14 +1,14 @@
 # vi: ft=zsh
 # utilities
 romkatv/zsh-defer
-romkatv/zsh-bench
+romkatv/zsh-bench kind:clone
 
 # prompts
 sindresorhus/pure
 romkatv/powerlevel10k
 
 # frameworks
-belak/zsh-utils
+belak/zsh-utils kind:clone
 ohmyzsh/ohmyzsh
 # sorin-ionescu/prezto
 

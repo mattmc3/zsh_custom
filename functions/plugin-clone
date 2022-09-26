@@ -1,19 +1,14 @@
 # vi: ft=zsh
 emulate -L zsh; setopt local_options extended_glob no_monitor
-local repo plugdir initfile
+local line repo plugdir initfile
 local -a initfiles
-for repo in $@; do
+for line in $@; do
+  repo=${line%% *}
   plugdir=$ZSH_CUSTOM/.external/${repo:h:t}/${repo:t}
   initfile=$plugdir/${repo:t}.plugin.zsh
   if [[ ! -d $plugdir ]]; then
     echo "Cloning $repo..."
-    (
-      git clone --quiet --depth 1 --recursive --shallow-submodules https://github.com/$repo $plugdir
-      if [[ ! -e $initfile ]]; then
-        initfiles=($plugdir/*.plugin.{z,}sh(N) $plugdir/*.{z,}sh{-theme,}(N))
-        [[ $#initfiles -gt 0 ]] && ln -sf $initfiles[1] $initfile
-      fi
-    ) &
+    git clone --quiet --depth 1 --recursive --shallow-submodules https://github.com/$repo $plugdir &
   fi
 done
 wait

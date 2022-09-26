@@ -9,5 +9,9 @@ fi
 plugdir=$ZSH_CUSTOM/.external/${repo:h:t}/${repo:t}
 [[ -d $plugdir ]] || plugin-clone $repo
 initfile=$plugdir/${repo:t}.plugin.zsh
+if [[ ! -e $initfile ]]; then
+  local initfiles=($plugdir/*.plugin.{z,}sh(N) $plugdir/*.{z,}sh{-theme,}(N))
+  [[ $#initfiles -gt 0 ]] && ln -sf $initfiles[1] $initfile
+fi
 fpath+=$plugdir
 (( $#o_defer )) && zsh-defer . $initfile || . $initfile
