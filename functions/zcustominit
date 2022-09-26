@@ -13,18 +13,18 @@ if (( ! $+functions[zsh-defer] )); then
 fi
 
 () {
-  local lastupdated="$ZSH_CUSTOM/.external/.lastupdated"
-
   # clone plugins if necessary
-  if [[ ! $lastupdated -nt $ZSH_CUSTOM/zplugins.txt ]]; then
-    local -a repos=("${(f)"$(<$ZSH_CUSTOM/zplugins.txt)"}")
+  local lastcloned="$ZSH_CUSTOM/.external/.lastcloned"
+  if [[ ! $lastcloned -nt $ZSH_CUSTOM/plugins/zplugins.txt ]]; then
+    local -a repos=("${(f)"$(<$ZSH_CUSTOM/plugins/zplugins.txt)"}")
     repos=(${repos:#\#*})
     plugin-clone $repos
-    [[ -f "$lastupdated" ]] && rm "$lastupdated"
+    date '+%Y-%m-%d %H:%M:%S' >"$lastcloned"
   fi
 
   # update plugins weekly
-  [[ -f "$lastupdated" ]] || date '+%Y-%m-%d %H:%M:%S' >"$lastupdated"
+  local lastupdated="$ZSH_CUSTOM/.external/.lastupdated"
+  [[ -f "$lastupdated" ]] || touch "$lastupdated"
   local -a lufiles=($lastupdated(Nmw-1))
   if ! (( $#lufiles )); then
     plugin-update
