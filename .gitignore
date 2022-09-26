@@ -1,4 +1,5 @@
 ~*
+.antidote/
 .external/
 *.zwc
 *.zwc.old
