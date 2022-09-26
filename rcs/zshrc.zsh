@@ -32,6 +32,7 @@ plugins=(
   lpass
   macos
   node
+  perl
   python
   ruby
   string
