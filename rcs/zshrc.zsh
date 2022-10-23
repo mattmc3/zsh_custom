@@ -16,6 +16,7 @@ plugins=(
 
   abbreviations
   aliases
+  antidote
   autosuggestions
   colors
   completion
