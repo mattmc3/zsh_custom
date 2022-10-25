@@ -15,6 +15,7 @@ plugins=(
   prompt
 
   abbreviations
+  antidote
   aliases
   antidote
   autosuggestions
