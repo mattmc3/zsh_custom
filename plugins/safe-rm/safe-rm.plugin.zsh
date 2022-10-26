@@ -1,7 +1,13 @@
 export PATH="$ZSH_CUSTOM/.external/kaelzhang/shell-safe-rm/bin:$PATH"
 if [[ "$OSTYPE" == darwin* ]]; then
   (( ${+commands[trash]} )) || brew install trash
-  alias rm="rm.sh"
+  function rm {
+    if [[ $# -eq 1 ]] && [[ -d "$1" ]]; then
+      rm.sh -r "$1"
+    else
+      rm.sh "$@"
+    fi
+  }
   alias del="trash -F"
   alias trash="trash -F"
 else
