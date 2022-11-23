@@ -1,7 +1,9 @@
 # vi: ft=zsh
 # update plugins
 emulate -L zsh; setopt local_options extended_glob no_monitor
-local d; for d in $ZSH_CUSTOM/.external/*/.git(N/); do
+local d; for d in $ZSH_CUSTOM/.external/*/*/.git(N/); do
+  echo "updating ${d:A:h:t}..."
   command git -C "${d:A:h}" pull --quiet --ff --depth 1 --rebase --autostash &
 done
 wait
+echo "done."
