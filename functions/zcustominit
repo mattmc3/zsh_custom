@@ -27,7 +27,7 @@ fi
   [[ -f "$lastupdated" ]] || touch "$lastupdated"
   local -a lufiles=($lastupdated(Nmw-1))
   if ! (( $#lufiles )); then
-    plugin-update
+    plugin-update >/dev/null
     date '+%Y-%m-%d %H:%M:%S' >"$lastupdated"
   fi
 }
