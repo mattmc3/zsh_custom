@@ -1,4 +1,4 @@
-# vi: ft=zsh
+#!/bin/zsh
 0=${(%):-%x}
 ZSH_CUSTOM=${ZSH_CUSTOM:-$0:A:h:h}
 ZFUNCDIR=$ZSH_CUSTOM/functions

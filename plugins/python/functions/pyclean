@@ -1,4 +1,4 @@
-# vi: ft=zsh
+#!/bin/zsh
 
 ##? Clean common python cache files.
 

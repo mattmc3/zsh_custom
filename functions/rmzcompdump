@@ -1,4 +1,4 @@
-# vi: ft=zsh
+#!/bin/zsh
 
 ##? remove zcompdump file to reset completions
 

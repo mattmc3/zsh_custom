@@ -1,4 +1,4 @@
-# vi: ft=zsh
+#!/bin/zsh
 ##? make a URL for git
 
 local parts url user

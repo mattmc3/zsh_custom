@@ -9,4 +9,4 @@ done
 wait
 echo "Update complete."
 
-# vi: ft=zsh
+#!/bin/zsh

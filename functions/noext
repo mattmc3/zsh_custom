@@ -1,4 +1,4 @@
-# vi: ft=zsh
+#!/bin/zsh
 
 ##? Find files with no file extension
 

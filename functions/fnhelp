@@ -1,4 +1,4 @@
-# vi: ft=zsh
+#!/bin/zsh
 ##? fnhelp - use '##?' comments in function files as help docs.
 ##?
 ##? usage: fnhelp <func>

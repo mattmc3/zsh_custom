@@ -1,4 +1,4 @@
-# vi: ft=zsh
+#!/bin/zsh
 if [[ -o interactive ]]; then
   echo "interactive shell"
 else

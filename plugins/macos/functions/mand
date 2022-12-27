@@ -1,4 +1,4 @@
-# vi: ft=zsh
+#!/bin/zsh
 
 if test $# -eq 0; then
   echo >&2 'mand: What manual page do you want to open in Dash?' && return 1

@@ -1,4 +1,4 @@
-# vi: ft=zsh
+#!/bin/zsh
 # Runs bindkey but for all of the keymaps. Running it with no arguments will
 # print out the mappings for all of the keymaps.
 local keymap=''

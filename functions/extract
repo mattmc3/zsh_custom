@@ -1,4 +1,4 @@
-# vi: ft=zsh
+#!/bin/zsh
 # https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/extract/extract.plugin.zsh
 setopt localoptions noautopushd
 

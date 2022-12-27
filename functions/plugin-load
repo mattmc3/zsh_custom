@@ -1,4 +1,4 @@
-# vi: ft=zsh
+#!/bin/zsh
 local repo=$1; shift
 local plugdir initfile
 local -a o_defer

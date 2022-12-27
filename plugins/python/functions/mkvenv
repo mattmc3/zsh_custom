@@ -1,4 +1,4 @@
-# vi: ft=zsh
+#!/bin/zsh
 
 ##? Make a Python virtual environment with `python3 -m venv`.
 

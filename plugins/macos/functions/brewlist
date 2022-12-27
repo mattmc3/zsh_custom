@@ -1,4 +1,4 @@
-# vi: ft=zsh
+#!/bin/zsh
 
 echo "==> Root Formulae"
 brew deps --installed --formula | \

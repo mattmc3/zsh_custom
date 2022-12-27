@@ -1,2 +1,2 @@
-# vi: ft=zsh
+#!/bin/zsh
 git submodule update --recursive --remote

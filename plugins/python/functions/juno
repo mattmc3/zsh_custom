@@ -1,4 +1,4 @@
-# vi: ft=zsh
+#!/bin/zsh
 
 ##? Open a Jupyter notebook.
 

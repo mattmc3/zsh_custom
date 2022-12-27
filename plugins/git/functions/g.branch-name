@@ -1,2 +1,2 @@
-# vi: ft=zsh
+#!/bin/zsh
 git branch --show-current
