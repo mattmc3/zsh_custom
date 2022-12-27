@@ -3,7 +3,7 @@
 alias zprofrc="ZPROFRC=1 zsh"
 
 # setup zsh_custom
-ZSH_CUSTOM=${ZSH_CUSTOM:-$ZDOTDIR/zsh_custom}
+ZSH_CUSTOM=${ZSH_CUSTOM:-$ZDOTDIR/custom}
 [[ -d $ZSH_CUSTOM ]] || git clone git@github.com:mattmc3/zsh_custom $ZSH_CUSTOM
 fpath+=$ZSH_CUSTOM/functions
 autoload -Uz zcustominit && zcustominit
