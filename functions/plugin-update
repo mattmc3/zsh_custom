@@ -1,9 +1,12 @@
-# vi: ft=zsh
 # update plugins
-emulate -L zsh; setopt local_options extended_glob no_monitor
-local d; for d in $ZSH_CUSTOM/.external/*/*/.git(N/); do
-  echo "updating ${d:A:h:t}..."
+emulate -L zsh; setopt local_options extended_glob glob_dots no_monitor
+local d
+for d in $ZDOTDIR/**/.git(N/); do
+  local url=$(git -C "${d:A:h}" config remote.origin.url)
+  echo "Updating ${url:h:t}/${url:t}..."
   command git -C "${d:A:h}" pull --quiet --ff --depth 1 --rebase --autostash &
 done
 wait
-echo "done."
+echo "Update complete."
+
+# vi: ft=zsh
