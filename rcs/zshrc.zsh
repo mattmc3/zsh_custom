@@ -5,47 +5,47 @@ alias zprofrc="ZPROFRC=1 zsh"
 # setup zsh_custom
 ZSH_CUSTOM=${ZSH_CUSTOM:-$ZDOTDIR/custom}
 [[ -d $ZSH_CUSTOM ]] || git clone git@github.com:mattmc3/zsh_custom $ZSH_CUSTOM
-fpath+=$ZSH_CUSTOM/functions
-autoload -Uz zcustominit && zcustominit
+source $ZSH_CUSTOM/lib/zcustominit.zsh
 
 plugins=(
   # first
+  #p10k-instant-prompt
+  zfunctions
   xdg-basedir
-  p10k-instant-prompt
-  prompt
-
-  abbreviations
-  antidote
-  aliases
-  antidote
-  autosuggestions
-  colors
-  completion
-  confd
+  environment
   directory
   editor
+  history
+  utility
+
+  # plugins
+  aliases
+  autosuggestions
+  colors
+  #confd
   emacs
-  environment
   fancy-ctrl-z
   git
   golang
   groovy
-  history
   lpass
   macos
   node
   perl
   python
   ruby
-  safe-rm
   string
-  syntax-highlighting
   terminal
-  utility
   z
   zman
 
+  # deferred
+  abbreviations
+  syntax-highlighting
+
   # last
+  completion
+  prompt
   history-substring-search
 )
 
@@ -53,6 +53,25 @@ for plugin in $plugins; do
   source "${ZSH_CUSTOM}/plugins/${plugin}/${plugin}.plugin.zsh"
 done
 unset plugin
+
+# set prompt
+# prompt powerlevel10k
+# source $ZSH_CUSTOM/lib/p10k.zsh
+prompt pure
+
+# Setup completion style
+compstyle mattmc3
+
+# Use Emacs keys.
+bindkey -e
+
+# Set plugin variables.
+MAGIC_ENTER_GIT_COMMAND='git status -sb'
+if [[ "$OSTYPE" == darwin* ]]; then
+  MAGIC_ENTER_OTHER_COMMAND='command ls -G'
+else
+  MAGIC_ENTER_OTHER_COMMAND='command ls --color=auto'
+fi
 
 # local settings
 [[ ! -f $DOTFILES.local/zsh/zshrc_local.zsh ]] || source $DOTFILES.local/zsh/zshrc_local.zsh

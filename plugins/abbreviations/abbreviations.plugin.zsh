@@ -1,3 +1,2 @@
-0=${(%):-%x}
-plugin-load --defer olets/zsh-abbr
-ABBR_USER_ABBREVIATIONS_FILE=${0:h}/abbreviations.zsh
+zsh-defer source $ZSH_CUSTOM/.external/zsh-abbr/zsh-abbr.zsh
+ABBR_USER_ABBREVIATIONS_FILE=$ZSH_CUSTOM/lib/abbr.zsh

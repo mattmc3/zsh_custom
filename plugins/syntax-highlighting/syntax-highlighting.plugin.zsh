@@ -1,1 +1,1 @@
-plugin-load --defer zdharma-continuum/fast-syntax-highlighting
+zsh-defer source $ZSH_CUSTOM/.external/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh

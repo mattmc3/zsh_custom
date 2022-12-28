@@ -1,4 +1,4 @@
-plugin-load zsh-users/zsh-autosuggestions
+source $ZSH_CUSTOM/.external/zsh-autosuggestions/zsh-autosuggestions.zsh
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
 if [[ -n "$key_info" ]]; then
   # vi

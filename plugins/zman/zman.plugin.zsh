@@ -1,1 +1,1 @@
-plugin-load mattmc3/zman
+source $ZSH_CUSTOM/.external/zman/zman.zsh

@@ -1,0 +1,3 @@
+#!/bin/zsh
+fpath+=$ZSH_CUSTOM/.external/powerlevel10k
+source $ZSH_CUSTOM/.external/powerlevel10k/powerlevel10k.zsh-theme
