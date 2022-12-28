@@ -15,6 +15,10 @@ ZSH_CUSTOM=${ZSH_CUSTOM:-$ZDOTDIR/custom}
 [[ -d $ZSH_CUSTOM ]] || git clone git@github.com:mattmc3/zsh_custom $ZSH_CUSTOM
 source $ZSH_CUSTOM/lib/zcustominit.zsh
 
+# setup omz
+ZSH=$ZSH_CUSTOM/.external/ohmyzsh
+
+# setup plugins
 plugins=(
   # first
   zfunctions
@@ -28,10 +32,9 @@ plugins=(
   # plugins
   aliases
   autosuggestions
+  clipboard
   colors
-  #confd
   emacs
-  fancy-ctrl-z
   git
   golang
   groovy
@@ -46,6 +49,12 @@ plugins=(
   z
   zman
 
+  # omz
+  magic-enter
+  fancy-ctrl-z
+  extract
+  sudo
+
   # deferred
   abbreviations
   syntax-highlighting
@@ -56,10 +65,27 @@ plugins=(
   history-substring-search
 )
 
-for plugin in $plugins; do
-  source "${ZSH_CUSTOM}/plugins/${plugin}/${plugin}.plugin.zsh"
+# for plugin in $plugins; do
+#   source "${ZSH_CUSTOM}/plugins/${plugin}/${plugin}.plugin.zsh"
+# done
+# unset plugin
+
+# Load plugins.
+for _p in $plugins; do
+  _initfiles=(
+    $ZSH_CUSTOM/plugins/${_p}/${_p}.plugin.zsh(N)
+    $ZSH_CUSTOM/.external/${_p}/${_p}.plugin.zsh(N)
+    $ZSH_CUSTOM/.external/ohmyzsh/plugins/${_p}/${_p}.plugin.zsh(N)
+    $ZSH_CUSTOM/.external/zsh-utils/${_p}/${_p}.plugin.zsh(N)
+  )
+  if (( $#_initfiles )); then
+    # echo "Loading plugin $_p from $_initfiles[1]"
+    source "$_initfiles[1]"
+  else
+    echo >&2 "Plugin not found '$_p'."
+  fi
 done
-unset plugin
+unset _p _initfiles
 
 # set prompt
 source $ZSH_CUSTOM/.external/powerlevel10k/powerlevel10k.zsh-theme
