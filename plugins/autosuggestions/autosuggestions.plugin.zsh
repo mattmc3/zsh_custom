@@ -1,5 +1,5 @@
 source $ZSH_CUSTOM/.external/zsh-autosuggestions/zsh-autosuggestions.zsh
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=60'
 if [[ -n "$key_info" ]]; then
   # vi
   bindkey -M viins "$key_info[Control]F" vi-forward-word
