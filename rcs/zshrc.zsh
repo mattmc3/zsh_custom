@@ -2,6 +2,14 @@
 [[ ${ZPROFRC:-0} -eq 0 ]] || zmodload zsh/zprof
 alias zprofrc="ZPROFRC=1 zsh"
 
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.config/zsh/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+[[ "$ZPROFRC" -eq 1 ]] && typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # setup zsh_custom
 ZSH_CUSTOM=${ZSH_CUSTOM:-$ZDOTDIR/custom}
 [[ -d $ZSH_CUSTOM ]] || git clone git@github.com:mattmc3/zsh_custom $ZSH_CUSTOM
@@ -9,7 +17,6 @@ source $ZSH_CUSTOM/lib/zcustominit.zsh
 
 plugins=(
   # first
-  #p10k-instant-prompt
   zfunctions
   xdg-basedir
   environment
@@ -45,7 +52,7 @@ plugins=(
 
   # last
   completion
-  prompt
+  #prompt
   history-substring-search
 )
 
@@ -55,9 +62,8 @@ done
 unset plugin
 
 # set prompt
-# prompt powerlevel10k
-# source $ZSH_CUSTOM/lib/p10k.zsh
-prompt pure
+source $ZSH_CUSTOM/.external/powerlevel10k/powerlevel10k.zsh-theme
+source $ZSH_CUSTOM/lib/p10k.zsh
 
 # Setup completion style
 compstyle mattmc3

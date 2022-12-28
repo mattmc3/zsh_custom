@@ -1,2 +1,1 @@
-0=${(%):-%x}
-source ${0:h}/aliases.zsh
+../../lib/aliases.zsh
