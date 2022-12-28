@@ -1,7 +1,6 @@
-path=(
-  $path
-  /{usr,opt}/{homebrew,local}/opt/ruby/bin(N)
-  /{usr,opt}/{homebrew,local}/lib/ruby/gems/*/bin(N)
+path+=(
+  /{usr,opt}/{local,homebrew}/opt/ruby/bin(N)
+  /{usr,opt}/{local,homebrew}/lib/ruby/gems/*/bin(N)
   $HOME/.gem/ruby/*/bin(N)
 )
 

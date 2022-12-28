@@ -1,6 +1,5 @@
-path=(
-  $path
-  /{usr,opt}/{homebrew,local}/share/npm/bin(N)
+path+=(
+  /{usr,opt}/{local,homebrew}/share/npm/bin(N)
 )
 
 export NPM_CONFIG_USERCONFIG="${NPM_CONFIG_USERCONFIG:-$XDG_CONFIG_HOME/npm/npmrc}"

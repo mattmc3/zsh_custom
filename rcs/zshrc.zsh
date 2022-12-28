@@ -73,6 +73,14 @@ else
   MAGIC_ENTER_OTHER_COMMAND='command ls --color=auto'
 fi
 
+# Set path.
+path=(
+  $HOME/{,s}bin(N)
+  /opt/{homebrew,local}/{,s}bin(N)
+  /usr/local/{,s}bin(N)
+  $path
+)
+
 # local settings
 [[ ! -f $DOTFILES.local/zsh/zshrc_local.zsh ]] || source $DOTFILES.local/zsh/zshrc_local.zsh
 
