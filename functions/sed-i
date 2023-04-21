@@ -1,0 +1,14 @@
+#!/bin/zsh
+
+##? sedi - cross platform 'sed -i' in-place syntax
+# function sedi {
+
+if sed --version &>/dev/null; then
+  # GNU
+  sed -i -- "$@"
+else
+  # macOS/BSD
+  sed -i "" "$@"
+fi
+
+# }
