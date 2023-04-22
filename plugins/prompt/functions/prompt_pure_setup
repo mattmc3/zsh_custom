@@ -1,5 +1,7 @@
 #!/bin/zsh
 
+plugin-load sindresorhus/pure
+
 # show exit code on right
 function precmd_pipestatus {
   local exitcodes="${(j.|.)pipestatus}"
@@ -10,6 +12,3 @@ function precmd_pipestatus {
   fi
 }
 add-zsh-hook precmd precmd_pipestatus
-
-fpath+=$ZSH_CUSTOM/.external/pure
-source $ZSH_CUSTOM/.external/pure/pure.zsh

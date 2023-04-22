@@ -1,6 +1,6 @@
-####
-# prompt - Set zsh prompt.
-###
+#
+# prompt - Set zsh prompt
+#
 
 #
 # Requirements
@@ -28,4 +28,11 @@ PS2='${${${(%):-%_}//[^ ]}// /  }    '
 # set prompt
 fpath+="${0:A:h}/functions"
 autoload -Uz promptinit && promptinit
-[[ -z "$ZSH_THEME" ]] || prompt $ZSH_THEME
+
+if [[ -n "$ZSH_THEME" ]]; then
+  _zsh_theme=$ZSH_THEME
+else
+  zstyle -s ':zsh_custom:plugin:prompt' theme _zsh_theme || _zsh_theme=starship
+fi
+prompt $_zsh_theme
+unset _zsh_theme

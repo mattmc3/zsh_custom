@@ -1,16 +1,18 @@
-###
+#
 # zfunctions - Use a Fish-like functions directory for zsh functions.
-###
+#
 
-autoload-dir "${0:A:h}/functions"
+# Load plugins functions.
+fpath=("${0:A:h}/functions" $fpath)
+autoload -Uz $fpath[1]/*(.:t)
 
-if [[ -z "$ZFUNCDIR" ]]; then
-  ZFUNCDIR=${ZDOTDIR:-${XDG_CONFIG_HOME:-$HOME/.config/zsh}}/functions
-fi
+# Set ZFUNCDIR.
+: ${ZFUNCDIR:=${ZDOTDIR:-${XDG_CONFIG_HOME:-~/.config/zsh}}/functions}
+[[ -d "$ZFUNCDIR" ]] || return 1
 
-[[ -d "$ZFUNCDIR" ]] || return
-autoload-dir "$ZFUNCDIR"
-for _fndir in $ZFUNCDIR/**/*(N/); do
-  autoload-dir $_fndir
+# Load zfunctions subdirs.
+for _fndir in $ZFUNCDIR(N/) $ZFUNCDIR/*(N/); do
+  fpath=("$_fndir" $fpath)
+  autoload -Uz $fpath[1]/*(.:t)
 done
 unset _fndir

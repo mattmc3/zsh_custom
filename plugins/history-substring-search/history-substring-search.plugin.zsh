@@ -1,4 +1,4 @@
-source $ZSH_CUSTOM/.external/zsh-history-substring-search/zsh-history-substring-search.zsh
+plugin-load zsh-users/zsh-history-substring-search
 
 # emacs
 bindkey -M emacs '^P' history-substring-search-up

@@ -1,1 +1,0 @@
-../../lib/aliases.zsh

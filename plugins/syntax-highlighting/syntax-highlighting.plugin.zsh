@@ -1,1 +1,6 @@
-zsh-defer source $ZSH_CUSTOM/.external/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
+#
+# syntax-highlighting - Fish-like syntax highlighting for Zsh
+#
+
+# plugin-load zsh-users/zsh-syntax-highlighting
+plugin-load zdharma-continuum/fast-syntax-highlighting

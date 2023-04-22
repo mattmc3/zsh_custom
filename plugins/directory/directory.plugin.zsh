@@ -1,22 +1,11 @@
-# Directory options
-setopt AUTO_PUSHD            # cd automatically uses the dirstack.
-setopt PUSHD_IGNORE_DUPS     # No duplicates in the dirstack.
-setopt PUSHD_MINUS           # Swap meanings of +/- to be more natural.
-setopt PUSHD_SILENT          # Do not print the dirstack after pushd/popd.
-setopt PUSHD_TO_HOME         # pushd with no args goes to home.
-setopt CDABLE_VARS           # Change directory to a path stored in a variable.
+##? directory - set directory options and aliases
 
-alias dirh='dirs -v'
-() {
-  # setup `cd ..2` aliases
-  local idx
-  local -a dotdot=('..')
-  for idx ({2..9}); do
-    dotdot+=('..')
-    alias -g ..${idx}="${(j./.)dotdot}"
-  done
-}
+# Use Prezto directory module.
+plugin-load sorin-ionescu/prezto/modules/directory
 
-# set initial working directory
-IWD=${IWD:-PWD}
-alias iwd='cd $IWD'
+# undo bad Prezto settings
+unsetopt AUTO_CD    # Do not auto change to a directory without typing cd.
+# unalias d
+
+# set other directory options
+setopt PUSHD_MINUS  # Swap meanings of +/- to be more natural.

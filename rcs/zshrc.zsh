@@ -2,116 +2,39 @@
 [[ ${ZPROFRC:-0} -eq 0 ]] || zmodload zsh/zprof
 alias zprofrc="ZPROFRC=1 zsh"
 
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.config/zsh/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-[[ "$ZPROFRC" -eq 1 ]] && typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
+# customizations
+zstyle ':zsh_custom:plugin:prompt' theme 'starship'
+zstyle ':zsh_custom:plugin:prompt' config 'hydro'
+ZSH_CUSTOM=$ZDOTDIR/custom
+ZUNPLUG_SHORTEN=0
 
-# setup zsh_custom
-ZSH_CUSTOM=${ZSH_CUSTOM:-$ZDOTDIR/custom}
-[[ -d $ZSH_CUSTOM ]] || git clone git@github.com:mattmc3/zsh_custom $ZSH_CUSTOM
-source $ZSH_CUSTOM/lib/zcustominit.zsh
+# Libs
+for zfile in $ZSH_CUSTOM/lib/*.zsh(N); source $zfile
+unset zfile
 
-# setup omz
-ZSH=$ZSH_CUSTOM/.external/ohmyzsh
-
-# setup plugins
-plugins=(
-  # first
-  zfunctions
-  xdg-basedir
-  environment
+# plugins
+myplugins=(
+  # load plugins
+  prompt
+  clipboard
   directory
   editor
   history
   utility
-
-  # plugins
-  aliases
-  autosuggestions
-  clipboard
-  colors
-  emacs
-  git
-  golang
-  groovy
-  lpass
-  macos
-  node
-  perl
-  python
-  ruby
-  string
   terminal
   z
-  zman
+  homebrew
+  macos
+  python
+  completion
 
-  # omz
-  magic-enter
-  fancy-ctrl-z
-  extract
-  sudo
-
-  # deferred
+  _defer_
   abbreviations
   syntax-highlighting
-
-  # last
-  completion
-  #prompt
+  autosuggestions
   history-substring-search
 )
-
-# for plugin in $plugins; do
-#   source "${ZSH_CUSTOM}/plugins/${plugin}/${plugin}.plugin.zsh"
-# done
-# unset plugin
-
-# Load plugins.
-for _p in $plugins; do
-  _initfiles=(
-    $ZSH_CUSTOM/plugins/${_p}/${_p}.plugin.zsh(N)
-    $ZSH_CUSTOM/.external/${_p}/${_p}.plugin.zsh(N)
-    $ZSH_CUSTOM/.external/ohmyzsh/plugins/${_p}/${_p}.plugin.zsh(N)
-    $ZSH_CUSTOM/.external/zsh-utils/${_p}/${_p}.plugin.zsh(N)
-  )
-  if (( $#_initfiles )); then
-    # echo "Loading plugin $_p from $_initfiles[1]"
-    source "$_initfiles[1]"
-  else
-    echo >&2 "Plugin not found '$_p'."
-  fi
-done
-unset _p _initfiles
-
-# set prompt
-source $ZSH_CUSTOM/.external/powerlevel10k/powerlevel10k.zsh-theme
-source $ZSH_CUSTOM/lib/p10k.zsh
-
-# Setup completion style
-compstyle mattmc3
-
-# Use Emacs keys.
-bindkey -e
-
-# Set plugin variables.
-MAGIC_ENTER_GIT_COMMAND='git status -sb'
-if [[ "$OSTYPE" == darwin* ]]; then
-  MAGIC_ENTER_OTHER_COMMAND='command ls -G'
-else
-  MAGIC_ENTER_OTHER_COMMAND='command ls --color=auto'
-fi
-
-# Set path.
-path=(
-  $HOME/{,s}bin(N)
-  /opt/{homebrew,local}/{,s}bin(N)
-  /usr/local/{,s}bin(N)
-  $path
-)
+plugin-load $myplugins
 
 # local settings
 [[ ! -f $DOTFILES.local/zsh/zshrc_local.zsh ]] || source $DOTFILES.local/zsh/zshrc_local.zsh

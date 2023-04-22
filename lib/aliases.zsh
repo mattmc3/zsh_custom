@@ -14,16 +14,6 @@ alias -g G='| grep -E'
 alias -g S='| sort'
 alias -g L='| less'
 alias -g M='| more'
-alias -g ...='../..'
-alias -g ....='../../..'
-alias -g ..2='../..'
-alias -g ..3='../../..'
-alias -g ..4='../../../..'
-alias -g ..5='../../../../..'
-alias -g ..6='../../../../../..'
-alias -g ..7='../../../../../../..'
-alias -g ..8='../../../../../../../..'
-alias -g ..9='../../../../../../../../..'
 
 # single character shortcuts - be sparing!
 alias -- -='cd -'
@@ -75,11 +65,18 @@ if [[ "$OSTYPE" == darwin* ]]; then
 else
   alias ls="ls --group-directories-first --color=auto"
 fi
-alias grep="grep --color=auto --exclude-dir={.git,.svn}"
 
-# dirs
+GREP_EXCL=(.bzr CVS .git .hg .svn .idea .tox)
+alias grep="grep --color=auto --exclude-dir={\${(j:,:)GREP_EXCL}}"
+
+# directory
 alias dirh='dirs -v'
 for _idx ({1..9}) alias "$_idx"="cd -${_idx}"
+for dotdot ({1..9}) alias -g "..$dotdot"=$(printf '../%.0s' {1..$dotdot}); unset dotdot
+
+# gpg
+export GNUPGHOME="${GNUPGHOME:-$XDG_DATA_HOME/gnupg}"
+alias gpg="${aliases[gpg]:-gpg} --homedir \$GNUPGHOME"
 
 # more ways to ls
 alias ll='ls -lh'
