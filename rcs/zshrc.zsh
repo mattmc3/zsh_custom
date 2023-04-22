@@ -15,6 +15,7 @@ unset zfile
 # plugins
 myplugins=(
   # load plugins
+  zfunctions
   prompt
   clipboard
   directory

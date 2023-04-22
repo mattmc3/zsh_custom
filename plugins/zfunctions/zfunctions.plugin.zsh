@@ -7,8 +7,8 @@ fpath=("${0:A:h}/functions" $fpath)
 autoload -Uz $fpath[1]/*(.:t)
 
 # Set ZFUNCDIR.
-: ${ZFUNCDIR:=${ZDOTDIR:-${XDG_CONFIG_HOME:-~/.config/zsh}}/functions}
-[[ -d "$ZFUNCDIR" ]] || return 1
+: ${ZFUNCDIR:=$ZSH_CUSTOM/functions}
+[[ -d "$ZFUNCDIR" ]] || ZFUNCDIR=$ZDOTDIR/functions
 
 # Load zfunctions subdirs.
 for _fndir in $ZFUNCDIR(N/) $ZFUNCDIR/*(N/); do
