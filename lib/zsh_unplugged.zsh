@@ -3,7 +3,7 @@
 
 # Set zsh_unplugged variables.
 : ${ZUNPLUG_HOME:=${ZPLUGINDIR:-${XDG_DATA_HOME:-~/.local/share}/zsh_unplugged}}
-: ${ZUNPLUG_CUSTOM:=${ZSH_CUSTOM:-${ZDOTDIR:-~/.config/zsh}}/plugins}
+: ${ZUNPLUG_CUSTOM:=${ZPLUGINDIR:-${ZSH_CUSTOM:-${ZDOTDIR:-~/.config/zsh}}/plugins}}
 typeset -gHa _zunplugopts=(extended_glob glob_dots no_monitor)
 
 ##? Clone zsh plugins in parallel.
@@ -11,7 +11,8 @@ function plugin-clone {
   emulate -L zsh; setopt local_options $_zunplugopts
   local repo repodir
   for repo in ${(u)@}; do
-    [[ ${ZUNPLUG_SHORTEN:-1} -eq 1 ]] && repodir=$ZUNPLUG_HOME/${repo:t} || repodir=$ZUNPLUG_HOME/$repo
+    [[ ${ZUNPLUG_SHORTEN:-1} -eq 1 ]] && repodir=${repo:t} || repodir=$repo
+    repodir=$ZUNPLUG_HOME/$repodir
     [[ ! -d $repodir ]] || continue
     echo "Cloning $repo..."
     (
