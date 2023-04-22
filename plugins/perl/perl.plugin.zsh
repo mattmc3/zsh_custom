@@ -1,3 +1,7 @@
+#
+# perl
+#
+
 if [[ "$OSTYPE" == darwin* ]]; then
   # eval "$(perl -I$XDG_DATA_HOME/perl5/lib/perl5 -Mlocal::lib=$XDG_DATA_HOME/perl5)"
   export PERL_MB_OPT='--install_base "$XDG_DATA_HOME/perl5"'

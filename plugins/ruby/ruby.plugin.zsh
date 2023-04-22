@@ -1,3 +1,7 @@
+#
+# ruby
+#
+
 path+=(
   /{usr,opt}/{local,homebrew}/opt/ruby/bin(N)
   /{usr,opt}/{local,homebrew}/lib/ruby/gems/*/bin(N)

@@ -1,3 +1,7 @@
+#
+# macos - Helpful functions for Mac users
+#
+
 # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/macos
 # https://github.com/sorin-ionescu/prezto/tree/master/modules/osx
 

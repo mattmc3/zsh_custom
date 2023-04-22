@@ -1,3 +1,7 @@
+#
+# clipboard
+#
+
 # Use Oh My Zsh's clipboard utilities.
 plugin-load \
   ohmyzsh/ohmyzsh/lib/clipboard.zsh \

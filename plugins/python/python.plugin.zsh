@@ -1,4 +1,6 @@
+#
 # python - Aliases and functions for python
+#
 
 export WORKON_HOME="$XDG_DATA_HOME/venvs"
 [[ -d "$WORKON_HOME" ]] || mkdir -p "$WORKON_HOME"

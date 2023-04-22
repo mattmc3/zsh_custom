@@ -1,3 +1,7 @@
+#
+# history-substring-search
+#
+
 plugin-load zsh-users/zsh-history-substring-search
 
 # emacs

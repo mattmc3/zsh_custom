@@ -1,4 +1,6 @@
-##? completion - Set up zsh completions
+#
+# completion - Set up zsh completions
+#
 
 plugin-load zsh-users/zsh-completions
 
