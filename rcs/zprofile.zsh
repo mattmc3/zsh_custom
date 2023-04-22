@@ -54,6 +54,8 @@ typeset -gU fpath path cdpath
 # Set the list of directories that cd searches.
 cdpath=(
   $XDG_PROJECTS_DIR
+  $XDG_PROJECTS_DIR/mattmc3(N/)
+  $cdpath
 )
 
 # Set the list of directories that Zsh searches for programs.
