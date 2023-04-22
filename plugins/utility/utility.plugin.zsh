@@ -99,6 +99,7 @@ alias help=run-help
 # External
 #
 
+plugin-load mattmc3/zman
 plugin-load ohmyzsh/ohmyzsh/plugins/extract
 [[ -d $ZUNPLUG_HOME/romkatv/zsh-bench ]] || plugin-clone romkatv/zsh-bench
 path+=($ZUNPLUG_HOME/romkatv/zsh-bench)
