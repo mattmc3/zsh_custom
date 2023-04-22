@@ -65,10 +65,3 @@ export LESS_TERMCAP_us=$'\e[04;35m'
 
   alias grep="${aliases[grep]:-grep} --color=auto"
 }
-
-#
-# Wrap up
-#
-
-# Tell Zephyr this plugin is loaded.
-zstyle ":zephyr:plugin:color" loaded 'yes'

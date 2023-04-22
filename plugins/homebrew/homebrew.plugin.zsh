@@ -13,7 +13,7 @@
 (( $+commands[brew] )) || return 1
 
 # Setup cache dir.
-_cache_dir=${XDG_CACHE_HOME:=$HOME/.cache}/zephyr
+_cache_dir=${XDG_CACHE_HOME:=$HOME/.cache}/zsh
 [[ -d $_cache_dir ]] || mkdir -p $_cache_dir
 
 #
@@ -36,8 +36,8 @@ if ! (( $#_cache_files )); then
 fi
 
 # Allow a user to do their own shellenv setup.
-if ! zstyle -t ':zephyr:plugin:homebrew:shellenv' skip; then
-  if zstyle -t ':zephyr:plugin:homebrew:shellenv' 'include-paths'; then
+if ! zstyle -t ':zsh_custom:plugin:homebrew:shellenv' skip; then
+  if zstyle -t ':zsh_custom:plugin:homebrew:shellenv' 'include-paths'; then
     source $_cache_dir/brew_shellenv.zsh
   else
     source $_cache_dir/brew_exclpaths.zsh
@@ -46,9 +46,3 @@ fi
 
 # Clean up.
 unset _cache_{dir,files}
-
-#
-# Wrap up
-#
-
-zstyle ":zephyr:plugin:homebrew" loaded 'yes'
