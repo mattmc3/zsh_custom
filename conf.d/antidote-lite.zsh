@@ -4,7 +4,7 @@
 #          https://github.com/mattmc3/antidote
 # license: https://unlicense.org
 # usage:   plugin-load $myplugins
-# version: 0.0.4
+# version: 0.0.5
 
 # Set variables.
 : ${ANTIDOTE_LITE_HOME:=${XDG_CACHE_HOME:-~/.cache}/antidote.lite}
@@ -28,13 +28,20 @@ function plugin-clone {
     if [[ ! -d $plugdir ]]; then
       echo "Cloning $repo..."
       (
-        command git clone -q --depth 1 --recursive --shallow-submodules \
+        command git clone --quiet --depth 1 --recursive --shallow-submodules \
           ${ANTIDOTE_LITE_GITURL:-https://github.com/}$repo $plugdir
         plugin-compile $plugdir
       ) &
     fi
   done
   wait
+}
+
+function plugin-source {
+  local repo=$1
+  local plugdir=$ANTIDOTE_LITE_HOME/$repo
+  [[ -d $plugdir ]] || plugin-clone $repo
+  source $plugdir/${repo:t}.plugin.zsh
 }
 
 ##? Load zsh plugins.
