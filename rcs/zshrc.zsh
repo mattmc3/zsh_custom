@@ -155,7 +155,7 @@ source $ZSH_CUSTOM/themes/pure.p10k.zsh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # local settings
-[[ -f $ZDOTDIR/.zshrc.local ]] || source $ZDOTDIR/.zshrc.local
+[[ -f $ZDOTDIR/.zshrc.local ]] && source $ZDOTDIR/.zshrc.local
 
 # done profiling
 [[ -z "$ZPROFRC" ]] || zprof
