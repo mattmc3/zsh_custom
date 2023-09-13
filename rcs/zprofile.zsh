@@ -10,26 +10,19 @@
 # Set XDG base dirs.
 # https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
 export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
-export XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
 export XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
-export XDG_STATE_HOME=${XDG_STATE_HOME:-$HOME/.local/state}
-export XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR:-$HOME/.xdg}
+export XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
 
-# Ensure XDG dirs exist.
-for xdgdir in XDG_{CONFIG,CACHE,DATA,STATE}_HOME XDG_RUNTIME_DIR; do
-  [[ -e ${(P)xdgdir} ]] || mkdir -p ${(P)xdgdir}
+# Zsh dirs
+: ${__zsh_config_dir:=${ZDOTDIR:-$XDG_CONFIG_HOME/zsh}}
+: ${__zsh_user_data_dir:=$XDG_DATA_HOME/zsh}
+: ${__zsh_cache_dir:=$XDG_CACHE_HOME/zsh}
+
+# Ensure Zsh dirs exist.
+for _zdir in __zsh_{config,user_data,cache}_dir; do
+  [[ -e ${(P)_zdir} ]] || mkdir -p ${(P)_zdir}
 done
-
-# OS specific
-if [[ "$OSTYPE" == darwin* ]]; then
-  export XDG_DESKTOP_DIR=${XDG_DESKTOP_DIR:-$HOME/Desktop}
-  export XDG_DOCUMENTS_DIR=${XDG_DOCUMENTS_DIR:-$HOME/Documents}
-  export XDG_DOWNLOAD_DIR=${XDG_DOWNLOAD_DIR:-$HOME/Downloads}
-  export XDG_MUSIC_DIR=${XDG_MUSIC_DIR:-$HOME/Music}
-  export XDG_PICTURES_DIR=${XDG_PICTURES_DIR:-$HOME/Pictures}
-  export XDG_VIDEOS_DIR=${XDG_VIDEOS_DIR:-$HOME/Videos}
-  export XDG_PROJECTS_DIR=${XDG_PROJECTS_DIR:-$HOME/Projects}
-fi
+unset _zdir
 
 #
 # Common
@@ -53,8 +46,8 @@ typeset -gU fpath path cdpath
 
 # Set the list of directories that cd searches.
 cdpath=(
-  $XDG_PROJECTS_DIR
-  $XDG_PROJECTS_DIR/mattmc3(N/)
+  ~/Projects(N/)
+  ~/Projects/*(N/)
   $cdpath
 )
 
@@ -67,7 +60,7 @@ path=(
 
   # emacs
   $HOME/.emacs.d/bin(N)
-  ${XDG_CONFIG_HOME:-$HOME/.config}/emacs/bin(N)
+  $XDG_CONFIG_HOME/emacs/bin(N)
 
   # path
   $path
