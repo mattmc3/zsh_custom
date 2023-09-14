@@ -8,7 +8,7 @@
 [[ "$OSTYPE" == darwin* ]] || return
 
 fpath+=(${0:A:h}/functions)
-autoload -U $fpath[-1]/*(.:t)
+autoload -U ${0:A:h}/functions/*(.:t)
 
 # canonical hex dump; some systems have this symlinked
 command -v hd > /dev/null || alias hd="hexdump -C"
