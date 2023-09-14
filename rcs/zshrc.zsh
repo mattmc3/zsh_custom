@@ -33,6 +33,7 @@ plugins=(
 
   # plugins
   directory
+  editor
   history
   prompt
   utility

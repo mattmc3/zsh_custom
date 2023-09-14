@@ -4,34 +4,37 @@
 # https://github.com/sorin-ionescu/prezto/blob/master/modules/editor/init.zsh
 
 #
-# zstyles
+# Requirements
 #
 
-# Set the key mapping style to 'emacs' or 'vi'.
-zstyle ':prezto:module:editor' key-bindings 'emacs'
+# Return if requirements are not found.
+[[ "$TERM" != 'dumb' ]] || return 1
 
-# Expand ... to ../..
+#
+# Zstyles
+#
+
+# enable ../.. dot-expansion
 zstyle ':prezto:module:editor' dot-expansion 'yes'
 
-# Set this to whatever you want to use to edit a command
-zstyle :zle:edit-command-line editor ${EDITOR:-vim}
-
 #
-# Oh-My-Zsh
+# Init
 #
 
-plugin-load ohmyzsh/ohmyzsh/plugins/magic-enter \
-            ohmyzsh/ohmyzsh/plugins/fancy-ctrl-z
-
-# magic-enter
-MAGIC_ENTER_GIT_COMMAND='git status -sb'
-MAGIC_ENTER_OTHER_COMMAND='ls'
-
-#
-# Prezto
-#
-
+# Use Prezto's editor module.
 plugin-load sorin-ionescu/prezto/modules/editor
 
-# undo bad prezto settings
-unsetopt BEEP
+#
+# Options
+#
+
+# Undo Prezto options.
+setopt NO_beep
+
+#
+# Keybindings
+#
+
+# https://github.com/ohmyzsh/ohmyzsh/blob/master/lib/completion.zsh
+zmodload -i zsh/complist
+bindkey -M menuselect '^o' accept-and-infer-next-history
