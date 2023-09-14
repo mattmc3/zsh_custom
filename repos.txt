@@ -1,0 +1,30 @@
+# run:
+# $ repo in <repos.txt
+
+# frameworks
+ohmyzsh/ohmyzsh
+
+# core plugins
+zsh-users/zsh-autosuggestions
+zsh-users/zsh-history-substring-search
+zsh-users/zsh-completions
+
+# prompts
+sindresorhus/pure
+romkatv/powerlevel10k
+
+# syntax highlighting
+zdharma-continuum/fast-syntax-highlighting
+
+# themes
+mbadolato/iTerm2-Color-Schemes
+
+# z
+ajeetdsouza/zoxide
+rupa/z
+agkozak/zsh-z
+
+# utils
+romkatv/zsh-bench
+romkatv/zsh-defer
+mattmc3/zman
