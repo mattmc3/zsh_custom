@@ -43,9 +43,7 @@ plugins=(
   history-substring-search
 )
 
-for plugin in $plugins; do
-  plugin-load $plugin
-done
+plugin-load $plugins
 
 # prompt
 prompt p10k lean
