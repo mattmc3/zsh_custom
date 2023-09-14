@@ -3,6 +3,7 @@
 
 # frameworks
 ohmyzsh/ohmyzsh
+sorin-ionescu/prezto
 
 # core plugins
 zsh-users/zsh-autosuggestions
