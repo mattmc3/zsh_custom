@@ -35,8 +35,13 @@ function __repo_clone {
   fi
 
   echo "Cloning $repo..."
-  command git clone --quiet --depth 1 --recursive --shallow-submodules \
-    https://github.com/$repo $repodir
+  if [[ $repo == sorin-ionescu/prezto ]]; then
+    command git clone --quiet --depth 1 \
+      https://github.com/$repo $repodir
+  else
+    command git clone --quiet --depth 1 --recursive --shallow-submodules \
+      https://github.com/$repo $repodir
+  fi
 
   local init=$repodir/${repo:t}.plugin.zsh
   if [[ ! -e $init ]]; then
