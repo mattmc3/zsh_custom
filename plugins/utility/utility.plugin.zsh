@@ -99,5 +99,5 @@ alias help=run-help
 # External
 #
 
-plugin-source mattmc3/zman
-plugin-load --kind path romkatv/zsh-bench
+plugin-load mattmc3/zman
+path+=( $REPO_HOME/romkatv/zsh-bench )

@@ -2,7 +2,7 @@
 # autosuggestions - Fish-like Zsh autosuggestions
 #
 
-plugin-source zsh-users/zsh-autosuggestions
+plugin-load zsh-users/zsh-autosuggestions
 
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=60'
 if [[ -n "$key_info" ]]; then

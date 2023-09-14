@@ -3,4 +3,4 @@
 #
 
 # plugin-load zsh-users/zsh-syntax-highlighting
-plugin-source zdharma-continuum/fast-syntax-highlighting
+plugin-load zdharma-continuum/fast-syntax-highlighting
