@@ -1,0 +1,9 @@
+#!/bin/zsh
+#function prompt_p10k_setup {
+  plugin-load romkatv/powerlevel10k
+  if (( $# )); then
+    if [[ -e $ZSH_CUSTOM/themes/$1.p10k.zsh ]]; then
+      source $ZSH_CUSTOM/themes/$1.p10k.zsh
+    fi
+  fi
+#}
