@@ -13,8 +13,7 @@
       $REPO_HOME/$plugin/*.{plugin.zsh,zsh,zsh-theme}(N)
     )
     if ! (( $#inits )); then
-      echo >&2 "plugin-load: Plugin not found '$plugin'."
-      echo {$ZSH_CUSTOM,$ZSH}/plugins/$plugin/${plugin}.plugin.zsh
+      print -ru2 "plugin-load: Plugin not found '$plugin'."
       continue
     fi
     source $inits[1]
