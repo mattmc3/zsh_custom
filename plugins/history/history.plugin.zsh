@@ -25,3 +25,8 @@ setopt NO_share_history        # Don't share history between all sessions.
 HISTFILE=$__zsh_user_data_dir/zsh_history  # The path to the history file.
 HISTSIZE=50000  # The maximum number of events to save in the internal history.
 SAVEHIST=10000  # The maximum number of events to save in the history file.
+
+# history
+# list the ten most used commands
+alias history-stat="command history 0 | awk '{print \$2}' | sort | uniq -c | sort -n -r | head"
+alias hist="fc -li"
