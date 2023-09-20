@@ -19,38 +19,6 @@ alias -g M='| more'
 alias -- -='cd -'
 alias _=sudo
 alias l=ls
-alias o='open'
-
-# Common commands everywhere
-if [[ "$OSTYPE" == darwin* ]]; then
-  # if there's ever a Linux command that should work on MacOS,
-  # put it here
-elif [[ "$OSTYPE" == cygwin* ]]; then
-  alias open='cygstart'
-  alias pbcopy='tee > /dev/clipboard'
-  alias pbpaste='cat /dev/clipboard'
-elif [[ "$OSTYPE" == linux-android ]]; then
-  alias open='termux-open'
-  alias pbcopy='termux-clipboard-set'
-  alias pbpaste='termux-clipboard-get'
-else
-  alias open='xdg-open'
-
-  if [[ -n $DISPLAY ]]; then
-    if (( $+commands[xclip] )); then
-      alias pbcopy='xclip -selection clipboard -in'
-      alias pbpaste='xclip -selection clipboard -out'
-    elif (( $+commands[xsel] )); then
-      alias pbcopy='xsel --clipboard --input'
-      alias pbpaste='xsel --clipboard --output'
-    fi
-  else
-    if (( $+commands[wl-copy] && $+commands[wl-paste] )); then
-      alias pbcopy='wl-copy'
-      alias pbpaste='wl-paste'
-    fi
-  fi
-fi
 
 # mask built-ins with better defaults
 # alias cp='cp -i'
@@ -115,16 +83,12 @@ alias urldecode='python3 -c "import sys, urllib.parse as ul; \
 alias urlencode='python3 -c "import sys, urllib.parse as ul; \
     print (ul.quote_plus(sys.argv[1]))"'
 
-# history
-# list the ten most used commands
-alias history-stat="command history 0 | awk '{print \$2}' | sort | uniq -c | sort -n -r | head"
-alias hist="fc -li"
-
 # misc
 alias please=sudo
 alias zshrc='${EDITOR:-vim} "${ZDOTDIR:-$HOME}"/.zshrc'
 alias zbench='for i in {1..10}; do /usr/bin/time zsh -lic exit; done'
 alias zdot='cd $ZDOTDIR'
+alias zcust='cd $ZSH_CUSTOM'
 alias cls="clear && printf '\e[3J'"
 
 # echo things
