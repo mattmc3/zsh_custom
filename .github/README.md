@@ -4,42 +4,31 @@ My Zsh custom plugins, ideal for [Oh-My-Zsh][omz].
 
 ## Install
 
-Fish:
-
-```fish
-# vars
-set -gx ZDOTDIR ~/.config/zsh
-set -gx ZSH_CUSTOM $ZDOTDIR/custom
-
-# clone
-test -d $ZSH_CUSTOM || git clone git@github.com:mattmc3/zsh_custom $ZSH_CUSTOM
-
-# symlinks
-for zfile in $ZSH_CUSTOM/rcs/*.zsh
-  ln -sf $zfile "$ZDOTDIR/."(path change-extension '' (path basename $zfile))
-end
-echo "source ~/.config/zsh/custom/rcs/zshenv.zsh" > ~/.zshenv
-```
-
-Zsh:
+Backup existing config:
 
 ```zsh
 setopt extended_glob interactive_comments
 
 # backup existing
-export ZDOTDIR=~/.config/zsh
+export ZDOTDIR=${ZDOTDIR:-~/.zsh}
+export ZSH_CUSTOM=$ZDOTDIR/custom
 [[ -d $ZDOTDIR ]] && mv $ZDOTDIR ${ZDOTDIR}.bak
+```
 
-# clone and symlink
-ZSH_CUSTOM=$ZDOTDIR/custom
-[[ -d $ZSH_CUSTOM ]] ||
-  git clone git@github.com:mattmc3/zsh_custom $ZSH_CUSTOM
+Install:
 
-cd $ZDOTDIR
-for zfile in ./custom/rcs/*.zsh~*zabbr*; do
-  ln -sf $zfile .${zfile:t:r}
+```zsh
+# setup
+setopt extended_glob interactive_comments
+export ZSH_CUSTOM=${ZSH_CUSTOM:-${ZDOTDIR:-$HOME/.config/zsh}/custom}
+
+# clone
+git clone git@github.com:mattmc3/zsh_custom $ZSH_CUSTOM
+cd $ZSH_CUSTOM
+for zfile in ./rcs/*.zsh; do
+  ln -sf $zfile $ZDOTDIR/.${zfile:t:r}
 done
-ln -sf $ZDOTDIR/.zshenv ~/.zshenv
+ln -sf ./rcs/.zshenv ~/.zshenv
 ```
 
 [omz]: https://github.com/ohmyzsh/ohmyzsh
