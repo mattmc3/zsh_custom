@@ -2,43 +2,46 @@
 [[ -z "$ZPROFRC" ]] || zmodload zsh/zprof
 alias zprofrc="ZPROFRC=1 zsh"
 
-# repo location
-export REPO_HOME=${XDG_CACHE_HOME:-$HOME/.cache}/repos
-
-# Oh My Zsh locations
-export ZSH=$REPO_HOME/ohmyzsh/ohmyzsh
-export ZSH_CUSTOM=$ZDOTDIR/custom
-
 # autoload functions
+export ZSH_CUSTOM=$ZDOTDIR/custom
 fpath+=($ZSH_CUSTOM/functions)
 autoload -Uz $ZSH_CUSTOM/functions/*(.:t)
 
 # clone repos
+export REPO_HOME=$ZSH_CUSTOM/.external
 [[ -d $REPO_HOME ]] || repo in <$ZSH_CUSTOM/repos.txt
 
 # plugins
 plugins=(
   # pre-reqs
   p10k-instant-prompt
-  confd
   zfunctions
   xdg
+  brew
+
+  # editor
+  editor
+  magic-enter
+  fancy-ctrl-z
 
   # utils
   clipboard
   macos
-  magic-enter
-  fancy-ctrl-z
   extract
 
   # plugins
   directory
-  editor
   history
   prompt
   utility
-  brew
+  terminal
+
+  # completions
+  completion
+
+  # fish-like
   autosuggestions
+  confd
   syntax-highlighting
   history-substring-search
 )
