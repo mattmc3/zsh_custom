@@ -1,17 +1,23 @@
 #!/bin/zsh
 #function plugin-load {
   : ${REPO_HOME:=${XDG_CACHE_HOME:-$HOME/.cache}/repos}
+  : ${ZSH:=$REPO_HOME/ohmyzsh/ohmyzsh}
+  : ${ZPREZTODIR:=$REPO_HOME/sorin-ionescu/prezto}
+
   local plugin inits=()
   for plugin in $@; do
     inits=(
       {$ZSH_CUSTOM,$ZSH}/plugins/$plugin/${plugin}.plugin.zsh(N)
+      $ZPREZTODIR/modules/$plugin/init.zsh(N)
       $REPO_HOME/$plugin/${plugin:t}.plugin.zsh(N)
       $REPO_HOME/$plugin/*.{plugin.zsh,zsh,zsh-theme}(N)
     )
     if ! (( $#inits )); then
-      echo >&2 "plugin-load: Plugin not found '$1'."
+      echo >&2 "plugin-load: Plugin not found '$plugin'."
+      echo {$ZSH_CUSTOM,$ZSH}/plugins/$plugin/${plugin}.plugin.zsh
       continue
     fi
     source $inits[1]
+    zstyle ":zsh_custom:plugin:$plugin" loaded 'yes'
   done
 #}
