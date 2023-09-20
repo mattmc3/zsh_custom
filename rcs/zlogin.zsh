@@ -1,8 +1,8 @@
 #
 # .zlogin - execute login commands post-zshrc
 #
-# https://github.com/sorin-ionescu/prezto/blob/master/runcoms/zlogin
 
+# https://github.com/sorin-ionescu/prezto/blob/master/runcoms/zlogin
 # Execute code that does not affect the current session in the background.
 {
   # Compile the completion dump to increase startup speed.

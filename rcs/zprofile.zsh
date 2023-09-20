@@ -1,6 +1,7 @@
 #
 # .zprofile - execute login commands pre-zshrc
 #
+
 # https://github.com/sorin-ionescu/prezto/blob/master/runcoms/zprofile
 
 #
