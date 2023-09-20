@@ -20,7 +20,7 @@ fpath=(
 )
 
 # Prezto forces this file for completions - don't try to change it. It won't work.
-: ${ZSH_COMPDUMP:=${XDG_CACHE_HOME:-$HOME/.cache}/prezto/zcompdump}
+: ${ZSH_COMPDUMP:=${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump}
 
 # Load prezto completions
 plugin-load sorin-ionescu/prezto/modules/completion
