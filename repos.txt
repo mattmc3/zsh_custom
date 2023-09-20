@@ -15,6 +15,7 @@ sindresorhus/pure
 romkatv/powerlevel10k
 
 # syntax highlighting
+zsh-users/zsh-syntax-highlighting
 zdharma-continuum/fast-syntax-highlighting
 
 # themes
@@ -26,6 +27,9 @@ rupa/z
 agkozak/zsh-z
 
 # utils
+kaelzhang/shell-safe-rm
 romkatv/zsh-bench
 romkatv/zsh-defer
 mattmc3/zman
+
+# vim: ft=properties sw=2 ts=2 et
