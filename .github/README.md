@@ -19,6 +19,7 @@ setopt extended_glob
 for rcfile in $ZDOTDIR/custom/rcs/*.zsh; do
   ln -sf $rcfile $ZDOTDIR/.${rcfile:t:r}
 done
+ln -sf $ZDOTDIR/custom/rcs/.zshenv ~/.zshenv
 ```
 
 [omz]: https://github.com/ohmyzsh/ohmyzsh
