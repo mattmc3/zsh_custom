@@ -50,7 +50,7 @@ plugins=(
 plugin-load $plugins
 
 # prompt
-prompt p10k lean
+prompt p10k hydro
 
 # local settings
 [[ -f $ZDOTDIR/.zshrc.local ]] && source $ZDOTDIR/.zshrc.local
