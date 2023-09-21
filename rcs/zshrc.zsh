@@ -28,6 +28,7 @@ plugins=(
   clipboard
   macos
   extract
+  zoxide
 
   # plugins
   directory
