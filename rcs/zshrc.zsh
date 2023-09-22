@@ -25,6 +25,7 @@ plugins=(
   fancy-ctrl-z
 
   # utils
+  colorize
   clipboard
   macos
   extract
