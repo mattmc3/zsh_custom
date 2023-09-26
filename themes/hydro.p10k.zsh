@@ -426,11 +426,11 @@
       res+="${dirty}•"
     fi
     if (( VCS_STATUS_COMMITS_AHEAD || VCS_STATUS_COMMITS_BEHIND )); then
+      res+=" "
       # ⇣42 if behind the remote.
-      (( VCS_STATUS_COMMITS_BEHIND )) && res+=" ${clean}⇣$VCS_STATUS_COMMITS_BEHIND"
-      # ⇡42 if ahead of the remote; no leading space if also behind the remote: ⇣42⇡42.
-      (( VCS_STATUS_COMMITS_AHEAD && !VCS_STATUS_COMMITS_BEHIND )) && res+=" "
-      (( VCS_STATUS_COMMITS_AHEAD  )) && res+=" ${clean}⇡$VCS_STATUS_COMMITS_AHEAD"
+      (( VCS_STATUS_COMMITS_BEHIND )) && res+="${clean}⇣$VCS_STATUS_COMMITS_BEHIND"
+      # ⇡42 if ahead of the remote.
+      (( VCS_STATUS_COMMITS_AHEAD  )) && res+="${clean}⇡$VCS_STATUS_COMMITS_AHEAD"
     fi
     # ☰ if have stashes.
     (( VCS_STATUS_STASHES        )) && res+=" ${modified}☰"
