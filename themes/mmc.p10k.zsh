@@ -368,7 +368,7 @@
       # Styling for up-to-date Git status.
       local       meta='%f'     # default foreground
       local      clean='%76F'   # green foreground
-      local      dirty='%178F'  # yellow foreground
+      local      dirty='%255F'  # white foreground
       local   modified='%39F'   # blue foreground
       local conflicted='%196F'  # red foreground
     else
@@ -1656,7 +1656,7 @@
   #   - always:   Trim down prompt when accepting a command line.
   #   - same-dir: Trim down prompt when accepting a command line unless this is the first command
   #               typed after changing current working directory.
-  typeset -g POWERLEVEL9K_TRANSIENT_PROMPT=always
+  typeset -g POWERLEVEL9K_TRANSIENT_PROMPT=same-dir
 
   # Instant prompt mode.
   #
