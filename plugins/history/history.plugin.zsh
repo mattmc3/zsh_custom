@@ -23,7 +23,7 @@ setopt NO_hist_beep            # Don't beep when accessing non-existent history.
 setopt NO_share_history        # Don't share history between all sessions.
 
 HISTFILE=$__zsh_user_data_dir/zsh_history  # The path to the history file.
-HISTSIZE=50000  # The maximum number of events to save in the internal history.
+HISTSIZE=20000  # The maximum number of events to save in the internal history.
 SAVEHIST=10000  # The maximum number of events to save in the history file.
 
 # history
