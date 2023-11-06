@@ -11,6 +11,13 @@
 PS2='${${${(%):-%_}//[^ ]}// /  }    '
 
 #
+# Options
+#
+
+# Remove right prompt for prior commands.
+setopt transient_rprompt
+
+#
 # Functions
 #
 
