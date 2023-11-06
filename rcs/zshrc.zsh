@@ -15,8 +15,9 @@ export REPO_HOME=$ZSH_CUSTOM/.external
 plugins=(
   # pre-reqs
   p10k-instant-prompt
-  zfunctions
+  environment
   xdg
+  zfunctions
   brew
 
   # editor
