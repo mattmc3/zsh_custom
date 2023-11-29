@@ -91,16 +91,20 @@ alias zdot='cd $ZDOTDIR'
 alias zcust='cd $ZSH_CUSTOM'
 alias cls="clear && printf '\e[3J'"
 
-# echo things
-alias print-fpath='for fp in $fpath; do echo $fp; done; unset fp'
-alias print-path='echo $PATH | tr ":" "\n"'
-alias print-functions='print -l ${(k)functions[(I)[^_]*]} | sort'
+# print things
+alias println="printf '%s\n'"
+alias printfuncs='print -l ${(k)functions[(I)[^_]*]} | sort'
+
+# bare repos
+alias dotfiles="GIT_WORK_TREE=~ GIT_DIR=~/.dotfiles"
+alias dotloc="GIT_WORK_TREE=~ GIT_DIR=~/.dotfiles.local"
+alias dotty='command git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 
 # auto-orient images based on exif tags
 alias autorotate="jhead -autorot"
 
 # set initial working directory
-IWD=${IWD:-$PWD}
+: ${IWD:=$PWD}
 alias iwd='cd $IWD'
 
 # dotfiles
