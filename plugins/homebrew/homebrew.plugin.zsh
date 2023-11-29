@@ -21,7 +21,7 @@ elif [[ -e /opt/homebrew/bin/brew ]]; then
   HOMEBREW_PREFIX=/opt/homebrew
 else
   return 1
-end
+fi
 
 # Setup cache dir.
 _cache_dir=${XDG_CACHE_HOME:=$HOME/.cache}/zsh
