@@ -12,7 +12,7 @@
 # Options
 #
 
-  # 16.2.1 Changing Directories
+# 16.2.1 Changing Directories
 setopt auto_pushd              # Make cd push the old directory onto the dirstack.
 setopt pushd_ignore_dups       # Don’t push multiple copies of the same directory onto the dirstack.
 setopt pushd_minus             # Exchanges meanings of +/- when navigating the dirstack.
@@ -28,7 +28,7 @@ setopt NO_rm_star_silent       # Ask for confirmation for `rm *' or `rm path/*'
 # Aliases
 #
 
-if ! zstyle -t ':zdotdir:directory:alias' skip; then
+if ! zstyle -t ':mattmc3:zsh_custom:directory:alias' skip; then
   alias -- -='cd -'
   alias dirh='dirs -v'
   for _idx in {1..9}; do

@@ -60,8 +60,8 @@ if ! (( $#_cache_files )); then
 fi
 
 # Allow a user to do their own shellenv setup.
-if ! zstyle -t ':zsh_custom:plugin:homebrew:shellenv' skip; then
-  if zstyle -t ':zsh_custom:plugin:homebrew:shellenv' 'include-paths'; then
+if ! zstyle -t ':mattmc3:zsh_custom:plugin:homebrew:shellenv' skip; then
+  if zstyle -t ':mattmc3:zsh_custom:plugin:homebrew:shellenv' 'include-paths'; then
     source $_cache_dir/brew_shellenv.zsh
   else
     source $_cache_dir/brew_exclpaths.zsh
