@@ -28,7 +28,7 @@ setopt NO_rm_star_silent       # Ask for confirmation for `rm *' or `rm path/*'
 # Aliases
 #
 
-if ! zstyle -t ':mattmc3:zsh_custom:directory:alias' skip; then
+if ! zstyle -t ':mattmc3:zsh_custom:plugin:directory:alias' skip; then
   alias -- -='cd -'
   alias dirh='dirs -v'
   for _idx in {1..9}; do
