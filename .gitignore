@@ -1,7 +1,5 @@
+.cache/
+.DS_Store
 ~*
-themes/powerlevel10k
-.antidote/
-.zephyr/
-.external/
 *.zwc
 *.zwc.old
