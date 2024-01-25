@@ -6,6 +6,21 @@
 0=${(%):-%N}
 ZSH_CUSTOM=${ZSH_CUSTOM:-${0:a:h:h:h}}
 
+# Set Zsh locations.
+typeset -gx __zsh_config_dir
+zstyle -s ':zsh_custom:xdg:config' dir '__zsh_config_dir' \
+  || __zsh_config_dir=${ZDOTDIR:-${XDG_CONFIG_HOME:-$HOME/.config}/zsh}
+[[ -d $__zsh_config_dir ]] || mkdir -p $__zsh_config_dir
+
+typeset -gx __zsh_user_data_dir
+zstyle -s ':zsh_custom:xdg:user_data' dir '__zsh_user_data_dir' \
+  || __zsh_user_data_dir=${XDG_DATA_HOME:-$HOME/.local/share}/zsh
+[[ -d $__zsh_user_data_dir ]] || mkdir -p $__zsh_user_data_dir
+
+typeset -gx __zsh_cache_dir
+zstyle -s ':zsh_custom:xdg:cache' dir '__zsh_cache_dir' \
+  || __zsh_cache_dir=${XDG_CACHE_HOME:-$HOME/.cache}/zsh
+
 ##? Autoload a user functions directory.
 function autoload-dir {
   local fndir
@@ -35,21 +50,6 @@ function cached-command {
   fi
   source $memofile
 }
-
-# Set Zsh locations.
-typeset -gx __zsh_config_dir
-zstyle -s ':zsh_custom:xdg:config' dir '__zsh_config_dir' \
-  || __zsh_config_dir=${ZDOTDIR:-${XDG_CONFIG_HOME:-$HOME/.config}/zsh}
-[[ -d $__zsh_config_dir ]] || mkdir -p $__zsh_config_dir
-
-typeset -gx __zsh_user_data_dir
-zstyle -s ':zsh_custom:xdg:user_data' dir '__zsh_user_data_dir' \
-  || __zsh_user_data_dir=${XDG_DATA_HOME:-$HOME/.local/share}/zsh
-[[ -d $__zsh_user_data_dir ]] || mkdir -p $__zsh_user_data_dir
-
-typeset -gx __zsh_cache_dir
-zstyle -s ':zsh_custom:xdg:cache' dir '__zsh_cache_dir' \
-  || __zsh_cache_dir=${XDG_CACHE_HOME:-$HOME/.cache}/zsh
 
 ##? Check if a file can be autoloaded by trying to load it in a subshell.
 function is-autoloadable {
