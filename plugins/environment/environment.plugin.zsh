@@ -1,78 +1,60 @@
 #
-# environment - Define Zsh environment variables.
-#
-# https://github.com/sorin-ionescu/prezto/blob/master/runcoms/zprofile
-
-#
-# XDG
+# environment - Set general shell options and define environment variables.
 #
 
 # Set XDG base dirs.
 # https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
 export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
-export XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
 export XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
+export XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
+export XDG_STATE_HOME=${XDG_STATE_HOME:-$HOME/.local/state}
 
-# Zsh dirs
-: ${__zsh_config_dir:=${ZDOTDIR:-$XDG_CONFIG_HOME/zsh}}
-: ${__zsh_user_data_dir:=$XDG_DATA_HOME/zsh}
-: ${__zsh_cache_dir:=$XDG_CACHE_HOME/zsh}
+# Fish-like Zsh vars
+export __zsh_config_dir=${__zsh_config_dir:-${ZDOTDIR:-$XDG_CONFIG_HOME/zsh}}
+export __zsh_user_data_dir=${__zsh_user_data_dir:-$XDG_DATA_HOME/zsh}
+export __zsh_cache_dir=${__zsh_cache_dir:-$XDG_CACHE_HOME/zsh}
 
-# Ensure Zsh dirs exist.
-for _zdir in __zsh_{config,user_data,cache}_dir; do
-  [[ -e ${(P)_zdir} ]] || mkdir -p ${(P)_zdir}
-done
-unset _zdir
+# Ensure dirs exist.
+() {
+  local _d
+  for _d in $@; do
+    [[ -d ${(P)_d} ]] || mkdir -p ${(P)_d}
+  done
+} XDG_{CONFIG,CACHE,DATA,STATE}_HOME __zsh_{config,user_data,cache}_dir
 
-#
-# Common
-#
+# Editors
+export EDITOR=${EDITOR:-nano}
+export VISUAL=${VISUAL:-nano}
+export PAGER=${PAGER:-less}
 
-# Set editor variables.
-export EDITOR=vim
-export VISUAL=code
-export PAGER=less
-
-# Browser.
+# Set browser.
 if [[ "$OSTYPE" == darwin* ]]; then
-  export BROWSER='open'
+  export BROWSER=${BROWSER:-open}
 fi
 
-# Regional settings
-export LANG='en_US.UTF-8'
+# Set language.
+export LANG=${LANG:-en_US.UTF-8}
 
 # Ensure path arrays do not contain duplicates.
-typeset -gU fpath path cdpath
+typeset -gU cdpath fpath mailpath path
 
 # Set the list of directories that cd searches.
-cdpath=(
-  ~/Projects(N/)
-  ~/Projects/*(N/)
-  $cdpath
-)
+# cdpath=(
+#   $cdpath
+# )
 
 # Set the list of directories that Zsh searches for programs.
 path=(
-  # core
   $HOME/{,s}bin(N)
+  $HOME/brew/{,s}bin(N)
   /opt/{homebrew,local}/{,s}bin(N)
   /usr/local/{,s}bin(N)
-
-  # emacs
-  $HOME/.emacs.d/bin(N)
-  $XDG_CONFIG_HOME/emacs/bin(N)
-
-  # path
   $path
 )
 
-#
-# Less
-#
-
 # Set the default Less options.
-# Mouse-wheel scrolling has been disabled by -X (disable screen clearing).
-# Remove -X to enable it.
+# Mouse-wheel scrolling can be disabled with -X (disable screen clearing).
+# Add -X to disable it.
 if [[ -z "$LESS" ]]; then
   export LESS='-g -i -M -R -S -w -z-4'
 fi
@@ -83,15 +65,16 @@ if [[ -z "$LESSOPEN" ]] && (( $#commands[(i)lesspipe(|.sh)] )); then
   export LESSOPEN="| /usr/bin/env $commands[(i)lesspipe(|.sh)] %s 2>&-"
 fi
 
-#
-# Misc
-#
-
-export DOTFILES=$XDG_CONFIG_HOME/dotfiles
-export KEYTIMEOUT=1
+# Reduce key delay
+export KEYTIMEOUT=${KEYTIMEOUT:-1}
 
 # Make Apple Terminal behave.
-export SHELL_SESSIONS_DISABLE=1
+if [[ "$OSTYPE" == darwin* ]]; then
+  export SHELL_SESSIONS_DISABLE=${SHELL_SESSIONS_DISABLE:-1}
+fi
 
 # Use `< file` to quickly view the contents of any file.
 [[ -z "$READNULLCMD" ]] || READNULLCMD=$PAGER
+
+# Mark this plugin as loaded.
+zstyle ':zsh_custom:plugin:environment' loaded 'yes'
