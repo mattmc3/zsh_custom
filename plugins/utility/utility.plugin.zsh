@@ -1,38 +1,15 @@
 #
-# utility - Misc Zsh shell options and utilities.
+# utility - Built-in Zsh shell utilities, and cross-platform utils.
 #
 
-#
-# Options
-#
+# References:
+# - https://github.com/belak/zsh-utils/blob/main/utility/utility.plugin.zsh
+# - https://github.com/sorin-ionescu/prezto/blob/master/modules/utility/init.zsh
+# - https://github.com/mattmc3/zephyr/blob/main/plugins/utility/utility.plugin.zsh
 
-# Glob options.
-setopt EXTENDED_GLOB         # Use more awesome globbing features.
-setopt GLOB_DOTS             # Include dotfiles when globbing.
-setopt NO_RM_STAR_SILENT     # Ask for confirmation for `rm *' or `rm path/*'
-
-# General options.
-setopt COMBINING_CHARS       # Combine 0-len chars with the base character (eg: accents).
-setopt INTERACTIVE_COMMENTS  # Enable comments in interactive shell.
-setopt RC_QUOTES             # Allow 'Hitchhikers''s Guide' instead of 'Hitchhikers'\''s Guide'.
-unsetopt MAIL_WARNING        # Don't print a warning message if a mail file has been accessed.
-unsetopt BEEP                # Don't Beep on error in line editor.
-
-# Job options.
-setopt LONG_LIST_JOBS        # List jobs in the long format by default.
-setopt AUTO_RESUME           # Attempt to resume existing job before creating a new process.
-setopt NOTIFY                # Report status of background jobs immediately.
-unsetopt BG_NICE             # Don't run all background jobs at a lower priority.
-unsetopt HUP                 # Don't kill jobs on shell exit.
-unsetopt CHECK_JOBS          # Don't report on jobs when shell exit.
-
-#
-# Functions
-#
-
-# Autoload functions.
-fpath=(${0:A:h}/functions $fpath)
-autoload -Uz $fpath[1]/*(.:t)
+# __init__
+0=${(%):-%N}
+zstyle -t ':zsh_custom:lib:__init__' loaded || source ${0:a:h:h:h}/lib/__init__.zsh
 
 # Use built-in paste magic.
 autoload -Uz bracketed-paste-url-magic
@@ -40,18 +17,21 @@ zle -N bracketed-paste bracketed-paste-url-magic
 autoload -Uz url-quote-magic
 zle -N self-insert url-quote-magic
 
-#
-# Aliases
-#
+# Load more specific 'run-help' function from $fpath.
+(( $+aliases[run-help] )) && unalias run-help && autoload -Uz run-help
+alias help=run-help
 
-# Common utils everywhere.
-
-# envsubst
+# Ensure envsubst command exists.
 if ! (( $+commands[envsubst] )); then
   alias envsubst="python -c 'import os,sys;[sys.stdout.write(os.path.expandvars(l)) for l in sys.stdin]'"
 fi
 
-# open
+# Ensure hd (hex dump) command exists.
+if ! (( $+commands[hd] )) && (( $+commands[hexdump] )); then
+  alias hd="hexdump -C"
+fi
+
+# Ensure open command exists.
 if ! (( $+commands[open] )); then
   if [[ "$OSTYPE" == cygwin* ]]; then
     alias open='cygstart'
@@ -62,7 +42,7 @@ if ! (( $+commands[open] )); then
   fi
 fi
 
-# pbcopy/pbpaste
+# Ensure pbcopy/pbpaste commands exist.
 if ! (( $+commands[pbcopy] )); then
   if [[ "$OSTYPE" == cygwin* ]]; then
     alias pbcopy='tee > /dev/clipboard'
@@ -84,20 +64,11 @@ if ! (( $+commands[pbcopy] )); then
   fi
 fi
 
-# Load more specific 'run-help' function from $fpath.
-(( $+aliases[run-help] )) && unalias run-help && autoload -Uz run-help
-alias help=run-help
+# Cross-platform sed -i syntax
+function sedi {
+  # GNU/BSD
+  sed --version &>/dev/null && sed -i -- "$@" || sed -i "" "$@"
+}
 
-#
-# Misc
-#
-
-# Allow mapping Ctrl+S and Ctrl+Q shortcuts
-[[ -r ${TTY:-} && -w ${TTY:-} && $+commands[stty] == 1 ]] && stty -ixon <$TTY >$TTY
-
-#
-# External
-#
-
-plugin-load mattmc3/zman
-path+=( $REPO_HOME/romkatv/zsh-bench )
+# Mark this plugin as loaded.
+zstyle ":zsh_custom:plugin:utility" loaded 'yes'
