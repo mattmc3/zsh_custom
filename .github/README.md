@@ -4,22 +4,21 @@ My Zsh custom plugins, ideal for [Oh-My-Zsh][omz].
 
 ## Install
 
-Backup existing config:
+Backup:
 
 ```zsh
-setopt extended_glob
-export ZDOTDIR=${ZDOTDIR:-~/.zsh}
-[[ -d $ZDOTDIR ]] && mv $ZDOTDIR ${ZDOTDIR}.bak
+cd ~
+setopt extended_glob interactive_comments
+export ZDOTDIR=${ZDOTDIR:-~/.config/zsh}
+[[ -d $ZDOTDIR ]] && mv $ZDOTDIR ${ZDOTDIR}.$(date +"%Y%m%d-%H%M%S").bak
+git clone git@github.com:mattmc3/zsh_custom $ZDOTDIR/custom
 ```
 
-Install:
+Symlink Zsh runcoms:
 
 ```zsh
-setopt extended_glob
-for rcfile in $ZDOTDIR/custom/rcs/*.zsh; do
-  ln -sf $rcfile $ZDOTDIR/.${rcfile:t:r}
-done
-ln -sf $ZDOTDIR/custom/rcs/.zshenv ~/.zshenv
+cd $ZDOTDIR
+for f in ./custom/rcs/*.zsh; ln -s $f .${f:t:r}
 ```
 
 [omz]: https://github.com/ohmyzsh/ohmyzsh
