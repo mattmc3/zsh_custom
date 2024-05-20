@@ -1,0 +1,4 @@
+#!/bin/zsh
+##? Is darwin?
+
+[[ "$OSTYPE" == darwin* ]]
