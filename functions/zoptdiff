@@ -1,7 +1,5 @@
 #!/bin/zsh
-
-# show the differences between Zsh default options and the options set in the current
-# interactive shell session
+##? Show diff between Zsh defaults and setopts in current interactive session
 
 tmp1=$(mktemp)
 tmp2=$(mktemp)
