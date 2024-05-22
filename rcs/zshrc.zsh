@@ -1,3 +1,7 @@
+#
+# .zshrc - Run on interactive sessions.
+#
+
 # init profiling
 [[ -z "$ZPROFRC" ]] || zmodload zsh/zprof
 alias zprofrc="ZPROFRC=1 zsh"

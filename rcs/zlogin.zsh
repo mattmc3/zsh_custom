@@ -7,6 +7,7 @@
 {
   # Compile the completion dump to increase startup speed.
   : ${ZSH_COMPDUMP:=${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump}
+  [[ -d ${ZSH_COMPDUMP:h} ]] || mkdir -p ${ZSH_COMPDUMP:h}
   if [[ -s "$ZSH_COMPDUMP" && (! -s "${ZSH_COMPDUMP}.zwc" || "$ZSH_COMPDUMP" -nt "${ZSH_COMPDUMP}.zwc") ]]; then
     if command mkdir "${ZSH_COMPDUMP}.zwc.lock" 2>/dev/null; then
       zcompile "$ZSH_COMPDUMP"

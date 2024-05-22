@@ -88,7 +88,7 @@ fi
 # Misc
 #
 
-export DOTFILES=$XDG_CONFIG_HOME/dotfiles
+export DOTFILES=~/.dotfiles
 export KEYTIMEOUT=1
 
 # Make Apple Terminal behave.
