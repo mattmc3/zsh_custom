@@ -1,75 +1,59 @@
 #
-# homebrew - Environment variables and functions for homebrew users.
+# homebrew: Environment variables and functions for homebrew users.
 #
 
-#
 # References
-#
+# - https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/brew
+# - https://github.com/sorin-ionescu/prezto/tree/master/modules/homebrew
 
-# https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/brew
-# https://github.com/sorin-ionescu/prezto/tree/master/modules/homebrew
+# Where is brew?
+# Setup homebrew if it exists on the system.
+typeset -aU _brewcmd=(
+  $commands[brew]
+  $HOME/.homebrew/bin/brew(N)
+  $HOME/.linuxbrew/bin/brew(N)
+  /opt/homebrew/bin/brew(N)
+  /usr/local/bin/brew(N)
+  /home/linuxbrew/.linuxbrew/bin/brew(N)
+)
+(( ${#_brewcmd} )) || return 1
 
-#
-# Requirements
-#
+# cached-eval 'brew_shellenv' $_brewcmd[1] shellenv
+source <($_brewcmd[1] shellenv)
+unset _brewcmd
 
-# homebrew
-if [[ -e ~/brew/bin/brew ]]; then
-  HOMEBREW_PREFIX=$HOME/brew
-  path=(/opt/homebrew/bin $path)
-elif [[ -e /opt/homebrew/bin/brew ]]; then
-  HOMEBREW_PREFIX=/opt/homebrew
-else
-  return 1
-fi
-
-# Setup cache dir.
-_cache_dir=${XDG_CACHE_HOME:=$HOME/.cache}/zsh
-[[ -d $_cache_dir ]] || mkdir -p $_cache_dir
-
-#
-# Variables
-#
-
+# Default to no tracking.
 HOMEBREW_NO_ANALYTICS=${HOMEBREW_NO_ANALYTICS:-1}
 
-#
-# Functions
-#
+# Add brewed Zsh to fpath
+if [[ -d "$HOMEBREW_PREFIX/share/zsh/site-functions" ]]; then
+  fpath+=("$HOMEBREW_PREFIX/share/zsh/site-functions")
+fi
 
-# Load plugin functions.
-0=${(%):-%N}
-fpath=(${0:A:h}/functions $fpath)
-autoload -Uz ${0:A:h}/functions/*(.:t)
-
-#
-# Aliases
-#
-
+# Set functions and aliases.
 alias brewup="brew update && brew upgrade && brew cleanup"
+alias brewinfo="brew leaves | xargs brew desc --eval-all"
 
-#
-# Init
-#
-
-# Generate a new cache file daily of just the 'HOMEBREW_' vars.
-typeset -a _cache_files=($_cache_dir/brew_shellenv.zsh(Nmh-20))
-if ! (( $#_cache_files )); then
-  $HOMEBREW_PREFIX/bin/brew shellenv 2> /dev/null >| $_cache_dir/brew_shellenv.zsh
-  grep "export HOMEBREW_" $_cache_dir/brew_shellenv.zsh >| $_cache_dir/brew_exclpaths.zsh
+# Multi-user brews.
+brew_owner=$(stat -f "%Su" $HOMEBREW_PREFIX)
+if [[ $(whoami) != $brew_owner ]]; then
+  alias brew="sudo -Hu '$brew_owner' brew"
 fi
+unset brew_owner
 
-# Allow a user to do their own shellenv setup.
-if ! zstyle -t ':mattmc3:zsh_custom:plugin:homebrew:shellenv' skip; then
-  if zstyle -t ':mattmc3:zsh_custom:plugin:homebrew:shellenv' 'include-paths'; then
-    source $_cache_dir/brew_shellenv.zsh
-  else
-    source $_cache_dir/brew_exclpaths.zsh
-  fi
-fi
+##? Show brewed apps.
+function brews {
+  local formulae="$(brew leaves | xargs brew deps --installed --for-each)"
+  local casks="$(brew list --cask 2>/dev/null)"
 
-#
-# Clean up
-#
+  local blue="$(tput setaf 4)"
+  local bold="$(tput bold)"
+  local off="$(tput sgr0)"
 
-unset _cache_{dir,files}
+  echo "${blue}==>${off} ${bold}Formulae${off}"
+  echo "${formulae}" | sed "s/^\(.*\):\(.*\)$/\1${blue}\2${off}/"
+  echo "\n${blue}==>${off} ${bold}Casks${off}\n${casks}"
+}
+
+# Mark this plugin as loaded.
+zstyle ':zsh_custom:plugin:homebrew' loaded 'yes'
