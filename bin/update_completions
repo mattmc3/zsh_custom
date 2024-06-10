@@ -1,0 +1,22 @@
+#!/bin/zsh
+
+PRJHOME=${${(%):-%N}:A:h:h}
+
+function update_git_completions {
+  emulate -L zsh; setopt local_options
+  # Download the git scripts
+  local dest=$PRJHOME/completions
+  local giturl=https://raw.githubusercontent.com/git/git/master/contrib/completion
+  [[ -d $dest ]] || mkdir -p $dest
+  curl -fsSL $giturl/git-completion.bash -o $dest/git-completion.bash
+  curl -fsSL $giturl/git-completion.zsh -o $dest/_git
+}
+
+function update_starship_completions {
+  emulate -L zsh; setopt local_options
+  (( $+commands[starship] )) || return 1
+  starship completions zsh > $PRJHOME/completions/_starship
+}
+
+update_git_completions
+update_starship_completions
