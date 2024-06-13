@@ -18,9 +18,21 @@ typeset -aU _brewcmd=(
 )
 (( ${#_brewcmd} )) || return 1
 
-# cached-eval 'brew_shellenv' $_brewcmd[1] shellenv
-source <($_brewcmd[1] shellenv)
+if (( $+functions[cached-eval] )) && zstyle -T ':zsh_custom:plugin:homebrew' 'use-cache'; then
+  cached-eval 'brew_shellenv' $_brewcmd[1] shellenv
+else
+  source <($_brewcmd[1] shellenv)
+fi
 unset _brewcmd
+
+# Build remaining path.
+path=(
+  $HOME/{,s}bin(N)
+  $HOME/.local/bin(N)
+  $HOMEBREW_PREFIX/{,s}bin(N)
+  /usr/local/{,s}bin(N)
+  $path
+)
 
 # Default to no tracking.
 HOMEBREW_NO_ANALYTICS=${HOMEBREW_NO_ANALYTICS:-1}
