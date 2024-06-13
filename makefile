@@ -13,6 +13,6 @@ all : help update
 help:
 	@grep "^##?" makefile | cut -c 5-
 
-##? update          update submodules
+##? update          update all the things that need updated
 update:
-	git submodule update --recursive --remote
+	./bin/update_completions
