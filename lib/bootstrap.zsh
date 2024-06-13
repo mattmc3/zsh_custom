@@ -10,8 +10,7 @@
 alias zprofrc="ZPROFRC=1 zsh"
 
 # Make sure ZSH_CUSTOM is properly set.
-0=${(%):-%N}
-ZSH_CUSTOM=${0:a:h:h:h}
+: ${ZSH_CUSTOM:=${${(%):-%N}:a:h:h}}
 
 # Set XDG base dirs.
 # https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
