@@ -29,4 +29,4 @@ alias hist='fc -li'
 alias history-stat="history 0 | awk '{print \$2}' | sort | uniq -c | sort -n -r | head"
 
 # Mark this plugin as loaded.
-zstyle ":zsh_custom:plugin:history" loaded 'yes'
+zstyle ':zsh_custom:plugin:history' loaded 'yes'
