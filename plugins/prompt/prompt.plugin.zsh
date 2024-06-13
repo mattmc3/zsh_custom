@@ -21,7 +21,7 @@ setopt transient_rprompt
 # Functions
 #
 
-# Add Zephyr's prompt functions to fpath.
+# Add prompt functions to fpath.
 0=${(%):-%N}
 fpath=(${0:A:h}/functions $fpath)
 

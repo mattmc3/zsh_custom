@@ -4,7 +4,7 @@
 
   if ! (( $+commands[starship] )); then
     # We could install, but running a remotely hosted shell script is not a risk
-    # Zephyr should assume. Let's let the user decide whether to install it.
+    # we should assume. Let's let the user decide whether to install it.
     echo >&2 "Starship prompt not installed. See https://starship.rs to install."
     return 1
   fi
