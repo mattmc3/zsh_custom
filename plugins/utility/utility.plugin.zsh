@@ -21,6 +21,11 @@ zle -N self-insert url-quote-magic
 (( $+aliases[run-help] )) && unalias run-help && autoload -Uz run-help
 alias help=run-help
 
+# Ensure python command exists.
+if (( $+commands[python3] )) && ! (( $+commands[python] )); then
+  alias python=python3
+fi
+
 # Ensure envsubst command exists.
 if ! (( $+commands[envsubst] )); then
   alias envsubst="python -c 'import os,sys;[sys.stdout.write(os.path.expandvars(l)) for l in sys.stdin]'"
@@ -71,4 +76,4 @@ function sedi {
 }
 
 # Mark this plugin as loaded.
-zstyle ":zsh_custom:plugin:utility" loaded 'yes'
+zstyle ':zsh_custom:plugin:utility' loaded 'yes'
