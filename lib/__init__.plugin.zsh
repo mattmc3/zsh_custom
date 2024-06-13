@@ -2,6 +2,9 @@
 # __init__: Ensure zsh_custom is properly boostrapped.
 #
 
+# Don't double load.
+! zstyle -t ':zsh_custom:plugin:__init__' loaded || return 1
+
 # Initialize profiling.
 [[ "$ZPROFRC" -ne 1 ]] || zmodload zsh/zprof
 alias zprofrc="ZPROFRC=1 zsh"
@@ -35,6 +38,28 @@ setopt extended_glob interactive_comments
 ##? Echo to stderror
 function echoerr {
   echo >&2 "$@"
+}
+
+function plugin-load {
+  : ${REPO_HOME:=${XDG_CACHE_HOME:-$HOME/.cache}/repos}
+  : ${ZSH:=$REPO_HOME/ohmyzsh/ohmyzsh}
+  : ${ZPREZTODIR:=$REPO_HOME/sorin-ionescu/prezto}
+
+  local plugin inits=()
+  for plugin in $@; do
+    inits=(
+      {$ZSH_CUSTOM,$ZSH}/plugins/$plugin/${plugin}.plugin.zsh(N)
+      $ZPREZTODIR/modules/$plugin/init.zsh(N)
+      $REPO_HOME/$plugin/${plugin:t}.plugin.zsh(N)
+      $REPO_HOME/$plugin/*.{plugin.zsh,zsh,zsh-theme}(N)
+    )
+    if ! (( $#inits )); then
+      print -ru2 "plugin-load: Plugin not found '$plugin'."
+      continue
+    fi
+    source $inits[1]
+    zstyle ":zsh_custom:plugin:$plugin" loaded 'yes'
+  done
 }
 
 ##? Autoload function files in directory
