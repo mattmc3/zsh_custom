@@ -2,65 +2,67 @@
 # __init__: Ensure zsh_custom is properly boostrapped.
 #
 
-# Set common vars.
-0=${(%):-%N}
-ZSH_CUSTOM=${0:a:h:h}
+# Initialize profiling.
+[[ "$ZPROFRC" -ne 1 ]] || zmodload zsh/zprof
+alias zprofrc="ZPROFRC=1 zsh"
 
-# Critical Zsh options
+# Make sure ZSH_CUSTOM is properly set.
+0=${(%):-%N}
+ZSH_CUSTOM=${0:a:h:h:h}
+
+# Set XDG base dirs.
+# https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
+export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
+export XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
+export XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
+export XDG_STATE_HOME=${XDG_STATE_HOME:-$HOME/.local/state}
+
+# Set core Zsh directories.
+: ${__zsh_config_dir:=${ZDOTDIR:-$XDG_CONFIG_HOME/zsh}}
+: ${__zsh_cache_dir:=$XDG_CACHE_HOME/zsh}
+: ${__zsh_user_data_dir:=$XDG_DATA_HOME/zsh}
+
+# Ensure core dirs exist.
+() {
+  local d; for d in $@; [[ -d ${(P)_d} ]] || mkdir -p ${(P)_d}
+} XDG_{CONFIG,CACHE,DATA,STATE}_HOME __zsh_{config,user_data,cache}_dir
+
+# Set essential options
 setopt extended_glob interactive_comments
 
-# Set Zsh locations.
-typeset -gx __zsh_config_dir
-zstyle -s ':zsh_custom:xdg:config' dir '__zsh_config_dir' \
-  || __zsh_config_dir=${ZDOTDIR:-${XDG_CONFIG_HOME:-$HOME/.config}/zsh}
+#region Define shared helper functions
 
-typeset -gx __zsh_user_data_dir
-zstyle -s ':zsh_custom:xdg:user_data' dir '__zsh_user_data_dir' \
-  || __zsh_user_data_dir=${XDG_DATA_HOME:-$HOME/.local/share}/zsh
-
-typeset -gx __zsh_cache_dir
-zstyle -s ':zsh_custom:xdg:cache' dir '__zsh_cache_dir' \
-  || __zsh_cache_dir=${XDG_CACHE_HOME:-$HOME/.cache}/zsh
-
-##? Make directories from vars
-function mkdir-fromvar {
-  local zdirvar
-  for zdirvar in $@; do
-    [[ -d ${(P)zdirvar} ]] || mkdir -p ${(P)zdirvar}
-  done
+##? Echo to stderror
+function echoerr {
+  echo >&2 "$@"
 }
 
-# Make critical Zsh dirs
-mkdir-fromvar __zsh_{config,cache,user_data}_dir
-
-##? Autoload a user functions directory.
+##? Autoload function files in directory
 function autoload-dir {
-  local fndir
-  for fndir in $@; do
-    [[ -d $fndir ]] || return 1
-    fpath=($fndir $fpath)
-    autoload -Uz $fndir/*~*/_*(N.:t)
+  local zdir
+  local -a zautoloads
+  for zdir in $@; do
+    [[ -d "$zdir" ]] || continue
+    fpath=("$zdir" $fpath)
+    zautoloads=($zdir/*~_*(N.:t))
+    (( $#zautoloads > 0 )) && autoload -Uz $zautoloads
   done
 }
 
-##? Memoize a command
-function cached-command {
+##? Cache the results of an eval command
+function cached-eval {
   emulate -L zsh; setopt local_options extended_glob
   (( $# >= 2 )) || return 1
 
-  # make the command name safer as a file path
-  local cmdname="${1}"; shift
-  cmdname=${cmdname:gs/\@/-AT-}
-  cmdname=${cmdname:gs/\:/-COLON-}
-  cmdname=${cmdname:gs/\//-SLASH-}
-
-  local memofile=$__zsh_cache_dir/memoized/${cmdname}.zsh
-  local -a cached=($memofile(Nmh-20))
-  if ! (( ${#cached} )); then
-    mkdir -p ${memofile:h}
-    "$@" >| $memofile
+  local cmdname=$1; shift
+  local cachefile=$__zsh_cache_dir/cached-eval/${cmdname}.zsh
+  local -a cached=($cachefile(Nmh-20))
+  # If the file has no size (is empty), or is older than 20 hours re-gen the cache.
+  if [[ ! -s $cachefile ]] || (( ! ${#cached} )); then
+    mkdir -p ${cachefile:h}
+    "$@" > $cachefile
   fi
-  source $memofile
+  source $cachefile
 }
 
 ##? Check if a file can be autoloaded by trying to load it in a subshell.
@@ -78,30 +80,17 @@ function is-true {
   [[ -n "$1" && "$1:l" == (1|y(es|)|t(rue|)|o(n|)) ]]
 }
 
-##? Check if running on macOS.
-function is-macos {
-  [[ "$OSTYPE" == darwin* ]]
-}
+##? Pass thru for copy/paste markdown
+function $ { $@ }
 
-##? Check if running on Linux.
-function is-linux {
-  [[ "$OSTYPE" == linux* ]]
-}
+# OS checks.
+function is-macos  { [[ "$OSTYPE" == darwin* ]] }
+function is-linux  { [[ "$OSTYPE" == linux*  ]] }
+function is-bsd    { [[ "$OSTYPE" == *bsd*   ]] }
+function is-cygwin { [[ "$OSTYPE" == cygwin* ]] }
+function is-termux { [[ "$OSTYPE" == linux-android ]] }
 
-##? Check if running on BSD.
-function is-bsd {
-  [[ "$OSTYPE" == *bsd* ]]
-}
+#endregion
 
-##? Check if running on Cygwin (Windows).
-function is-cygwin {
-  [[ "$OSTYPE" == cygwin* ]]
-}
-
-##? Check if running on termux (Android).
-function is-termux {
-  [[ "$OSTYPE" == linux-android ]]
-}
-
-# Mark this lib as loaded.
-zstyle ":zsh_custom:lib:__init__" loaded 'yes'
+# Mark this plugin as loaded.
+zstyle ':zsh_custom:plugin:__init__' loaded 'yes'
