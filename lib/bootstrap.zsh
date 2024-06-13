@@ -1,9 +1,9 @@
 #
-# __init__: Ensure zsh_custom is properly boostrapped.
+# bootstrap: Ensure zsh_custom is properly boostrapped.
 #
 
 # Don't double load.
-! zstyle -t ':zsh_custom:plugin:__init__' loaded || return 1
+! zstyle -t ':zsh_custom:lib:bootstrap' loaded || return 1
 
 # Initialize profiling.
 [[ "$ZPROFRC" -ne 1 ]] || zmodload zsh/zprof
@@ -118,4 +118,4 @@ function is-termux { [[ "$OSTYPE" == linux-android ]] }
 #endregion
 
 # Mark this plugin as loaded.
-zstyle ':zsh_custom:plugin:__init__' loaded 'yes'
+zstyle ':zsh_custom:lib:bootstrap' loaded 'yes'
