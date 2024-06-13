@@ -35,6 +35,7 @@ path=(
   $HOME/{,s}bin(N)
   /opt/{homebrew,local}/{,s}bin(N)
   /usr/local/{,s}bin(N)
+  $ZSH_CUSTOM/bin(N)
   $path
 )
 
