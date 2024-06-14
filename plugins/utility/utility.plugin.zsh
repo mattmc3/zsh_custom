@@ -74,6 +74,3 @@ function sedi {
   # GNU/BSD
   sed --version &>/dev/null && sed -i -- "$@" || sed -i "" "$@"
 }
-
-# Mark this plugin as loaded.
-zstyle ':zsh_custom:plugin:utility' loaded 'yes'

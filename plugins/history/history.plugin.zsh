@@ -27,6 +27,3 @@ HISTFILE=$__zsh_user_data_dir/zsh_history      # History file path.
 # History aliases.
 alias hist='fc -li'
 alias history-stat="history 0 | awk '{print \$2}' | sort | uniq -c | sort -n -r | head"
-
-# Mark this plugin as loaded.
-zstyle ':zsh_custom:plugin:history' loaded 'yes'

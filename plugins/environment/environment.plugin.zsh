@@ -6,8 +6,8 @@
 # - https://github.com/sorin-ionescu/prezto/blob/master/runcoms/zprofile
 
 # Bootstrap.
-0=${(%):-%N}
-zstyle -t ':zsh_custom:plugins:__init__' loaded || source ${0:a:h:h}/__init__/__init__.plugin.zsh
+: ${ZSH_CUSTOM:=${${(%):-%N}:a:h:h:h}}
+zstyle -t ':zsh_custom:lib:bootstrap' loaded || source $ZSH_CUSTOM/lib/bootstrap.zsh
 
 # Editors
 export EDITOR=${EDITOR:-nano}
@@ -62,6 +62,3 @@ fi
 
 # Use `< file` to quickly view the contents of any file.
 [[ -z "$READNULLCMD" ]] || READNULLCMD=$PAGER
-
-# Mark this plugin as loaded.
-zstyle ':zsh_custom:plugin:environment' loaded 'yes'

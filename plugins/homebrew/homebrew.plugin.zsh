@@ -66,6 +66,3 @@ function brews {
   echo "${formulae}" | sed "s/^\(.*\):\(.*\)$/\1${blue}\2${off}/"
   echo "\n${blue}==>${off} ${bold}Casks${off}\n${casks}"
 }
-
-# Mark this plugin as loaded.
-zstyle ':zsh_custom:plugin:homebrew' loaded 'yes'

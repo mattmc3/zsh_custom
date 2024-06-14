@@ -40,6 +40,3 @@ if ! zstyle -t ':zsh_custom:plugin:directory:alias' skip; then
     done
   }
 fi
-
-# Mark this plugin as loaded.
-zstyle ':zsh_custom:plugin:directory' loaded 'yes'

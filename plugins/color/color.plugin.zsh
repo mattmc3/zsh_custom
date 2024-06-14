@@ -70,6 +70,3 @@ fi
 
 # Colorize completions.
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
-
-# Mark this plugin as loaded.
-zstyle ':zsh_custom:plugin:color' loaded 'yes'
