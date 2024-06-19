@@ -6,8 +6,9 @@
 # - https://github.com/sorin-ionescu/prezto/blob/master/runcoms/zprofile
 
 # Bootstrap.
-: ${ZSH_CUSTOM:=${${(%):-%N}:a:h:h:h}}
-zstyle -t ':zsh_custom:plugin:__init__' loaded || source $ZSH_CUSTOM/plugins/__init__/__init__.plugin.zsh
+0=${(%):-%N}
+: ${ZSH_CUSTOM:=${0:a:h:h:h}}
+zstyle -t ':zsh_custom:lib' loaded || source $ZSH_CUSTOM/lib/__init__.zsh
 
 # Editors
 export EDITOR=${EDITOR:-nano}
