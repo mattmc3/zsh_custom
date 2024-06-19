@@ -5,6 +5,10 @@
 # Don't double load.
 ! zstyle -t ':zsh_custom:lib' loaded || return 1
 
+# Initialize profiling.
+[[ "$ZPROFRC" -ne 1 ]] || zmodload zsh/zprof
+alias zprofrc="ZPROFRC=1 zsh"
+
 # Set essential options
 setopt extended_glob interactive_comments
 
@@ -53,6 +57,3 @@ function is-linux  { [[ "$OSTYPE" == linux*  ]] }
 function is-bsd    { [[ "$OSTYPE" == *bsd*   ]] }
 function is-cygwin { [[ "$OSTYPE" == cygwin* ]] }
 function is-termux { [[ "$OSTYPE" == linux-android ]] }
-
-# Mark this plugin as loaded.
-zstyle ':zsh_custom:lib' loaded 'yes'
