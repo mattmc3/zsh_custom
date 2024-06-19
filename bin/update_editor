@@ -1,0 +1,18 @@
+#!/bin/zsh
+
+PRJHOME=${${(%):-%N}:A:h:h}
+
+function filter {
+  awkfilter=$1; shift
+  awk -v UPSTREAM_URL=$UPSTREAM_URL \
+      -f $PRJHOME/bin/filters/$awkfilter
+}
+
+function update_editor {
+  emulate -L zsh; setopt local_options
+  local dest=$PRJHOME/plugins/editor/external
+  export REMOTE_URL=https://raw.githubusercontent.com/sorin-ionescu/prezto/master/modules/editor/init.zsh
+  [[ -d $dest ]] || mkdir -p $dest
+  curl -fsSL $REMOTE_URL | filter scrub_prezto | filter scrub_editor > $dest/prezto_editor.zsh
+}
+update_editor

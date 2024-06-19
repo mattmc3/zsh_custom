@@ -1,0 +1,15 @@
+#!/usr/bin/awk -f
+
+NR==1 && UPSTREAM_URL!="" {
+  print "#"
+  print "# Generated from " UPSTREAM_URL
+  print "#"
+  print ""
+}
+{
+  gsub(/:prezto:module:/,":zsh_custom:plugin:")
+  gsub(/prezto/,"zsh_custom")
+}
+{ print }
+
+# vim: ft=awk
