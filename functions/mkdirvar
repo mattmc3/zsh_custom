@@ -1,0 +1,11 @@
+#!/bin/zsh
+##? Ensure directory variables exist.
+#function mkdirvar {
+  local dirvar dirpath
+  for dirvar in $@; do
+    dirpath=${(P)dirvar}
+    if [[ -n "$dirpath" ]] && [[ ! -d $dirpath ]]; then
+      echo mkdir -p $dirpath
+    fi
+  done
+#}

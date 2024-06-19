@@ -1,9 +1,17 @@
 #!/bin/zsh
+
+##? Autoload function files in directory
 #function autoload-dir {
-  if [[ ! -d $1 ]]; then
-    echo >&2 "autoload-dir: Directory not found '$1'."
-    return 1
-  fi
-  fpath+=($1)
-  autoload -Uz $1/*(.:t)
+  local zdir
+  local -a zautoloads
+  for zdir in $@; do
+    [[ -n "$zdir" ]] || continue
+    if [[ ! -d $zdir ]]; then
+      echo >&2 "autoload-dir: Directory not found '$zdir'."
+      return 1
+    fi
+    fpath=("$zdir" $fpath)
+    zautoloads=($zdir/*~_*(N.:t))
+    (( $#zautoloads > 0 )) && autoload -Uz $zautoloads
+  done
 #}
