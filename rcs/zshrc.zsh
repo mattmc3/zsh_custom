@@ -18,7 +18,6 @@ export REPO_HOME=$ZSH_CUSTOM/.external
 # plugins
 plugins=(
   # pre-reqs
-  __init__
   p10k-instant-prompt
   environment
   homebrew
@@ -41,7 +40,6 @@ plugins=(
   directory
   history
   prompt
-  terminal
 
   # completions
   completion
