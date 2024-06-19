@@ -12,7 +12,7 @@
 # Variables
 #
 
-zstyle -s ':mattmc3:zsh_custom:plugin:otp' home 'OTP_HOME' ||
+zstyle -s ':zsh_custom:plugin:otp' home 'OTP_HOME' ||
   OTP_HOME="${OTP_HOME:-${XDG_DATA_HOME:-$HOME/.local/share}/otp}"
 [[ -d $OTP_HOME ]] || mkdir -p $OTP_HOME
 
