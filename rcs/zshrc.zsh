@@ -2,18 +2,7 @@
 # .zshrc - Run on interactive sessions.
 #
 
-# init profiling
-[[ -z "$ZPROFRC" ]] || zmodload zsh/zprof
-alias zprofrc="ZPROFRC=1 zsh"
-
-# autoload functions
-export ZSH_CUSTOM=$ZDOTDIR/custom
-fpath+=($ZSH_CUSTOM/functions)
-autoload -Uz $ZSH_CUSTOM/functions/*(.:t)
-
-# clone repos
-export REPO_HOME=$ZSH_CUSTOM/.external
-[[ -d $REPO_HOME ]] || repo in <$ZSH_CUSTOM/repos.txt
+ZSH_CUSTOM=$ZDOTDIR/custom
 
 # plugins
 plugins=(
@@ -51,6 +40,10 @@ plugins=(
   history-substring-search
 )
 
+# Source custom
+source $ZSH_CUSTOM/zsh_custom.zsh
+
+# Load plugins
 plugin-load $plugins
 
 # prompt
