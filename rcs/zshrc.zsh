@@ -21,9 +21,9 @@ plugins=(
   __init__
   p10k-instant-prompt
   environment
+  homebrew
   xdg
   zfunctions
-  homebrew
 
   # editor
   editor
@@ -32,7 +32,7 @@ plugins=(
 
   # utils
   colorize
-  clipboard
+  utility
   macos
   extract
   zoxide
@@ -41,7 +41,6 @@ plugins=(
   directory
   history
   prompt
-  utility
   terminal
 
   # completions
