@@ -10,11 +10,11 @@ if [[ "$1" = */* ]]; then
   user=${1%/*}
   repo=${1##*/}
 else
-  user=mattmc3
+  user=$(git config user.name)
   repo=$1
 fi
 
-local giturl="github.com"
+local giturl=$(git config user.giturl || echo "github.com")
 local dest=${XDG_PROJECTS_HOME:-~/Projects}/$user/$repo
 
 if [[ ! -d $dest ]]; then
