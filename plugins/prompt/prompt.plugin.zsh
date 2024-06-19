@@ -34,7 +34,7 @@ autoload -Uz promptinit && promptinit
 
 # Set the prompt if specified
 local -a prompt_theme
-zstyle -a ':mattmc3:zsh_custom:plugin:prompt' theme 'prompt_theme'
+zstyle -a ':zsh_custom:plugin:prompt' theme 'prompt_theme'
 if [[ $TERM == (dumb|linux|*bsd*) ]]; then
   prompt 'off'
 elif (( $#prompt_theme > 0 )); then
