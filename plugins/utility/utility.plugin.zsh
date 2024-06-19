@@ -8,8 +8,8 @@
 # - https://github.com/mattmc3/zephyr/blob/main/plugins/utility/utility.plugin.zsh
 
 # __init__
-0=${(%):-%N}
-zstyle -t ':zsh_custom:lib:__init__' loaded || source ${0:a:h:h:h}/lib/__init__.zsh
+: ${ZSH_CUSTOM:=${${(%):-%N}:a:h:h:h}}
+zstyle -t ':zsh_custom:plugin:__init__' loaded || source $ZSH_CUSTOM/plugins/__init__/__init__.plugin.zsh
 
 # Use built-in paste magic.
 autoload -Uz bracketed-paste-url-magic

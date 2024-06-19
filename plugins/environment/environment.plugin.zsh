@@ -7,7 +7,7 @@
 
 # Bootstrap.
 : ${ZSH_CUSTOM:=${${(%):-%N}:a:h:h:h}}
-zstyle -t ':zsh_custom:lib:bootstrap' loaded || source $ZSH_CUSTOM/lib/bootstrap.zsh
+zstyle -t ':zsh_custom:plugin:__init__' loaded || source $ZSH_CUSTOM/plugins/__init__/__init__.plugin.zsh
 
 # Editors
 export EDITOR=${EDITOR:-nano}

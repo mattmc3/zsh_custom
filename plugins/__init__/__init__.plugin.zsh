@@ -1,38 +1,32 @@
 #
-# bootstrap: Ensure zsh_custom is properly boostrapped.
+# __init__: zsh_custom helper functions and pre-reqs.
 #
 
 # Don't double load.
-! zstyle -t ':zsh_custom:lib:bootstrap' loaded || return 1
-
-# Initialize profiling.
-[[ "$ZPROFRC" -ne 1 ]] || zmodload zsh/zprof
-alias zprofrc="ZPROFRC=1 zsh"
-
-# Make sure ZSH_CUSTOM is properly set.
-: ${ZSH_CUSTOM:=${${(%):-%N}:a:h:h}}
-
-# Set XDG base dirs.
-# https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
-export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
-export XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
-export XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
-export XDG_STATE_HOME=${XDG_STATE_HOME:-$HOME/.local/state}
-
-# Set core Zsh directories.
-: ${__zsh_config_dir:=${ZDOTDIR:-$XDG_CONFIG_HOME/zsh}}
-: ${__zsh_cache_dir:=$XDG_CACHE_HOME/zsh}
-: ${__zsh_user_data_dir:=$XDG_DATA_HOME/zsh}
-
-# Ensure core dirs exist.
-() {
-  local d; for d in $@; [[ -d ${(P)_d} ]] || mkdir -p ${(P)_d}
-} XDG_{CONFIG,CACHE,DATA,STATE}_HOME __zsh_{config,user_data,cache}_dir
+! zstyle -t ':zsh_custom:plugin:__init__' loaded || return 1
 
 # Set essential options
 setopt extended_glob interactive_comments
 
-#region Define shared helper functions
+# Make sure ZSH_CUSTOM is properly set.
+: ${ZSH_CUSTOM:=${${(%):-%N}:a:h:h:h}}
+
+# Set core Zsh directories.
+: ${__zsh_config_dir:=${ZDOTDIR:-${XDG_CONFIG_HOME:-$HOME/.config}/zsh}}
+: ${__zsh_cache_dir:=${XDG_CACHE_HOME:-$HOME/.cache}/zsh}
+: ${__zsh_user_data_dir:=${XDG_DATA_HOME:-$HOME/.local/share}/zsh}
+
+##? Ensure directory variables exist.
+function mkdirvar {
+  local dirvar dirpath
+  for dirvar in $@; do
+    dirpath=${(P)dirvar}
+    if [[ -n "$dirpath" ]] && [[ ! -d $dirpath ]]; then
+      echo mkdir -p $dirpath
+    fi
+  done
+}
+mkdirvar XDG_{CONFIG,CACHE,DATA,STATE}_HOME __zsh_{config,user_data,cache}_dir
 
 ##? Echo to stderror
 function echoerr {
@@ -114,7 +108,5 @@ function is-bsd    { [[ "$OSTYPE" == *bsd*   ]] }
 function is-cygwin { [[ "$OSTYPE" == cygwin* ]] }
 function is-termux { [[ "$OSTYPE" == linux-android ]] }
 
-#endregion
-
 # Mark this plugin as loaded.
-zstyle ':zsh_custom:lib:bootstrap' loaded 'yes'
+zstyle ':zsh_custom:plugin:__init__' loaded 'yes'
