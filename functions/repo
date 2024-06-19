@@ -2,6 +2,7 @@
 ##? repo - Deal with git repos
 
 function __repo_help {
+  emulate -L zsh; setopt local_options
   echo "repo - Deal with git repos"
   echo ""
   echo "commands:"
@@ -16,8 +17,32 @@ function __repo_help {
   echo "  repo in <repos.txt"
 }
 
+function __repo_home {
+  emulate -L zsh; setopt local_options
+  if [[ -n "$REPO_HOME" ]]; then
+    echo $REPO_HOME
+  else
+    echo ${XDG_CACHE_HOME:-$HOME/.cache}/repos
+  fi
+}
+
 function __repo_update {
-  local repodir=$REPO_HOME/$1
+  emulate -L zsh; setopt local_options no_monitor
+  echo "Checking for updates..."
+  local repo
+  local -a repos
+  (( $# > 0 )) && repos=($@) || repos=($(repo ls))
+  for repo in $repos; do
+    echo "$repo..."
+    __repo_pull $repo &
+  done
+  wait
+  echo "Updates complete."
+}
+
+function __repo_pull {
+  emulate -L zsh; setopt local_options
+  local repodir=$(__repo_home)/$1
   local oldsha=$(command git -C $repodir rev-parse --short HEAD)
   command git -C $repodir pull --quiet --ff --depth 1 --rebase --autostash
   local newsha=$(command git -C $repodir rev-parse --short HEAD)
@@ -28,7 +53,7 @@ function __repo_update {
 
 function __repo_clone {
   local repo=$1
-  local repodir=$REPO_HOME/$repo
+  local repodir=$(__repo_home)/$repo
   if [ -d $repodir ]; then
     echo "Found $repo..."
     return
@@ -56,6 +81,44 @@ function __repo_clone {
   echo "Cloned $repo."
 }
 
+function __repo_list {
+  emulate -L zsh
+  setopt local_options extended_glob no_monitor
+  local repo err=1
+  for repo in $(__repo_home)/*/*/.git(/N); do
+    echo ${repo:h:h:t}/${repo:h:t}
+    err=0
+  done
+  return $err
+}
+
+function __repo_install {
+  emulate -L zsh; setopt local_options no_monitor
+  local repo
+  for repo in $@; do
+    __repo_clone $repo &
+  done
+  wait
+}
+
+function __repo_remove {
+  emulate -L zsh; setopt local_options
+  local err=0
+  local repo_home=$(__repo_home)
+  for repo in $@; do
+    if ! [[ "$repo_home" =~ $HOME/* ]]; then
+      echo >&2 "repo: \$REPO_HOME not set correctly '$repo_home'."
+      return 2
+    elif ! [[ -d $repo_home/$repo ]]; then
+      echo "Repo not found '$repo'."
+      err=1
+    else
+      command rm -rf -- $repo_home/$repo
+    fi
+  done
+  return $err
+}
+
 function repo {
   emulate -L zsh
   setopt local_options extended_glob no_monitor
@@ -65,9 +128,8 @@ function repo {
     return 1
   }
 
-  local repo err=1
+  local err=0
   local cmd=$1; shift
-  : ${REPO_HOME:=${XDG_CACHE_HOME:-$HOME/.cache}/repos}
 
   # piped/redirected input
   if ! [ -t 0 ]; then
@@ -85,50 +147,29 @@ function repo {
       __repo_help
     ;;
     home)
-      echo $REPO_HOME
+      __repo_home
     ;;
     ls|list)
-      err=1
-      for repo in $REPO_HOME/*/*/.git(/N); do
-        echo ${repo:h:h:t}/${repo:h:t}
-        err=0
-      done
-      return $err
+      __repo_list
+      err=$?
     ;;
     up|update)
-      echo "Checking for updates..."
-      for repo in $(repo ls); do
-        echo "$repo..."
-        __repo_update $repo &
-      done
-      wait
-      echo "Updates complete."
+      __repo_update "$@"
+      err=$?
     ;;
     in|install)
-      for repo in $@; do
-        __repo_clone $repo &
-      done
-      wait
+      __repo_install "$@"
+      err=$?
     ;;
     rm|del)
-      local err=0
-      for repo in $@; do
-        if ! [[ "$REPO_HOME" =~ $HOME/* ]]; then
-          echo >&2 "repo: \$REPO_HOME not set correctly '$REPO_HOME'."
-          return 2
-        elif ! [[ -d $REPO_HOME/$repo ]]; then
-          echo "Repo not found '$repo'."
-          err=1
-        else
-          command rm -rf -- $REPO_HOME/$repo
-        fi
-      done
-      return $err
+      __repo_remove "$@"
     ;;
     *)
       echo >&2 "repo: Unknown command '"$cmd"'"
-      return 1
+      err=1
     ;;
   esac
+
+  return $err
 }
 repo "$@"

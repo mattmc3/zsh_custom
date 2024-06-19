@@ -1,6 +1,6 @@
 #!/bin/zsh
 #function plugin-load {
-  : ${REPO_HOME:=${XDG_CACHE_HOME:-$HOME/.cache}/repos}
+  local REPO_HOME=${REPO_HOME:-$(repo home)}
   : ${ZSH:=$REPO_HOME/ohmyzsh/ohmyzsh}
   : ${ZPREZTODIR:=$REPO_HOME/sorin-ionescu/prezto}
 
