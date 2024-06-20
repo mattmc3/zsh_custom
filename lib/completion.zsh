@@ -14,7 +14,7 @@ setopt complete_in_word  # Complete from both ends of a word.
 setopt NO_menu_complete  # Do not autoselect the first completion entry.
 
 # Initialize completions.
-function mycompinit {
+function docompinit {
   local compdump=${ZSH_COMPDUMP:-$__zsh_cache_dir/compdump}
   [[ -d $compdump:h ]] || mkdir -p $compdump:h
 

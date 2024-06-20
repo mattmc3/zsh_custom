@@ -34,7 +34,7 @@ function zshrc-post {
   fi
 
   # Init completions.
-  (( $+functions[compinit] )) || mycompinit
+  (( $+functions[compinit] )) || docompinit
 
   # Finish profiling by calling zprof.
   [[ "$ZPROFRC" -eq 1 ]] && zprof
