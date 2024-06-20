@@ -1,6 +1,8 @@
 #!/bin/zsh
 ##? repo - Deal with git repos
 
+typeset -gHa _repo_opts=(extended_glob glob_dots no_monitor)
+
 function __repo_help {
   emulate -L zsh; setopt local_options
   echo "repo - Deal with git repos"
@@ -19,18 +21,13 @@ function __repo_help {
 
 function __repo_home {
   emulate -L zsh; setopt local_options
-  if [[ -n "$REPO_HOME" ]]; then
-    echo $REPO_HOME
-  else
-    echo ${XDG_CACHE_HOME:-$HOME/.cache}/repos
-  fi
+  echo ${REPO_HOME:-${XDG_CACHE_HOME:-$HOME/.cache}/repos}
 }
 
 function __repo_update {
-  emulate -L zsh; setopt local_options no_monitor
+  emulate -L zsh; setopt local_options $_repo_opts
   echo "Checking for updates..."
-  local repo
-  local -a repos
+  local repo; local -a repos
   (( $# > 0 )) && repos=($@) || repos=($(repo ls))
   for repo in $repos; do
     echo "$repo..."
@@ -41,7 +38,7 @@ function __repo_update {
 }
 
 function __repo_pull {
-  emulate -L zsh; setopt local_options
+  emulate -L zsh; setopt local_options $_repo_opts
   local repodir=$(__repo_home)/$1
   local oldsha=$(command git -C $repodir rev-parse --short HEAD)
   command git -C $repodir pull --quiet --ff --depth 1 --rebase --autostash
@@ -52,6 +49,7 @@ function __repo_pull {
 }
 
 function __repo_clone {
+  emulate -L zsh; setopt local_options $_repo_opts
   local repo=$1
   local repodir=$(__repo_home)/$repo
   if [ -d $repodir ]; then
@@ -82,7 +80,7 @@ function __repo_clone {
 }
 
 function __repo_list {
-  emulate -L zsh
+  emulate -L zsh; setopt local_options $_repo_opts
   setopt local_options extended_glob no_monitor
   local repo err=1
   for repo in $(__repo_home)/*/*/.git(/N); do
@@ -93,7 +91,7 @@ function __repo_list {
 }
 
 function __repo_install {
-  emulate -L zsh; setopt local_options no_monitor
+  emulate -L zsh; setopt local_options $_repo_opts
   local repo
   for repo in $@; do
     __repo_clone $repo &
@@ -102,7 +100,7 @@ function __repo_install {
 }
 
 function __repo_remove {
-  emulate -L zsh; setopt local_options
+  emulate -L zsh; setopt local_options $_repo_opts
   local err=0
   local repo_home=$(__repo_home)
   for repo in $@; do
@@ -120,9 +118,7 @@ function __repo_remove {
 }
 
 function repo {
-  emulate -L zsh
-  setopt local_options extended_glob no_monitor
-
+  emulate -L zsh; setopt local_options $_repo_opts
   (( $# )) || {
     echo >&2 "repo: Expecting command argument."
     return 1
@@ -136,7 +132,7 @@ function repo {
     local -a args=($@)
     local data
     while IFS= read -r data || [ -n "$data" ]; do
-      data=${data%\#*}
+      data=${data%\#*}  # strip comments
       args+=($data)
     done
     set -- $args
@@ -145,29 +141,29 @@ function repo {
   case "$cmd" in
     help|-h|--help)
       __repo_help
-    ;;
+      ;;
     home)
       __repo_home
-    ;;
+      ;;
     ls|list)
       __repo_list
       err=$?
-    ;;
+      ;;
     up|update)
       __repo_update "$@"
       err=$?
-    ;;
+      ;;
     in|install)
       __repo_install "$@"
       err=$?
-    ;;
+      ;;
     rm|del)
       __repo_remove "$@"
-    ;;
+      ;;
     *)
       echo >&2 "repo: Unknown command '"$cmd"'"
       err=1
-    ;;
+      ;;
   esac
 
   return $err
