@@ -5,11 +5,6 @@
 # Reference:
 # - https://github.com/sorin-ionescu/prezto/blob/master/runcoms/zprofile
 
-# Bootstrap.
-0=${(%):-%N}
-: ${ZSH_CUSTOM:=${0:a:h:h:h}}
-zstyle -t ':zsh_custom:lib' loaded || source $ZSH_CUSTOM/lib/__init__.zsh
-
 # Editors
 export EDITOR=${EDITOR:-nano}
 export VISUAL=${VISUAL:-nano}

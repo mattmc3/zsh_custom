@@ -7,11 +7,6 @@
 # - https://github.com/sorin-ionescu/prezto/blob/master/modules/utility/init.zsh
 # - https://github.com/mattmc3/zephyr/blob/main/plugins/utility/utility.plugin.zsh
 
-# Bootstrap.
-0=${(%):-%N}
-: ${ZSH_CUSTOM:=${0:a:h:h:h}}
-zstyle -t ':zsh_custom:lib' loaded || source $ZSH_CUSTOM/lib/__init__.zsh
-
 # Use built-in paste magic.
 autoload -Uz bracketed-paste-url-magic
 zle -N bracketed-paste bracketed-paste-url-magic
