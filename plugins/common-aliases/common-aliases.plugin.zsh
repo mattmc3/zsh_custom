@@ -34,15 +34,20 @@ else
   alias ls="ls --group-directories-first --color=auto"
 fi
 
-GREP_EXCL=(.bzr CVS .git .hg .svn .idea .tox)
-alias grep="grep --color=auto --exclude-dir={\${(j:,:)GREP_EXCL}}"
+# grep
+typeset -gHa _grep_exclude_dirs
+zstyle -a ':zsh_custom:plugin:common-aliases:grep' 'exclude-dirs' '_grep_exclude_dirs' \
+  || _grep_exclude_dirs=(.bzr CVS .git .hg .svn .idea .tox)
+alias grep="${aliases[grep]:-grep} --exclude-dir={${(j:,:)_grep_exclude_dirs}}"
+unset _grep_exclude_dirs
 
-# directory
-alias dirh='dirs -v'
-for _idx ({1..9}) alias "$_idx"="cd -${_idx}"
-for dotdot ({1..9}) alias -g "..$dotdot"=$(printf '../%.0s' {1..$dotdot}); unset dotdot
+# Better ls default flags.
+alias ls="${aliases[ls]:-ls} -h"
+if (( $+commands[dircolors] )) || ! is-macos; then
+  alias ls="${aliases[ls]:-ls} --group-directories-first"
+fi
 
-# more ways to ls
+# More ways to ls.
 alias ll='ls -lh'
 alias la='ls -lAh'
 alias ldot='ls -ld .*'
@@ -91,17 +96,8 @@ alias cls="clear && printf '\e[3J'"
 alias println="printf '%s\n'"
 alias funclist='print -l ${(k)functions[(I)[^_]*]} | sort'
 
-# bare repos
-# alias dotfiles="GIT_WORK_TREE=~ GIT_DIR=~/.dotfiles"
-# alias dotloc="GIT_WORK_TREE=~ GIT_DIR=~/.dotfiles.local"
-# alias dotty='command git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
-
 # auto-orient images based on exif tags
 alias autorotate="jhead -autorot"
-
-# dotfiles
-alias dotf='cd "$DOTFILES"'
-alias dotfed='cd "$DOTFILES" && ${VISUAL:-${EDITOR:-vim}} .'
 
 # java
 alias setjavahome="export JAVA_HOME=\`/usr/libexec/java_home\`"
@@ -114,7 +110,3 @@ alias todos="$VISUAL $HOME/Desktop/todo.txt"
 if [[ "$OSTYPE" == darwin* ]]; then
   alias code="open -b com.microsoft.VSCode"
 fi
-
-# Load more specific zsh 'run-help' function.
-(( $+aliases[run-help] )) && unalias run-help && autoload -Uz run-help
-alias help=run-help
