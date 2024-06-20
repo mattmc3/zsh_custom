@@ -1,15 +1,14 @@
-: ${__zsh_cache_dir:=${XDG_CACHE_HOME:-$HOME/.cache}/zsh}
+#
+# zoxide: A smarter cd command
+#
 
 if ! (( $+commands[zoxide] )); then
   echo >&2 'zoxide: command not found, please install it from https://github.com/ajeetdsouza/zoxide'
   return 1
 fi
 
-typeset _initfile=$__zsh_cache_dir/zoxide.init.zsh
-typeset -a _cache=($initfile(Nmh-20))
-if ! (( $#_cache )); then
-  zoxide init zsh 2> /dev/null >| $_initfile
+if (( $+functions[cached-eval] )) && zstyle -T ':zsh_custom:plugin:zoxide' 'use-cache'; then
+  cached-eval 'zoxide_init' zoxide init zsh
+else
+  source <(zoxide init zsh)
 fi
-source $_initfile
-
-unset _{cache,initfile}
