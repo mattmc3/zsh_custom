@@ -19,13 +19,14 @@ setopt extended_glob      # Use more awesome globbing features.
 setopt glob_dots          # Include dotfiles when globbing.
 
 # 16.2.6 Input/Output
+setopt path_dirs          # Perform path search even on command names with slashes.
 setopt NO_clobber         # Don't overwrite files with >. Use >| to bypass.
 setopt NO_rm_star_silent  # Ask for confirmation for `rm *' or `rm path/*'
 
 # 16.2.9 Scripts and Functions
 setopt multios        # Write to multiple descriptors.
 
-# Set aliases.
+# Set directory aliases.
 if ! zstyle -t ':zsh_custom:plugin:directory:alias' skip; then
   # Set directory aliases.
   alias -- -='cd -'
