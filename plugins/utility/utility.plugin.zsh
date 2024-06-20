@@ -18,22 +18,22 @@ zle -N self-insert url-quote-magic
 alias help=run-help
 
 # Ensure python command exists.
-if (( $+commands[python3] )) && ! (( $+commands[python] )); then
+if ! is-callable python && is-callable python3; then
   alias python=python3
 fi
 
 # Ensure envsubst command exists.
-if ! (( $+commands[envsubst] )); then
+if ! is-callable envsubst && is-callable python; then
   alias envsubst="python -c 'import os,sys;[sys.stdout.write(os.path.expandvars(l)) for l in sys.stdin]'"
 fi
 
 # Ensure hd (hex dump) command exists.
-if ! (( $+commands[hd] )) && (( $+commands[hexdump] )); then
+if ! is-callable hd && is-callable hexdump; then
   alias hd="hexdump -C"
 fi
 
 # Ensure open command exists.
-if ! (( $+commands[open] )); then
+if ! is-callable open; then
   if [[ "$OSTYPE" == cygwin* ]]; then
     alias open='cygstart'
   elif [[ "$OSTYPE" == linux-android ]]; then
@@ -44,7 +44,7 @@ if ! (( $+commands[open] )); then
 fi
 
 # Ensure pbcopy/pbpaste commands exist.
-if ! (( $+commands[pbcopy] )); then
+if ! is-callable pbcopy; then
   if [[ "$OSTYPE" == cygwin* ]]; then
     alias pbcopy='tee > /dev/clipboard'
     alias pbpaste='cat /dev/clipboard'
