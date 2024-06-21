@@ -18,6 +18,9 @@ zstyle -T ':zsh_custom:plugin:editor' dot-expansion ||
 # Use Prezto's editor module.
 source ${0:A:h}/external/prezto_editor.zsh
 
+# Don't use PS2 for multi-line commands
+plugin-load romkatv/zsh-no-ps2
+
 # 16.2.6 Input/Output
 setopt interactive_comments  # Enable comments in interactive shell.
 setopt rc_quotes             # Allow 'Hitchhikers''s Guide' instead of 'Hitchhikers'\''s Guide'.
