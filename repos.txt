@@ -30,6 +30,8 @@ agkozak/zsh-z
 kaelzhang/shell-safe-rm
 romkatv/zsh-bench
 romkatv/zsh-defer
+romkatv/zsh-no-ps2
+romkatv/gitstatus
 mattmc3/zman
 
 # vim: ft=properties sw=2 ts=2 et
