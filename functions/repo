@@ -16,7 +16,7 @@ function __repo_help {
   echo "  up     update repos"
   echo ""
   echo "examples:"
-  echo "  repo in <repos.txt"
+  echo "  repo in < repos.txt"
 }
 
 function __repo_home {
@@ -52,10 +52,7 @@ function __repo_clone {
   emulate -L zsh; setopt local_options $_repo_opts
   local repo=$1
   local repodir=$(__repo_home)/$repo
-  if [ -d $repodir ]; then
-    echo "Found $repo..."
-    return
-  fi
+  [[ ! -d $repodir ]] || return 1
 
   echo "Cloning $repo..."
   if [[ $repo == sorin-ionescu/prezto ]]; then
@@ -92,9 +89,12 @@ function __repo_list {
 
 function __repo_install {
   emulate -L zsh; setopt local_options $_repo_opts
+  local repo_home=$(__repo_home)
   local repo
   for repo in $@; do
-    __repo_clone $repo &
+    if [[ ! -d $repo_home/$repo ]]; then
+      __repo_clone $repo &
+    fi
   done
   wait
 }
@@ -115,6 +115,11 @@ function __repo_remove {
     fi
   done
   return $err
+}
+
+function __repo_mark_updated {
+  emulate -L zsh; setopt local_options $_repo_opts
+  date +%Y-%m-%dT%H:%M:%S%z > $(__repo_home)/.lastupdated
 }
 
 function repo {
@@ -152,13 +157,17 @@ function repo {
     up|update)
       __repo_update "$@"
       err=$?
+      __repo_mark_updated
       ;;
     in|install)
       __repo_install "$@"
       err=$?
+      __repo_mark_updated
       ;;
     rm|del)
       __repo_remove "$@"
+      err=$?
+      __repo_mark_updated
       ;;
     *)
       echo >&2 "repo: Unknown command '"$cmd"'"
