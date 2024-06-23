@@ -1,0 +1,36 @@
+#!/bin/zsh
+##? Test if an item is present in a list.
+#function contains {
+  emulate -L zsh
+  setopt local_options extended_glob
+
+  # Parse options.
+  local -a o_index=()
+  while (( $# )); do
+    case $1 in
+      -i|--index)  o_index+=($1)  ;;
+      -*)  echo >&2 "contains: '$1': unknown option"; return 2  ;;
+      --)  shift; break  ;;
+      *)          break  ;;
+    esac
+    shift
+  done
+
+  # Check that 'key' was provided.
+  if (( $# == 0)); then
+    echo >&2 "contains: expecting argument 'key'."
+    return 1
+  fi
+  local key=$1; shift
+
+  # See if 'key' is contained in the params.
+  local item idx=1
+  for item in $@; do
+    if [[ "$item" == "$key" ]]; then
+      (( $#o_index )) && echo $idx
+      return
+    fi
+    (( idx = idx + 1 ))
+  done
+  return 1
+#}
