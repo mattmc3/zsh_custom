@@ -13,25 +13,41 @@ plugins=(
   xdg
   zfunctions
 
+  # core plugins
+  color
+  directory
+  history
+  prompt
+  utility
+  jobs
+
   # editor
   editor
   magic-enter
   fancy-ctrl-z
 
   # utils
-  colorize
-  utility
-  macos
+  git
+  common-aliases
+  dotfiles
   extract
+  gpg
+  iwd
+  macos
+  otp
+  prj
+  up
   zoxide
 
-  # plugins
-  directory
-  history
-  prompt
+  # languages
+  python
+  golang
+
+  # external
+  mattmc3/zman
 
   # completions
-  completion
+  #completion
 
   # fish-like
   autosuggestions
@@ -40,14 +56,14 @@ plugins=(
   history-substring-search
 )
 
+# Zstyles
+zstyle ':zsh_custom:plugin:prompt' theme p10k mmc
+
 # Source custom
 source $ZSH_CUSTOM/zsh_custom.zsh
 
 # Load plugins
 plugin-load $plugins
-
-# prompt
-prompt p10k mmc
 
 # local settings
 [[ -f $ZDOTDIR/.zshrc.local ]] && source $ZDOTDIR/.zshrc.local
