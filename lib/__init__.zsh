@@ -65,6 +65,11 @@ if [[ ! -e $REPO_HOME/.lastupdated ]] || [[ $ZSH_CUSTOM/repos.txt -nt $REPO_HOME
   date +%Y-%m-%dT%H:%M:%S%z >| $REPO_HOME/.lastupdated
 fi
 
+# Add path repos
+for repo in romkatv/zsh-bench; do
+  [[ -d $REPO_HOME/$repo ]] && path+=($REPO_HOME/$repo)
+done
+
 function skipped_plugins {
   local -a skipped allplugins=($ZSH_CUSTOM/plugins/*(:t))
   local plugin
