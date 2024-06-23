@@ -57,3 +57,60 @@ function is-linux  { [[ "$OSTYPE" == linux*  ]] }
 function is-bsd    { [[ "$OSTYPE" == *bsd*   ]] }
 function is-cygwin { [[ "$OSTYPE" == cygwin* ]] }
 function is-termux { [[ "$OSTYPE" == linux-android ]] }
+
+# Clone plugin repos.
+export REPO_HOME=$(repo home)
+if [[ ! -e $REPO_HOME/.lastupdated ]] || [[ $ZSH_CUSTOM/repos.txt -nt $REPO_HOME/.lastupdated ]]; then
+  repo in < $ZSH_CUSTOM/repos.txt
+  date +%Y-%m-%dT%H:%M:%S%z >| $REPO_HOME/.lastupdated
+fi
+
+function skipped_plugins {
+  local -a skipped allplugins=($ZSH_CUSTOM/plugins/*(:t))
+  local plugin
+  for plugin in $allplugins; do
+    zstyle -t ":zsh_custom:plugin:$plugin" loaded || skipped+=($plugin)
+  done
+  printf '%s\n' $skipped
+}
+
+# Init zstyles.
+[[ -r ${ZDOTDIR:-$HOME}/.zstyles ]] && source ${ZDOTDIR:-$HOME}/.zstyles
+
+# Init aliases.
+[[ -r ${ZDOTDIR:-$HOME}/.zaliases ]] && source ${ZDOTDIR:-$HOME}/.zaliases
+
+# Init local settings.
+[[ -r ${ZDOTDIR:-$HOME}/.zshrc.local ]] && source ${ZDOTDIR:-$HOME}/.zshrc.local
+
+# Run this at the very end.
+function zshrc-post {
+  # Init prompt.
+  if (( $#prompt_themes == 0 )); then
+    promptinit
+
+    # Set prompt
+    if [[ $TERM == dumb ]]; then
+      prompt 'off'
+    else
+      local -a prompt_argv
+      zstyle -a ':zsh_custom:lib:prompt' 'theme' 'prompt_argv' \
+        || prompt_argv=(off)
+      prompt "$prompt_argv[@]"
+    fi
+  fi
+
+  # Init completions.
+  (( $+functions[compinit] )) || docompinit
+
+  # Finish profiling by calling zprof.
+  [[ "$ZPROFRC" -eq 1 ]] && zprof
+  [[ -v ZPROFRC ]] && unset ZPROFRC
+
+  # Mark loaded.
+  add-zsh-hook -d precmd zshrc-post
+}
+
+# Add hook so that zshrc-post is run in case the user forgot to.
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd zshrc-post  # precmd is the only hook I know to use for this.
