@@ -1,5 +1,5 @@
 #
-# autosuggestions - Fish-like syntax highlighting for Zsh
+# autosuggestions - Fish-like Zsh autosuggestions
 #
 
 plugin-load zsh-users/zsh-autosuggestions
