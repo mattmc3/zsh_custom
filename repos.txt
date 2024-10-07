@@ -3,6 +3,7 @@
 
 # frameworks
 ohmyzsh/ohmyzsh
+mattmc3/zephyr
 
 # core plugins
 zdharma-continuum/fast-syntax-highlighting
@@ -13,7 +14,6 @@ zsh-users/zsh-completions
 romkatv/powerlevel10k
 
 # utils
-zshzoo/macos
 aloxaf/fzf-tab
 kaelzhang/shell-safe-rm
 romkatv/zsh-bench
