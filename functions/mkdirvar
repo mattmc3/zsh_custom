@@ -1,9 +1,0 @@
-#!/bin/zsh
-##? Ensure directory variables exist.
-#function mkdirvar {
-  local dirvar
-  for dirvar in $@; do
-    [[ -n "$dirvar" ]] && [[ -n "${(P)dirvar}" ]] || continue
-    [[ -d "${(P)dirvar}" ]] || mkdir -p "${(P)dirvar}"
-  done
-#}
