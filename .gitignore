@@ -1,6 +1,4 @@
-.external/
-.cache/
-.DS_Store
 ~*
+.external/
 *.zwc
 *.zwc.old
