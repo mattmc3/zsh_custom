@@ -1,1 +1,1 @@
-path+=($ZSH_CUSTOM/.external/romkatv/zsh-bench)
+path+=($ZSH_CUSTOM/.external/zsh-bench)
