@@ -37,8 +37,3 @@ zsh_custom_clone themes \
 zsh_custom_clone .external \
   kaelzhang/shell-safe-rm \
   romkatv/zsh-bench
-
-# Make Terminal.app behave.
-if [[ "$OSTYPE" == darwin* ]]; then
-  export SHELL_SESSIONS_DISABLE=1
-fi
