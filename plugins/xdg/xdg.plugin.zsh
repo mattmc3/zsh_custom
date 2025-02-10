@@ -1,5 +1,5 @@
 #
-# xdg - don't pollute home
+# XDG base dirs - don't pollute home
 #
 
 #
@@ -47,12 +47,6 @@ alias wget="${aliases[wget]:-wget} --hsts-file=\$XDG_CACHE_HOME/wget/wget-hsts"
 # gpg
 export GNUPGHOME="${GNUPGHOME:-$XDG_DATA_HOME/gnupg}"
 alias gpg="${aliases[gpg]:-gpg} --homedir \"\$GNUPGHOME\""
-
-# groovy
-if [[ "$OSTYPE" == darwin* ]]; then
-  export GROOVY_HOME=$HOMEBREW_PREFIX/opt/groovy/libexec  # per homebrew
-  export GROOVY_TURN_OFF_JAVA_WARNINGS="true"
-fi
 
 # jupyter
 export JUPYTER_CONFIG_DIR="${JUPYTER_CONFIG_DIR:-$XDG_CONFIG_HOME/jupyter}"
