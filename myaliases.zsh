@@ -91,6 +91,7 @@ alias dotfl="cd \$DOTFILES/local"
 alias fdot='cd ${XDG_CONFIG_HOME:-~/.config}/fish'
 alias fconf=fdot
 alias zdot='cd $ZDOTDIR'
+alias zcust='cd $ZSH_CUSTOM'
 
 # fonts
 alias fontlist="system_profiler SPFontsDataType | grep 'Full Name' | awk -F: '{print \$2}' | sed 's/^ *//g' | sort"
