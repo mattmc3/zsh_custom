@@ -154,3 +154,54 @@ function zcompiledir {
     done
   fi
 }
+
+##? Echo to stderror
+function echoerr {
+  echo >&2 "$@"
+}
+
+##? Pass thru for copy/paste markdown
+function $ { $@ }
+
+##? Check if a file can be autoloaded by trying to load it in a subshell.
+function is-autoloadable {
+  ( unfunction $1 ; autoload -U +X $1 ) &> /dev/null
+}
+
+##? Check if a name is a command, function, or alias.
+function is-callable {
+  (( $+commands[$1] || $+functions[$1] || $+aliases[$1] || $+builtins[$1] ))
+}
+
+##? Check a string for case-insensitive "true" value (1,y,yes,t,true,o,on).
+function is-true {
+  [[ -n "$1" && "$1:l" == (1|y(es|)|t(rue|)|o(n|)) ]]
+}
+
+# OS checks.
+function is-macos  { [[ "$OSTYPE" == darwin* ]] }
+function is-linux  { [[ "$OSTYPE" == linux*  ]] }
+function is-bsd    { [[ "$OSTYPE" == *bsd*   ]] }
+function is-cygwin { [[ "$OSTYPE" == cygwin* ]] }
+function is-termux { [[ "$OSTYPE" == linux-android ]] }
+
+function mkdirvar {
+  local dirvar
+  for dirvar in $@; do
+    [[ -n "$dirvar" ]] && [[ -n "${(P)dirvar}" ]] || continue
+    [[ -d "${(P)dirvar}" ]] || mkdir -p "${(P)dirvar}"
+  done
+}
+
+##? funcfresh - refresh function definition
+function funcfresh {
+  if ! (( $# )); then
+    echo >&2 "funcfresh: Expecting function argument."
+    return 1
+  elif ! (( $+functions[$1] )); then
+    echo >&2 "funcfresh: Function not found '$1'."
+    return 1
+  fi
+  unfunction $1
+  autoload -Uz $1
+}
