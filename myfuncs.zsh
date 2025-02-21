@@ -1,3 +1,9 @@
+##? Get an Azure DB token
+function azdbtok {
+    local tok="$(az account get-access-token --resource https://ossrdbms-aad.database.windows.net --query accessToken --output tsv)"
+    echo "$tok" | tee >(pbcopy) >(cat)
+}
+
 ##? Show all extensions in current folder structure.
 function allexts {
   find . -not \( -path '*/.git/*' -prune \) -type f -name '*.*' | sed 's|.*\.|\.|' | sort | uniq -c
