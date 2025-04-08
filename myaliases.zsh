@@ -108,6 +108,9 @@ alias iwd='cd $IWD'
 # java
 alias setjavahome="export JAVA_HOME=\`/usr/libexec/java_home\`"
 
+# dotnet
+alias dotnet8="/opt/homebrew/opt/dotnet@8/bin/dotnet"
+
 # todo-txt
 alias t="todo.sh"
 alias todos="$VISUAL $HOME/Desktop/todo.txt"
