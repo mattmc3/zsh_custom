@@ -17,3 +17,6 @@ _dotnet_zsh_complete()
 }
 
 compdef _dotnet_zsh_complete dotnet
+
+# Mark the plugin as loaded
+zstyle ':zsh_custom:plugin:dotnet' loaded 'yes'

@@ -66,3 +66,6 @@ if [[ "$HOMEBREW_PREFIX" == /opt/homebrew ]]; then
   fi
   unset _brew_owner
 fi
+
+# Mark the plugin as loaded
+zstyle ':zsh_custom:plugin:homebrew' loaded 'yes'

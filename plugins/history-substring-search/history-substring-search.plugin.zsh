@@ -17,3 +17,7 @@ if [[ -n "$key_info" ]]; then
   bindkey -M emacs "$key_info[Control]P" history-substring-search-up
   bindkey -M emacs "$key_info[Control]N" history-substring-search-down
 fi
+
+# Mark the plugin as loaded
+zstyle ':zsh_custom:plugin:history-substring-search' loaded 'yes'
+

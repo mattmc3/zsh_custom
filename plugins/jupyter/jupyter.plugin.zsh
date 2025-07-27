@@ -28,3 +28,6 @@ function juno {
 
   jupyter lab "${1:-$jupyter_prj}"
 }
+
+# Mark the plugin as loaded
+zstyle ':zsh_custom:plugin:jupyter' loaded 'yes'

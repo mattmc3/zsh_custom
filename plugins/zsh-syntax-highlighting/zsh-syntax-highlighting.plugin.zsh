@@ -95,3 +95,6 @@ ZSH_HIGHLIGHT_STYLES[default]=fg=blue
 # Make rm -rf a bit more obvious.
 typeset -A ZSH_HIGHLIGHT_PATTERNS
 ZSH_HIGHLIGHT_PATTERNS[rm*-rf*]="fg=white,bold,bg=red"
+
+# Mark the plugin as loaded
+zstyle ':zsh_custom:plugin:zsh-syntax-highlighting' loaded 'yes'

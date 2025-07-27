@@ -13,3 +13,6 @@ function set_terminal_var() {
   fi
 }
 set_terminal_var "TERM_CURRENT_SHELL" "zsh ${ZSH_PATCHLEVEL:-$ZSH_VERSION}"
+
+# Mark the plugin as loaded
+zstyle ':zsh_custom:plugin:terminal' loaded 'yes'

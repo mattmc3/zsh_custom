@@ -16,3 +16,6 @@ up() {
   done
   cd $dotdot
 }
+
+# Mark the plugin as loaded
+zstyle ':zsh_custom:plugin:up' loaded 'yes'

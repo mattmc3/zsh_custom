@@ -63,3 +63,6 @@ bindkey -M viins "^ " magic-space
 
 # normal space during searches
 bindkey -M isearch " " magic-space
+
+# Mark the plugin as loaded
+zstyle ':zsh_custom:plugin:globalias' loaded 'yes'

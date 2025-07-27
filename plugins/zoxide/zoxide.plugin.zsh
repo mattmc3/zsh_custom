@@ -6,3 +6,6 @@
 if (( $+commands[zoxide] )); then
   cached-eval 'zoxide-init-zsh' zoxide init zsh
 fi
+
+# Mark the plugin as loaded
+zstyle ':zsh_custom:plugin:zoxide' loaded 'yes'

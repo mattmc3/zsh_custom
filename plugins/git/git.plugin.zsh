@@ -41,3 +41,6 @@ alias gpsuo="git push --set-upstream origin (git rev-parse --abbrev-ref HEAD)"
 alias grv="git remote -v"
 alias gsh="git stash"
 alias gst="git status -sb"
+
+# Mark the plugin as loaded
+zstyle ':zsh_custom:plugin:git' loaded 'yes'

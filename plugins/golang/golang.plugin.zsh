@@ -20,3 +20,6 @@ alias gops="cd \$GOPATH/src"
 alias gor="go run"
 alias got="go test"
 alias gov="go vet"
+
+# Mark the plugin as loaded
+zstyle ':zsh_custom:plugin:golang' loaded 'yes'

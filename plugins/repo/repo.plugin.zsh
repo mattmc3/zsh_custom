@@ -34,4 +34,5 @@ function __repo_keys {
 
 compctl -K __repo_keys repo
 
+# Mark the plugin as loaded
 zstyle ':zsh_custom:plugin:repo' loaded 'yes'

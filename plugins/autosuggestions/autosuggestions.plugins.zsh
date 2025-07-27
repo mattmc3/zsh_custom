@@ -12,3 +12,6 @@ if [[ -n "$key_info" ]]; then
   bindkey -M viins "$key_info[Control]F" vi-forward-word
   bindkey -M viins "$key_info[Control]E" vi-add-eol
 fi
+
+# Mark the plugin as loaded
+zstyle ':zsh_custom:plugin:autosuggestions' loaded 'yes'

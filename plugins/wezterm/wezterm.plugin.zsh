@@ -9,3 +9,6 @@ function set_current_shell_precmd() {
 }
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd set_current_shell_precmd
+
+# Mark the plugin as loaded
+zstyle ':zsh_custom:plugin:wezterm' loaded 'yes'

@@ -21,3 +21,6 @@ export BUNDLE_USER_PLUGIN="${BUNDLE_USER_PLUGIN:-$XDG_DATA_HOME/bundle}"
 # ruby gems
 export GEM_HOME="${GEM_HOME:-$XDG_DATA_HOME/gem}"
 export GEM_SPEC_CACHE="${GEM_SPEC_CACHE:-$XDG_CACHE_HOME/gem}"
+
+# Mark the plugin as loaded
+zstyle ':zsh_custom:plugin:ruby' loaded 'yes'
