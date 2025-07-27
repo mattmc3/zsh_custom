@@ -11,16 +11,14 @@
 # https://dev.to/frost/fish-style-abbreviations-in-zsh-40aa
 
 #
-# Variables
-#
-
-[[ -v noexpand_aliases ]] || typeset -ag noexpand_aliases=()
-
-#
 # Functions
 #
 
 function globalias {
+  local -a noexpand_aliases
+  zstyle -a ':zsh_custom:plugin:globalias' 'noexpand' 'noexpand_aliases' \
+    || noexpand_aliases=()
+
   # Get last word to the left of the cursor:
   # (A) makes it an array even if there's only one element
   # (z) splits into words using shell parsing
@@ -33,6 +31,20 @@ function globalias {
 }
 zle -N globalias
 
+function globalias-enter {
+  local -a noexpand_aliases
+  zstyle -a ':zsh_custom:plugin:globalias' 'noexpand' 'noexpand_aliases' \
+    || noexpand_aliases=()
+
+  # Check if the whole buffer is an alias
+  local cmd="$LBUFFER$RBUFFER"
+  if [[ $noexpand_aliases[(Ie)$cmd] -eq 0 ]]; then
+    zle _expand_alias
+  fi
+  zle accept-line
+}
+zle -N globalias-enter
+
 #
 # Keybindings
 #
@@ -40,6 +52,10 @@ zle -N globalias
 # space expands all aliases, including global
 bindkey -M emacs " " globalias
 bindkey -M viins " " globalias
+
+# RETURN/ENTER expands whole-line alias
+bindkey -M emacs "^M" globalias-enter
+bindkey -M viins "^M" globalias-enter
 
 # control-space to make a normal space
 bindkey -M emacs "^ " magic-space
