@@ -1,0 +1,62 @@
+#!/bin/sh
+
+# otp - One-time passwords (multi-factor authentication from the command line)
+
+OTP_HOME="${OTP_HOME:-${XDG_DATA_HOME:-$HOME/.local/share}/otp}"
+[ -d "$OTP_HOME" ] || mkdir -p "$OTP_HOME"
+
+usage() {
+  echo "usage: otp [-h|--help] [-l|--list] [-a|--add] <key>"
+}
+
+# Check dependencies
+if ! command -v oathtool >/dev/null 2>&1; then
+  echo "otp: 'oathtool' not found. Install oathtool or oath-toolkit." >&2
+  exit 1
+fi
+
+if ! command -v gpg >/dev/null 2>&1; then
+  echo "otp: 'gpg' not found. Install, and create a key with 'gpg --gen-key'." >&2
+  exit 1
+fi
+
+# Parse options
+flag_help=0
+flag_list=0
+flag_add=0
+key=""
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -h|--help) flag_help=1 ;;
+    -l|--list) flag_list=1 ;;
+    -a|--add)  flag_add=1 ;;
+    *) key="$1" ;;
+  esac
+  shift
+done
+
+if [ "$flag_help" -eq 1 ]; then
+  usage
+  exit 0
+elif [ "$flag_list" -eq 1 ]; then
+  for file in "$OTP_HOME"/*.otp.asc; do
+    [ -f "$file" ] && basename "$file" .otp.asc
+  done
+  exit 0
+elif [ -z "$key" ]; then
+  echo "otp: Expecting <key> argument. Run 'otp -h' for usage." >&2
+  exit 1
+elif [ "$flag_add" -eq 1 ]; then
+  echo "The 'otp' utility uses gpg to encrypt your OTP key."
+  echo "Paste your OTP secret key, then press Ctrl-D to finish."
+  rm -f -- "${OTP_HOME:?}/$key.otp.asc"
+  gpg --armor --encrypt --output "$OTP_HOME/$key.otp.asc" /dev/stdin
+  exit 0
+elif [ ! -f "$OTP_HOME/$key.otp.asc" ]; then
+  echo "otp: missing key '$key'. Run 'otp --add <key>' to add a new one-time password." >&2
+  exit 1
+else
+  totpkey=$(gpg --quiet --decrypt "$OTP_HOME/$key.otp.asc")
+  oathtool --totp --b "$totpkey"
+fi
