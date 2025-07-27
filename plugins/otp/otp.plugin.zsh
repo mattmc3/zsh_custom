@@ -20,7 +20,17 @@ zstyle ':zsh_custom:plugin:otp' loaded 'yes'
 #
 
 function __otp_keys {
-  reply=($(find $OTP_HOME/ -name \*.otp.asc | xargs basename -s .otp.asc))
+  local flags
+  flags=(
+    -h --help
+    -l --list
+    -a --add
+    -r --remove
+    --rekey
+  )
+  local keys
+  keys=($(find $OTP_HOME/ -name '*.otp.asc' | xargs -n1 basename | sed 's/\.otp\.asc$//'))
+  reply=(${flags[@]} ${keys[@]})
 }
 
 compctl -K __otp_keys otp
