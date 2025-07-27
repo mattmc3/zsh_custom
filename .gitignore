@@ -2,9 +2,3 @@
 .external/
 *.zwc
 *.zwc.old
-plugins/fast-syntax-highlighting
-plugins/fzf-tab
-plugins/zsh-*
-plugins/zman
-!plugins/zsh-bench
-themes/powerlevel10k
