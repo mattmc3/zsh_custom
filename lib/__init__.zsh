@@ -18,3 +18,32 @@ function repo {
 
 # OMZ
 ZSH=$REPO_HOME/ohmyzsh/ohmyzsh
+
+# Set options we always want no matter what.
+setopt INTERACTIVE_COMMENTS EXTENDED_GLOB
+
+# Helper function
+function zsh_custom {
+  emulate -L zsh
+  setopt local_options
+
+  local subcmd=$1 plugin_dir plugin loaded
+  if [[ "$subcmd" == list ]]; then
+    for plugin_dir in $ZSH_CUSTOM/plugins/*(N/); do
+      echo ${plugin_dir:t}
+    done
+  elif [[ "$subcmd" == loaded ]]; then
+    for plugin_dir in $ZSH_CUSTOM/plugins/*(N/); do
+      plugin=${plugin_dir:t}
+      if zstyle -t ":zsh_custom:plugin:${plugin}" "loaded"; then
+        loaded=yes
+      else
+        loaded=no
+      fi
+      printf '%-25s %s\n' $plugin $loaded
+    done
+  else
+    echo "Unrecognized subcommand '$subcmd'." >&2
+    return 1
+  fi
+}
