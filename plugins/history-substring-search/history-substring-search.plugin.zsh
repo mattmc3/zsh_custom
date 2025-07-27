@@ -1,0 +1,19 @@
+#!/bin/zsh
+# https://github.com/zsh-users/zsh-history-substring-search
+
+source "$ZSH_CUSTOM/.external/zsh-users/zsh-history-substring-search/zsh-history-substring-search.zsh"
+
+for keymap in 'emacs' 'viins'; do
+  bindkey -M "$keymap" "$terminfo[kcuu1]" history-substring-search-up
+  bindkey -M "$keymap" "$terminfo[kcud1]" history-substring-search-down
+done
+
+# Vi
+bindkey -M vicmd "k" history-substring-search-up
+bindkey -M vicmd "j" history-substring-search-down
+
+# Emacs
+if [[ -n "$key_info" ]]; then
+  bindkey -M emacs "$key_info[Control]P" history-substring-search-up
+  bindkey -M emacs "$key_info[Control]N" history-substring-search-down
+fi
