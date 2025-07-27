@@ -13,3 +13,6 @@ mkdir -p "$XDG_CONFIG_HOME" "$XDG_CACHE_HOME" "$XDG_DATA_HOME" "$XDG_STATE_HOME"
 export REPO_HOME=$ZSH_CUSTOM/.external
 function repo { $ZSH_CUSTOM/bin/repo "$@"; }
 [[ -d $REPO_HOME ]] || repo in <$ZSH_CUSTOM/repos.txt
+
+# OMZ
+ZSH=$REPO_HOME/ohmyzsh/ohmyzsh
