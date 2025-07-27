@@ -1,0 +1,3 @@
+#!/bin/sh
+URL=$(git config remote.${1-origin}.url | sed -E -e 's#^.*@#https://#' -e 's#.git$##' -e 's#:#/#2')
+git web--browse --browser "${BROWSER:-open}" "$URL"

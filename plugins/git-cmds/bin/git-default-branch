@@ -1,0 +1,4 @@
+#!/bin/sh
+# defbranch: Get the name of thgie default branch for a repo (main, master, trunk, etc)
+# https://stackoverflow.com/questions/28666357/git-how-to-get-default-branch
+git symbolic-ref --short refs/remotes/origin/HEAD | sed 's|^origin/||'

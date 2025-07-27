@@ -1,0 +1,8 @@
+#!/bin/sh
+# branch-cleanup: Remove branches no longer on remote
+# https://stackoverflow.com/questions/7726949/remove-tracking-branches-no-longer-on-remote
+local defbranch
+defbranch="$(gitex_branch_main 2>/dev/null)"
+git checkout "${defbranch:-main}" >/dev/null 2>/dev/null && git fetch -p && git branch -vv |
+  awk '/: gone]/{print $1}' |
+  xargs git branch -d
