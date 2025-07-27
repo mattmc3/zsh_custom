@@ -12,11 +12,11 @@ fi
 
 usage() {
   echo "usage: otp [-h|--help] [-l|--list] [-a|--add] [-r|--remove] [--rekey] <key>"
-  echo "  -h, --help        Show help"
-  echo "  -l, --list        List keys"
-  echo "  -a, --add <key>   Add a new OTP key"
+  echo "  -h, --help         Show help"
+  echo "  -l, --list         List keys"
+  echo "  -a, --add <key>    Add a new OTP key"
   echo "  -r, --remove <key> Remove an OTP key"
-  echo "      --rekey       Re-encrypt all OTP keys to current recipients"
+  echo "      --rekey        Re-encrypt all OTP keys to current recipients"
 }
 
 # Check dependencies

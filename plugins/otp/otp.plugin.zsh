@@ -7,6 +7,8 @@
 
 ! zstyle -t ':zsh_custom:plugin:otp' loaded || return 1
 
+
+export OTP_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/otp"
 function otp {
   "$ZSH_CUSTOM/plugins/otp/bin/otp" "$@"
 }
