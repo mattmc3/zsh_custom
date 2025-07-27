@@ -2,10 +2,15 @@
 # ruby
 #
 
+# Ruby is keg-only
+[[ -d "${HOMBREW_PREFIX:-/opt/homebrew}" ]] || return
+
+: ${HOMBREW_PREFIX:=/opt/homebrew}
 path+=(
-  /{usr,opt}/{local,homebrew}/opt/ruby/bin(N)
-  /{usr,opt}/{local,homebrew}/lib/ruby/gems/*/bin(N)
+  $HOMBREW_PREFIX/opt/ruby/bin(N)
+  $HOMEBREW_PREFIX/lib/ruby/gems/*/bin(N)
   $HOME/.gem/ruby/*/bin(N)
+  $path
 )
 
 # ruby bundler
