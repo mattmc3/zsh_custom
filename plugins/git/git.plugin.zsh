@@ -5,13 +5,11 @@
 # References
 # - https://www.oliverspryn.com/blog/adding-git-completion-to-zsh
 
-0=${(%):-%N}
-
 function update_git_completions {
+  emulate -L zsh
   # Download the git scripts
-  0=${(%):-%x}
   local giturl=https://raw.githubusercontent.com/git/git/master/contrib/completion
-  local dest=${1:-${0:a:h}/completions}
+  local dest=${1:-$ZSH_CUSTOM/plugins/git/completions}
   [[ -d $dest ]] || mkdir -p $dest
   curl -fsSL $giturl/git-completion.bash -o $dest/git-completion.bash
   curl -fsSL $giturl/git-completion.zsh -o $dest/_git
