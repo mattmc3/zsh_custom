@@ -2,7 +2,7 @@
 # history - Set Zsh history options, variables, and aliases.
 #
 
-# 16.2.4 History
+# 16.2.4 History: https://zsh.sourceforge.io/Doc/Release/Options.html#History
 setopt bang_hist               # Treat the '!' character specially during expansion.
 setopt extended_history        # Write the history file in the ':start:elapsed;command' format.
 setopt hist_expire_dups_first  # Expire a duplicate event first when trimming history.
@@ -18,8 +18,7 @@ setopt NO_hist_beep            # Don't beep when accessing non-existent history.
 setopt NO_share_history        # Don't share history between all sessions.
 
 # Path to the history file.
-: ${__zsh_user_data_dir:=${XDG_DATA_HOME:-$HOME/.local/share}/zsh}
-HISTFILE=$__zsh_user_data_dir/zsh_history      # History file path.
+HISTFILE=${XDG_DATA_HOME:-$HOME/.local/share}/zsh/history  # History file path.
 [[ -d $HISTFILE:h ]] || mkdir -p $HISTFILE:h
 [[ "$SAVEHIST" -gt 1000 ]] || SAVEHIST=100000  # Max history file size.
 [[ "$HISTSIZE" -gt 2000 ]] || HISTSIZE=20000   # Max session history size.
