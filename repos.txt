@@ -7,17 +7,25 @@ mattmc3/zephyr
 
 # core plugins
 zdharma-continuum/fast-syntax-highlighting
+zsh-hooks/zsh-hooks
 zsh-users/zsh-autosuggestions
 zsh-users/zsh-completions
+zsh-users/zsh-history-substring-search
+zsh-users/zsh-syntax-highlighting
 
 # prompts
 romkatv/powerlevel10k
 
 # utils
+jeffreytse/zsh-vi-mode
 aloxaf/fzf-tab
 kaelzhang/shell-safe-rm
+romkatv/gitstatus
 romkatv/zsh-bench
 romkatv/zsh-no-ps2
 mattmc3/zman
+
+# misc
+# ajeetdsouza/zoxide
 
 # vim: ft=properties sw=2 ts=2 et
