@@ -5,8 +5,18 @@
 OTP_HOME="${OTP_HOME:-${XDG_DATA_HOME:-$HOME/.local/share}/otp}"
 [ -d "$OTP_HOME" ] || mkdir -p "$OTP_HOME"
 
+# Set GPG home directory
+if [ -n "$GPG_HOME" ]; then
+  GPG_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/gnupg"
+fi
+
 usage() {
-  echo "usage: otp [-h|--help] [-l|--list] [-a|--add] <key>"
+  echo "usage: otp [-h|--help] [-l|--list] [-a|--add] [-r|--remove] [--rekey] <key>"
+  echo "  -h, --help        Show help"
+  echo "  -l, --list        List keys"
+  echo "  -a, --add <key>   Add a new OTP key"
+  echo "  -r, --remove <key> Remove an OTP key"
+  echo "      --rekey       Re-encrypt all OTP keys to current recipients"
 }
 
 # Check dependencies
@@ -20,10 +30,20 @@ if ! command -v gpg >/dev/null 2>&1; then
   exit 1
 fi
 
+# Collect GPG recipients from pubkeys/*.asc
+RECIPIENTS=""
+for pubkey in "$OTP_HOME"/pubkeys/*.asc; do
+  [ -f "$pubkey" ] || continue
+  keyid=$(gpg --homedir "$GPG_HOME" --show-keys --with-colons "$pubkey" 2>/dev/null | awk -F: '/^pub/ {print $5}')
+  [ -n "$keyid" ] && RECIPIENTS="$RECIPIENTS --recipient $keyid"
+done
+
 # Parse options
 flag_help=0
 flag_list=0
 flag_add=0
+flag_remove=0
+flag_rekey=0
 key=""
 
 while [ $# -gt 0 ]; do
@@ -31,6 +51,8 @@ while [ $# -gt 0 ]; do
     -h|--help) flag_help=1 ;;
     -l|--list) flag_list=1 ;;
     -a|--add)  flag_add=1 ;;
+    -r|--remove) flag_remove=1 ;;
+    --rekey)   flag_rekey=1 ;;
     *) key="$1" ;;
   esac
   shift
@@ -47,16 +69,52 @@ elif [ "$flag_list" -eq 1 ]; then
 elif [ -z "$key" ]; then
   echo "otp: Expecting <key> argument. Run 'otp -h' for usage." >&2
   exit 1
+elif [ "$flag_remove" -eq 1 ]; then
+  if [ -z "$key" ]; then
+    echo "otp: Please specify a key to remove." >&2
+    exit 1
+  fi
+  if [ -f "$OTP_HOME/$key.otp.asc" ]; then
+    rm -f "$OTP_HOME/$key.otp.asc"
+    echo "otp: Removed key '$key'."
+    exit 0
+  else
+    echo "otp: Key '$key' not found." >&2
+    exit 1
+  fi
 elif [ "$flag_add" -eq 1 ]; then
   echo "The 'otp' utility uses gpg to encrypt your OTP key."
-  echo "Paste your OTP secret key, then press Ctrl-D to finish."
+  printf "Enter the OTP secret for '%s': " "$key"
+  stty -echo
+  read -r otp_secret
+  stty echo
+  echo
   rm -f -- "${OTP_HOME:?}/$key.otp.asc"
-  gpg --armor --encrypt --output "$OTP_HOME/$key.otp.asc" /dev/stdin
+  # shellcheck disable=SC2086
+  echo "$otp_secret" | gpg --homedir "$GPG_HOME" $RECIPIENTS --armor --encrypt --output "$OTP_HOME/$key.otp.asc"
+  exit 0
+elif [ "$flag_rekey" -eq 1 ]; then
+  for file in "$OTP_HOME"/*.otp.asc; do
+    [ -f "$file" ] || continue
+    totpkey=$(gpg --homedir "$GPG_HOME" --quiet --decrypt "$file")
+    # shellcheck disable=SC2086
+    if echo "$totpkey" | gpg --homedir "$GPG_HOME" $RECIPIENTS --armor --encrypt --output "$file.new"; then
+      mv -f "$file.new" "$file"
+    else
+      rm -f "$file.new"
+      echo "otp: failed to rekey $file" >&2
+      exit 1
+    fi
+  done
   exit 0
 elif [ ! -f "$OTP_HOME/$key.otp.asc" ]; then
   echo "otp: missing key '$key'. Run 'otp --add <key>' to add a new one-time password." >&2
   exit 1
 else
-  totpkey=$(gpg --quiet --decrypt "$OTP_HOME/$key.otp.asc")
-  oathtool --totp --b "$totpkey"
+  totpkey=$(gpg --homedir "$GPG_HOME" --quiet --decrypt "$OTP_HOME/$key.otp.asc")
+  if command -v pbcopy >/dev/null 2>&1; then
+    oathtool --totp --b "$totpkey" | tee /dev/stderr | pbcopy
+  else
+    oathtool --totp --b "$totpkey"
+  fi
 fi
