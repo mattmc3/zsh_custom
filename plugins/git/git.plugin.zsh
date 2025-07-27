@@ -9,6 +9,7 @@
 
 function update_git_completions {
   # Download the git scripts
+  0=${(%):-%x}
   local giturl=https://raw.githubusercontent.com/git/git/master/contrib/completion
   local dest=${1:-${0:a:h}/completions}
   [[ -d $dest ]] || mkdir -p $dest
