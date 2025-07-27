@@ -1,8 +1,13 @@
 #
-# history - Set Zsh history options, variables, and aliases.
+# history: Set history options and define history aliases.
 #
 
-# 16.2.4 History: https://zsh.sourceforge.io/Doc/Release/Options.html#History
+# References:
+# - https://github.com/sorin-ionescu/prezto/tree/master/modules/history
+# - https://github.com/ohmyzsh/ohmyzsh/blob/master/lib/history.zsh
+# - https://zsh.sourceforge.io/Doc/Release/Options.html#History
+
+# Set Zsh options related to history.
 setopt bang_hist               # Treat the '!' character specially during expansion.
 setopt extended_history        # Write the history file in the ':start:elapsed;command' format.
 setopt hist_expire_dups_first  # Expire a duplicate event first when trimming history.
@@ -17,12 +22,34 @@ setopt inc_append_history      # Write to the history file immediately, not when
 setopt NO_hist_beep            # Don't beep when accessing non-existent history.
 setopt NO_share_history        # Don't share history between all sessions.
 
-# Path to the history file.
-HISTFILE=${XDG_DATA_HOME:-$HOME/.local/share}/zsh/history  # History file path.
-[[ -d $HISTFILE:h ]] || mkdir -p $HISTFILE:h
-[[ "$SAVEHIST" -gt 1000 ]] || SAVEHIST=100000  # Max history file size.
-[[ "$HISTSIZE" -gt 2000 ]] || HISTSIZE=20000   # Max session history size.
+# Set the path to the default history file.
+if zstyle -s ':zsh_custom:plugin:history' histfile 'HISTFILE'; then
+  # Make sure the user didn't store a HISTFILE with a leading '~'.
+  HISTFILE="${~HISTFILE}"
+else
+  if zstyle -T ':zsh_custom:plugin:history' use-xdg-basedirs; then
+    HISTFILE=${XDG_DATA_HOME:-$HOME/.local/share}/zsh/history
+  else
+    HISTFILE="${ZDOTDIR:-$HOME}/.zsh_history"
+  fi
+fi
 
-# History aliases.
-alias hist='fc -li'
-alias history-stat="history 0 | awk '{print \$2}' | sort | uniq -c | sort -n -r | head"
+# Make sure the HISTFILE's directory exists.
+[[ -d "${HISTFILE:h}" ]] || mkdir -p "${HISTFILE:h}"
+
+# Set history file size.
+zstyle -s ':zsh_custom:plugin:history' savehist 'SAVEHIST' \
+  || SAVEHIST=100000
+
+# Set session history size.
+zstyle -s ':zsh_custom:plugin:history' histsize 'HISTSIZE' \
+  || HISTSIZE=20000
+
+# Set history aliases.
+if ! zstyle -t ':zsh_custom:plugin:history:alias' skip; then
+  alias hist='fc -li'
+  alias history-stat="history 0 | awk '{print \$2}' | sort | uniq -c | sort -n -r | head"
+fi
+
+# Mark the plugin as loaded
+zstyle ':zsh_custom:plugin:history' loaded 'yes'
