@@ -1,7 +1,9 @@
-prj() {
-  local selection="$(command prj "$@")"
-  if [[ -n "$selection" ]] && [[ -d "$selection" ]]; then
-    cd "$selection"
-  fi
-}
-eval "$(command prj --init sh)"
+#
+# prj: The project jumper
+#
+
+! zstyle -t ':zsh_custom:plugin:prj' loaded || return 1
+
+eval "$("$ZSH_CUSTOM/plugins/prj/bin/prj" -i zsh)"
+
+zstyle ':zsh_custom:plugin:prj' loaded 'yes'
