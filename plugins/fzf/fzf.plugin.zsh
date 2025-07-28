@@ -9,7 +9,7 @@ fi
 
 # https://github.com/ajeetdsouza/fzf
 if (( $+functions[cached-eval] )); then
-  cached-eval 'fzf-zsh' fzf zsh
+  cached-eval 'fzf-zsh' fzf --zsh
 else
   source <(fzf --zsh)
 fi
