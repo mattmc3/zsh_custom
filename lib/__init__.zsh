@@ -10,14 +10,14 @@ export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
 mkdir -p "$XDG_CONFIG_HOME" "$XDG_CACHE_HOME" "$XDG_DATA_HOME" "$XDG_STATE_HOME"
 
 # Repos
-export REPO_HOME=$ZSH_CUSTOM/.external
+ZSH_REPO_HOME=$ZSH_CUSTOM/.external
 function repo {
-  "$ZSH_CUSTOM/plugins/repo/bin/repo" "$@"
+  REPO_HOME=$ZSH_REPO_HOME "$ZSH_CUSTOM/plugins/repo/bin/repo" "$@"
 }
-[[ -d $REPO_HOME ]] || repo in <$ZSH_CUSTOM/repos.txt
+[[ -d $ZSH_REPO_HOME ]] || repo in <$ZSH_CUSTOM/repos.txt
 
 # OMZ
-ZSH=$REPO_HOME/ohmyzsh/ohmyzsh
+ZSH=$ZSH_REPO_HOME/ohmyzsh/ohmyzsh
 
 # Set options we always want no matter what.
 setopt INTERACTIVE_COMMENTS EXTENDED_GLOB

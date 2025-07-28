@@ -24,7 +24,7 @@ function __repo_keys {
     up update
   )
   local keys
-  keys=($(find "$REPO_HOME" -type d -name .git 2>/dev/null | while read -r d; do
+  keys=($(find "$ZSH_REPO_HOME" -type d -name .git 2>/dev/null | while read -r d; do
     repo_path="$(dirname "$d")"
     parent_path="$(dirname "$repo_path")"
     echo "$(basename "$parent_path")/$(basename "$repo_path")"

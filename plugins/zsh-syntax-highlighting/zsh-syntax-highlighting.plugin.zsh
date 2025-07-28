@@ -5,7 +5,7 @@
 # See available highlighters here:
 # - https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters/main.md
 
-source "$ZSH_CUSTOM/.external/zsh-users/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+source "$ZSH_REPO_HOME/zsh-users/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
 # Check if using zsh-users/zsh-syntax-highlighting
 [[ -v ZSH_HIGHLIGHT_STYLES ]] || return 1
