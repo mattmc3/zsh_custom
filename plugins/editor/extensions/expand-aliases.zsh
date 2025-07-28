@@ -7,4 +7,5 @@ function expand-aliases {
 zle -N expand-aliases
 
 # control-space expands all aliases, including global
-bindkey -M "$keymap" "$key_info[Control] " expand-aliases
+bindkey -M emacs "$key_info[Control] " expand-aliases
+bindkey -M vicmd "$key_info[Control] " expand-aliases
