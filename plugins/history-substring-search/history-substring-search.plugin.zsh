@@ -5,35 +5,35 @@ if (( ! $+functions[history-substring-search-up] )); then
   source "$ZSH_REPO_HOME/zsh-users/zsh-history-substring-search/zsh-history-substring-search.zsh" || return 1
 fi
 
-zstyle -s ':zsh_custom:plugins:history-substring-search:color' found \
+zstyle -s ':zsh_custom:plugin:history-substring-search:color' found \
   'HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND' \
     || HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='bg=magenta,fg=white,bold'
 
-zstyle -s ':zsh_custom:plugins:history-substring-search:color' not-found \
+zstyle -s ':zsh_custom:plugin:history-substring-search:color' not-found \
   'HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND' \
     || HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND='bg=red,fg=white,bold'
 
-zstyle -s ':zsh_custom:plugins:history-substring-search' globbing-flags \
+zstyle -s ':zsh_custom:plugin:history-substring-search' globbing-flags \
   'HISTORY_SUBSTRING_SEARCH_GLOBBING_FLAGS' \
     || HISTORY_SUBSTRING_SEARCH_GLOBBING_FLAGS='i'
 
-if zstyle -t ':zsh_custom:plugins:history-substring-search' case-sensitive; then
+if zstyle -t ':zsh_custom:plugin:history-substring-search' case-sensitive; then
   HISTORY_SUBSTRING_SEARCH_GLOBBING_FLAGS="${HISTORY_SUBSTRING_SEARCH_GLOBBING_FLAGS//i}"
 fi
 
-if ! zstyle -t ':zsh_custom:plugins:history-substring-search' color; then
+if ! zstyle -t ':zsh_custom:plugin:history-substring-search' color; then
   unset HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_{FOUND,NOT_FOUND}
 fi
 
-if zstyle -t ':zsh_custom:plugins:history-substring-search' fuzzy; then
+if zstyle -t ':zsh_custom:plugin:history-substring-search' fuzzy; then
   HISTORY_SUBSTRING_SEARCH_FUZZY=1
 fi
 
-if zstyle -t ':zsh_custom:plugins:history-substring-search' unique; then
+if zstyle -t ':zsh_custom:plugin:history-substring-search' unique; then
   HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=1
 fi
 
-if zstyle -t ':zsh_custom:plugins:history-substring-search' prefixed; then
+if zstyle -t ':zsh_custom:plugin:history-substring-search' prefixed; then
   HISTORY_SUBSTRING_SEARCH_PREFIXED=1
 fi
 
