@@ -22,9 +22,5 @@ ZSH=$ZSH_REPO_HOME/ohmyzsh/ohmyzsh
 # Set options we always want no matter what.
 setopt INTERACTIVE_COMMENTS EXTENDED_GLOB
 
-# Lazy-load (autoload) Zsh function files from a directory.
-fpath=($ZSH_CUSTOM/functions $fpath)
-autoload -Uz $ZSH_CUSTOM/functions/*(.:t)
-
 # Helper functions
 source $ZSH_CUSTOM/lib/functions.zsh
