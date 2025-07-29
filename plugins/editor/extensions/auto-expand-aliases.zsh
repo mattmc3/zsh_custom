@@ -1,6 +1,6 @@
 function auto-expand-aliases {
   local -a noexpand_aliases
-  zstyle -a ':zsh_custom:plugin:auto-expand-aliases' 'noexpand' 'noexpand_aliases' \
+  zstyle -a ':zsh_custom:plugin:editor:auto-expand-aliases' 'noexpand' 'noexpand_aliases' \
     || noexpand_aliases=()
 
   # Get last word to the left of the cursor:
