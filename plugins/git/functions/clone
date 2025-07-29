@@ -10,7 +10,7 @@ if [[ "$1" = */* ]]; then
   user=${1%/*}
   repo=${1##*/}
 else
-  # Set history file size.
+  # Use the git user zstyle
   zstyle -s ':zsh_custom:plugin:git' default-user user
   if [[ -z "$user" ]]; then
     echo "clone: Expecting zstyle ':zsh_custom:plugin:git' default-user." >&2
@@ -19,7 +19,8 @@ else
   repo=$1
 fi
 
-local giturl="github.com"
+local giturl
+zstyle -s ':zsh_custom:plugin:git' default-site giturl || giturl=github.com
 local dest=${XDG_PROJECTS_HOME:-~/Projects}/$user/$repo
 
 if [[ ! -d $dest ]]; then
