@@ -126,18 +126,5 @@ function echoerr {
 ##? Pass thru for copy/paste markdown
 function $ { $@ }
 
-##? funcfresh - refresh function definition
-function funcfresh {
-  if ! (( $# )); then
-    echo >&2 "funcfresh: Expecting function argument."
-    return 1
-  elif ! (( $+functions[$1] )); then
-    echo >&2 "funcfresh: Function not found '$1'."
-    return 1
-  fi
-  unfunction $1
-  autoload -Uz $1
-}
-
 # Mark the plugin as loaded
 zstyle ':zsh_custom:plugin:common-functions' loaded 'yes'
