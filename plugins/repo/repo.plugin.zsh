@@ -1,5 +1,5 @@
 #
-# repo - One-time passwords (multi-factor authentication from the command line)
+# repo: Manage git repositories for Zsh plugins
 #
 
 # References
