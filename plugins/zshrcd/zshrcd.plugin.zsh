@@ -3,7 +3,7 @@
 #
 
 # Allow user to set .zshrc.d to whatever.
-zstyle -s ':zsh_custom:plugin:zshrc' directory _zshrcd \
+zstyle -s ':zsh_custom:plugin:zshrcd' directory _zshrcd \
   || _zshrcd=${ZDOTDIR:-$HOME}/.zshrc.d
 
 # Replace a literal leading '~' with $HOME.
@@ -23,4 +23,4 @@ done
 unset _{rc,zshrcd}
 
 # Mark the plugin as loaded.
-zstyle ':zsh_custom:plugin:zshrc' loaded 'yes'
+zstyle ':zsh_custom:plugin:zshrcd' loaded 'yes'
