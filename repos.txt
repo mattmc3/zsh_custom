@@ -3,7 +3,6 @@
 
 # frameworks
 ohmyzsh/ohmyzsh
-mattmc3/zephyr
 
 # core plugins
 zdharma-continuum/fast-syntax-highlighting
@@ -17,6 +16,7 @@ zsh-users/zsh-syntax-highlighting
 romkatv/powerlevel10k
 
 # utils
+larkery/zsh-histdb
 jeffreytse/zsh-vi-mode
 aloxaf/fzf-tab
 kaelzhang/shell-safe-rm
