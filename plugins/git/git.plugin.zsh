@@ -5,6 +5,8 @@
 # References
 # - https://www.oliverspryn.com/blog/adding-git-completion-to-zsh
 
+0=${(%):-%N}
+
 function update_git_completions {
   emulate -L zsh
   # Download the git scripts
@@ -42,6 +44,11 @@ if ! zstyle -t ':zsh_custom:plugin:git:alias' skip; then
   alias grv="git remote -v"
   alias gsh="git stash"
   alias gst="git status -sb"
+fi
+
+# Functions
+if ! zstyle -t ':zsh_custom:plugin:git:functions' skip; then
+  autoload-dir ${0:a:h}/functions
 fi
 
 # Mark the plugin as loaded
