@@ -12,7 +12,7 @@ if [[ "$1" = */* ]]; then
 else
   # Set history file size.
   zstyle -s ':zsh_custom:plugin:git' default-user user
-  if [[ -n "$user" ]]; then
+  if [[ -z "$user" ]]; then
     echo "clone: Expecting zstyle ':zsh_custom:plugin:git' default-user." >&2
     return 1
   fi
