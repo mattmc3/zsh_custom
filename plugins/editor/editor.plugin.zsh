@@ -23,8 +23,8 @@ setopt NO_flow_control         # Allow the usage of ^Q/^S in the context of zsh.
 #
 
 # Treat these characters as part of a word.
-zstyle -s ':zsh_custom:plugin:editor' wordchars 'WORDCHARS' || \
-WORDCHARS='*?_-.[]~&;!#$%^(){}<>'
+zstyle -s ':zsh_custom:plugin:editor' wordchars 'WORDCHARS' \
+  || WORDCHARS='*?_-.[]~&;!#$%^(){}<>'
 
 # Use human-friendly identifiers.
 zmodload zsh/terminfo
