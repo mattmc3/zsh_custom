@@ -92,7 +92,7 @@ function zfuncdir {
   emulate -L zsh; setopt local_options
   local zfuncd
   zstyle -s ':zsh_custom:plugin:zfunctions' directory zfuncd \
-    || zfuncd="${ZFUNCDIR:-${ZDOTDIR:-$HOME}/.zfunctions}"
+    || zfuncd="${ZFUNCDIR:-${ZDOTDIR:-$HOME/.config/zsh}/functions}"
   echo "${~zfuncd}"
 }
 
