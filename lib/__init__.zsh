@@ -2,6 +2,9 @@
 0=${(%):-%N}
 ZSH_CUSTOM="${0:a:h:h}"
 
+# Set options we always want no matter what.
+setopt INTERACTIVE_COMMENTS EXTENDED_GLOB
+
 # XDG
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
@@ -19,8 +22,6 @@ function repo {
 # OMZ
 ZSH=$ZSH_REPO_HOME/ohmyzsh/ohmyzsh
 
-# Set options we always want no matter what.
-setopt INTERACTIVE_COMMENTS EXTENDED_GLOB
-
-# Helper functions
+# Helper libs
 source $ZSH_CUSTOM/lib/functions.zsh
+source $ZSH_CUSTOM/lib/postzshrc.zsh
