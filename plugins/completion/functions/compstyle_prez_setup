@@ -1,21 +1,47 @@
 #!/bin/zsh
 
-function compstyle_zephyr_help {
-  echo "A composite of the grml, prezto, and ohmyzsh completions."
-  echo "You can invoke it with the following command:"
-  echo
-  echo "  compstyle zephyr"
-  echo
-  echo "More information available at: https://github.com/mattmc3/zephyr"
+### Prezto Project information:
+## Home:     https://github.com/sorin-ionescu/prezto
+## Authors:  Prezto contributers (https://github.com/sorin-ionescu/prezto/graphs/contributors)
+## License:  MIT
+## Source:   https://github.com/sorin-ionescu/prezto/blob/master/modules/completion/init.zsh
+
+function compstyle_prez_help () {
+  cat <<'EOF'
+This completion style mimics the one included with Prezto.
+You can invoke it with the following command:
+
+  compstyle prez
+
+More information available here: https://github.com/sorin-ionescu/prezto
+EOF
 }
 
-function compstyle_zephyr_setup {
-  # Pre-reqs.
-  : ${__zsh_cache_dir:=${XDG_CACHE_HOME:-$HOME/.cache}/zsh}
-  [[ -d $__zsh_cache_dir ]] || mkdir -p $__zsh_cache_dir
+function compstyle_prez_setup {
+  #
+  # Options
+  #
+
+  setopt COMPLETE_IN_WORD     # Complete from both ends of a word.
+  setopt ALWAYS_TO_END        # Move cursor to the end of a completed word.
+  setopt PATH_DIRS            # Perform path search even on command names with slashes.
+  setopt AUTO_MENU            # Show completion menu on a successive tab press.
+  setopt AUTO_LIST            # Automatically list choices on ambiguous completion.
+  setopt AUTO_PARAM_SLASH     # If completed parameter is a directory, add a trailing slash.
+  setopt EXTENDED_GLOB        # Needed for file modification glob modifiers with compinit.
+  unsetopt MENU_COMPLETE      # Do not autoselect the first completion entry.
+  unsetopt FLOW_CONTROL       # Disable start/stop characters in shell editor.
+
+  #
+  # Variables
+  #
 
   # Standard style used by default for 'list-colors'
   LS_COLORS=${LS_COLORS:-'di=34:ln=35:so=32:pi=33:ex=31:bd=36;01:cd=33;01:su=31;40;07:sg=36;40;07:tw=32;40;07:ow=33;40;07:'}
+
+  #
+  # Styles
+  #
 
   # Defaults.
   zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
@@ -23,15 +49,15 @@ function compstyle_zephyr_setup {
 
   # Use caching to make completion for commands such as dpkg and apt usable.
   zstyle ':completion::complete:*' use-cache on
-  zstyle ':completion::complete:*' cache-path "$__zsh_cache_dir/zcompcache"
+  zstyle ':completion::complete:*' cache-path "${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompcache"
 
   # Case-insensitive (all), partial-word, and then substring completion.
-  if zstyle -t ':zsh_custom:plugin:compstyle:*' case-sensitive; then
-    zstyle ':completion:*' matcher-list 'r:|=*' 'l:|=* r:|=*'
-    setopt case_glob
+  if zstyle -t ':zsh-utils:plugin:completion:*' case-sensitive; then
+    zstyle ':completion:*' matcher-list 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+    setopt CASE_GLOB
   else
-    zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
-    unsetopt case_glob
+    zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+    unsetopt CASE_GLOB
   fi
 
   # Group matches and describe.
@@ -39,11 +65,11 @@ function compstyle_zephyr_setup {
   zstyle ':completion:*:matches' group 'yes'
   zstyle ':completion:*:options' description 'yes'
   zstyle ':completion:*:options' auto-description '%d'
-  zstyle ':completion:*:corrections' format ' %F{red}-- %d (errors: %e) --%f'
-  zstyle ':completion:*:descriptions' format ' %F{purple}-- %d --%f'
-  zstyle ':completion:*:messages' format ' %F{green} -- %d --%f'
-  zstyle ':completion:*:warnings' format ' %F{yellow}-- no matches found --%f'
-  zstyle ':completion:*' format ' %F{blue}-- %d --%f'
+  zstyle ':completion:*:corrections' format ' %F{green}-- %d (errors: %e) --%f'
+  zstyle ':completion:*:descriptions' format ' %F{yellow}-- %d --%f'
+  zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
+  zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
+  zstyle ':completion:*' format ' %F{yellow}-- %d --%f'
   zstyle ':completion:*' group-name ''
   zstyle ':completion:*' verbose yes
 
@@ -67,7 +93,6 @@ function compstyle_zephyr_setup {
   zstyle ':completion:*:*:cd:*:directory-stack' menu yes select
   zstyle ':completion:*:-tilde-:*' group-order 'named-directories' 'path-directories' 'users' 'expand'
   zstyle ':completion:*' squeeze-slashes true
-  zstyle ':completion:*' special-dirs ..
 
   # History
   zstyle ':completion:*:history-words' stop yes
@@ -80,7 +105,7 @@ function compstyle_zephyr_setup {
 
   # Populate hostname completion. But allow ignoring custom entries from static
   # */etc/hosts* which might be uninteresting.
-  zstyle -a ':zsh_custom:plugin:compstyle:*:hosts' etc-host-ignores '_etc_host_ignores'
+  zstyle -a ':zsh-utils:plugin:completion:*:hosts' etc-host-ignores '_etc_host_ignores'
 
   zstyle -e ':completion:*:hosts' hosts 'reply=(
     ${=${=${=${${(f)"$(cat {/etc/ssh/ssh_,~/.ssh/}known_hosts(|2)(N) 2> /dev/null)"}%%[#| ]*}//\]:[0-9]*/ }//,/ }//\[/ }
@@ -115,7 +140,6 @@ function compstyle_zephyr_setup {
   # Man
   zstyle ':completion:*:manuals' separate-sections true
   zstyle ':completion:*:manuals.(^1*)' insert-sections true
-  zstyle ':completion:*:man:*' menu yes select
 
   # Media Players
   zstyle ':completion:*:*:mpg123:*' file-patterns '*.(mp3|MP3):mp3\ files *(-/):directories'
@@ -137,5 +161,4 @@ function compstyle_zephyr_setup {
   zstyle ':completion:*:(ssh|scp|rsync):*:hosts-domain' ignored-patterns '<->.<->.<->.<->' '^[-[:alnum:]]##(.[-[:alnum:]]##)##' '*@*'
   zstyle ':completion:*:(ssh|scp|rsync):*:hosts-ipaddr' ignored-patterns '^(<->.<->.<->.<->|(|::)([[:xdigit:].]##:(#c,2))##(|%*))' '127.0.0.<->' '255.255.255.255' '::1' 'fe80::*'
 }
-
-compstyle_zephyr_setup "$@"
+compstyle_prez_setup "$@"

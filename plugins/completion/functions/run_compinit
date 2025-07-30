@@ -1,0 +1,50 @@
+#!/bin/zsh
+function run_compinit {
+  emulate -L zsh
+  setopt local_options extended_glob
+
+  # Use whatever the zstyle or ZSH_COMPDUMP is set to.
+  local zcompdump
+  zstyle -s ':zsh_custom:plugin:completion' compdump zcompdump \
+    || zcompdump=${ZSH_COMPDUMP:-${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump}
+
+  # Make sure zcompdump's directory exists and doesn't have a leading tilde.
+  zcompdump="${~zcompdump}"
+  [[ -d $zcompdump:h ]] || mkdir -p $zcompdump:h
+
+  # `run_compinit -f` forces a cache reset.
+  if [[ "$1" == (-f|--force) ]]; then
+    shift
+    [[ -r "$zcompdump" ]] && rm -rf -- "$zcompdump"
+  fi
+
+  # Initialize completions
+  local -a compinit_flags=(-d "$zcompdump")
+  autoload -Uz compinit
+  if zstyle -T ':zsh_custom:plugin:completion' 'use-cache'; then
+    # Load and initialize the completion system ignoring insecure directories with a
+    # cache time of 20 hours, so it should almost always regenerate the first time a
+    # shell is opened each day.
+    local zcompdump_cache=($zcompdump(Nmh-20))
+    if (( $#zcompdump_cache )); then
+      # -C (skip function check) implies -i (skip security check).
+      compinit -C $compinit_flags
+    else
+      compinit -i $compinit_flags
+      touch "$zcompdump"  # Ensure timestamp updates to reset the cache timeout.
+    fi
+  else
+    compinit $compinit_flags
+  fi
+
+  # Compile zcompdump, if modified, in background to increase startup speed.
+  {
+    if [[ -s "$zcompdump" && (! -s "${zcompdump}.zwc" || "$zcompdump" -nt "${zcompdump}.zwc") ]]; then
+      if command mkdir "${zcompdump}.zwc.lock" 2>/dev/null; then
+        zcompile "$zcompdump"
+        command rmdir  "${zcompdump}.zwc.lock" 2>/dev/null
+      fi
+    fi
+  } &!
+}
+run_compinit "$@"

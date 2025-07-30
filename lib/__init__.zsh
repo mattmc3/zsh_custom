@@ -25,3 +25,6 @@ ZSH=$ZSH_REPO_HOME/ohmyzsh/ohmyzsh
 # Helper libs
 source $ZSH_CUSTOM/lib/functions.zsh
 source $ZSH_CUSTOM/lib/postzshrc.zsh
+
+# Mark this lib as loaded
+zstyle ':zsh_custom:lib:__init__' loaded 'yes'
