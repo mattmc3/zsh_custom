@@ -37,6 +37,9 @@ function run_compinit {
     compinit $compinit_flags
   fi
 
+  # Give users a variable they can use.
+  export ZSH_COMPDUMP=$zcompdump
+
   # Compile zcompdump, if modified, in background to increase startup speed.
   {
     if [[ -s "$zcompdump" && (! -s "${zcompdump}.zwc" || "$zcompdump" -nt "${zcompdump}.zwc") ]]; then
