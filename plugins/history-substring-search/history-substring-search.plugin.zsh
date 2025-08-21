@@ -21,7 +21,7 @@ if zstyle -t ':zsh_custom:plugin:history-substring-search' case-sensitive; then
   HISTORY_SUBSTRING_SEARCH_GLOBBING_FLAGS="${HISTORY_SUBSTRING_SEARCH_GLOBBING_FLAGS//i}"
 fi
 
-if ! zstyle -t ':zsh_custom:plugin:history-substring-search' color; then
+if ! zstyle -T ':zsh_custom:plugin:history-substring-search' color; then
   unset HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_{FOUND,NOT_FOUND}
 fi
 
@@ -43,7 +43,7 @@ bindkey -M vicmd "k" history-substring-search-up
 bindkey -M vicmd "j" history-substring-search-down
 
 # Emacs and Vi
-for _keymap in 'emacs' 'viins'; do
+for _keymap in 'emacs' 'viins' 'vicmd'; do
   bindkey -M "$_keymap" "$terminfo[kcuu1]" history-substring-search-up
   bindkey -M "$_keymap" "$terminfo[kcud1]" history-substring-search-down
 done
