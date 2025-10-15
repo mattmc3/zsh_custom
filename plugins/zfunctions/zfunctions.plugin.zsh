@@ -2,11 +2,21 @@
 # zfunctions: Fish-like lazy function management
 #
 
+##? Get the default ZFUNCDIR
+function zfuncdir {
+  emulate -L zsh; setopt local_options
+  local zfuncd
+  zstyle -s ':zsh_custom:plugin:zfunctions' directory zfuncd \
+    || zfuncd="${ZFUNCDIR:-${ZDOTDIR:-$HOME/.config/zsh}/functions}"
+  echo "${~zfuncd}"
+}
+
 ##? autoload-dir - Autoload function files in directory
 function autoload-dir {
   local zdir
   local -a zautoloads
   for zdir in $@; do
+    zdir="${zdir:A}"
     [[ -d "$zdir" ]] || continue
     fpath=("$zdir" $fpath)
     zautoloads=($zdir/*~_*(N.:t))
@@ -86,14 +96,6 @@ function funcfresh {
   fi
   unfunction $1
   autoload -Uz $1
-}
-
-function zfuncdir {
-  emulate -L zsh; setopt local_options
-  local zfuncd
-  zstyle -s ':zsh_custom:plugin:zfunctions' directory zfuncd \
-    || zfuncd="${ZFUNCDIR:-${ZDOTDIR:-$HOME/.config/zsh}/functions}"
-  echo "${~zfuncd}"
 }
 
 # Autoload Zsh function directory.
