@@ -36,8 +36,8 @@ if zstyle -T ':zsh_custom:plugin:environment' use-xdg-basedirs; then
 fi
 
 # Editors
-export EDITOR=${EDITOR:-nano}
-export VISUAL=${VISUAL:-nano}
+export EDITOR=${EDITOR:-nvim}
+export VISUAL=${VISUAL:-code}
 export PAGER=${PAGER:-less}
 
 # Set browser.
@@ -73,14 +73,13 @@ fi
 [[ -z "$READNULLCMD" ]] || READNULLCMD=$PAGER
 
 # Ensure path arrays do not contain duplicates.
-typeset -gU cdpath fpath mailpath path
+typeset -gaU cdpath fpath mailpath path prepath
 
 # Add /usr/local/bin to path.
 path=(/usr/local/{,s}bin(N) $path)
 
 # Set the list of directories that Zsh searches for programs.
 if [[ ! -v prepath ]]; then
-  typeset -ga prepath
   # If path ever gets out of order, you can use `path=($prepath $path)` to reset it.
   zstyle -a ':zsh_custom:plugin:environment' 'prepath' 'prepath' \
   || prepath=(
