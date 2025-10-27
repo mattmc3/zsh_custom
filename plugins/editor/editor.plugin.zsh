@@ -237,21 +237,6 @@ else
 fi
 
 #
-# Plugins
-#
-
-if zstyle -t ":zsh_custom:plugin:editor:zsh-no-ps2" "enabled" && [[ -d "$ZSH_REPO_HOME"/romkatv/zsh-no-ps2 ]]; then
-  source "$ZSH_REPO_HOME"/romkatv/zsh-no-ps2/zsh-no-ps2.plugin.zsh
-fi
-
-if zstyle -t ":zsh_custom:plugin:editor:zsh-vi-mode" "enabled" &&
-   [[ -d "$ZSH_REPO_HOME"/romkatv/zsh-no-ps2 ]] &&
-   [[ "$key_bindings" == vi ]]
-then
-  source "$ZSH_REPO_HOME"/jeffreytse/zsh-vi-mode/zsh-vi-mode.plugin.zsh
-fi
-
-#
 # Post
 #
 
