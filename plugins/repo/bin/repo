@@ -2,7 +2,7 @@
 # shellcheck disable=SC3043
 # repo - Deal with git repos
 
-: ${REPO_HOME:=${XDG_CACHE_HOME:-$HOME/.cache}/repos}
+: "${REPO_HOME:=${XDG_CACHE_HOME:-$HOME/.cache}/repos}"
 
 repo_help() {
   echo "repo - Deal with git repos"
