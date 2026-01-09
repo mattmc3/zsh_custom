@@ -2,9 +2,12 @@
 # lib/functions: Shared helper functions available to any plugin
 #
 
+# Use the base OMZ functions.
+source $ZSH/lib/functions.zsh
+
 # Lazy-load (autoload) Zsh function files from a directory.
-fpath=($ZSH_CUSTOM/functions $fpath)
-autoload -Uz $ZSH_CUSTOM/functions/*(.:t)
+fpath=($MY_ZSH_CUSTOM/functions $fpath)
+autoload -Uz $MY_ZSH_CUSTOM/functions/*(.:t)
 
 # Check if a file can be autoloaded by trying to load it in a subshell.
 function is-autoloadable {

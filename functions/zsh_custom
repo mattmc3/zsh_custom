@@ -6,11 +6,11 @@ setopt local_options
 
 local subcmd=$1 plugin_dir plugin loaded
 if [[ "$subcmd" == list ]]; then
-  for plugin_dir in $ZSH_CUSTOM/plugins/*(N/); do
+  for plugin_dir in $ZSH_CUSTOM/plugins/*(N); do
     echo ${plugin_dir:t}
   done
 elif [[ "$subcmd" == loaded ]]; then
-  for plugin_dir in $ZSH_CUSTOM/plugins/*(N/); do
+  for plugin_dir in $ZSH_CUSTOM/plugins/*(N); do
     plugin=${plugin_dir:t}
     if zstyle -t ":zsh_custom:plugin:${plugin}" "loaded"; then
       loaded=yes
