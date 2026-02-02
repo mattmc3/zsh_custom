@@ -1,5 +1,8 @@
 #!/bin/zsh
 
+0=${(%):-%N}
+MY_ZSH_CUSTOM=${0:a:h:h}
+
 # Set XDG base dirs.
 # https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
 if zstyle -T ':zsh_custom:environment' use-xdg-basedirs; then
