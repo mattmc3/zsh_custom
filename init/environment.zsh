@@ -26,7 +26,7 @@ export BROWSER="${BROWSER:-open}"
 
 if (( $+commands[nvim] )); then
   export EDITOR="${EDITOR:-nvim}"
-elif
+else
   export EDITOR="${EDITOR:-vim}"
 fi
 
@@ -34,7 +34,7 @@ if (( $+commands[code] )); then
   export VISUAL="${VISUAL:-code}"
 elif (( $+commands[nvim] )); then
   export VISUAL="${VISUAL:-nvim}"
-elif
+else
   export VISUAL="${VISUAL:-vim}"
 fi
 
