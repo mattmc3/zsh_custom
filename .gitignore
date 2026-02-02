@@ -1,4 +1,7 @@
 ~*
 .external/
+.oh-my-zsh/
+ohmyzsh/
 *.zwc
 *.zwc.old
+.zsh_history
