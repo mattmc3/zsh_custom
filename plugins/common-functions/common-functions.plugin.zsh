@@ -118,13 +118,5 @@ function zcompiledir {
   fi
 }
 
-##? Echo to stderror
-function echoerr {
-  echo >&2 "$@"
-}
-
-##? Pass thru for copy/paste markdown
-function $ { $@ }
-
 # Mark the plugin as loaded
 zstyle ':zsh_custom:plugin:common-functions' loaded 'yes'
