@@ -1,6 +1,5 @@
-#!/bin/zsh
 #
-# histinit: Set history options and define history aliases.
+# history: Set history options and define history aliases.
 #
 
 # Set history options.
@@ -19,7 +18,7 @@ setopt NO_hist_beep            # Don't beep when accessing non-existent history.
 setopt NO_share_history        # Don't share history between all sessions.
 
 # Set the path to the default history file.
-if zstyle -s ':history:env' HISTFILE 'HISTFILE'; then
+if zstyle -s ':zsh_custom:init:history' HISTFILE 'HISTFILE'; then
   HISTFILE="${~HISTFILE}"  # Convert leading '~' to $HOME
 elif [[ -n "$XDG_DATA_HOME" ]]; then
   HISTFILE="${XDG_DATA_HOME}/zsh/zsh_history"
@@ -31,11 +30,11 @@ fi
 [[ -d "${HISTFILE:h}" ]] || mkdir -p "${HISTFILE:h}"
 
 # Set history file size.
-zstyle -s ':history:env' SAVEHIST 'SAVEHIST' \
+zstyle -s ':zsh_custom:init:history' SAVEHIST 'SAVEHIST' \
   || SAVEHIST=100000
 
 # Set session history size.
-zstyle -s ':history:env' HISTSIZE 'HISTSIZE' \
+zstyle -s ':zsh_custom:init:history' HISTSIZE 'HISTSIZE' \
   || HISTSIZE=20000
 
 # Use a better history command.

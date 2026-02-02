@@ -1,6 +1,6 @@
 #!/bin/zsh
 #
-# dirinit: Set features related to Zsh directories and dirstack.
+# directory: Set features related to Zsh directories and dirstack.
 #
 
 # Return if requirements are not met.

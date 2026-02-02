@@ -1,6 +1,5 @@
-#!/bin/zsh
 #
-# toolinit: Misc Zsh shell tools, focused on cross-platform conformity.
+# utility: Misc Zsh shell tools, focused on cross-platform conformity.
 #
 
 # Return if requirements are not met.
