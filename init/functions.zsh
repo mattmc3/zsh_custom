@@ -3,6 +3,50 @@
 say()  { printf '%s\n' "$@"; }
 warn() { say "$@" >&2; }
 
+# Autoload function files in directory
+function autoload-dir {
+  local zdir
+  local -a zautoloads
+  for zdir in "$@"; do
+    [[ -d "$zdir" ]] || continue
+    fpath=("$zdir" $fpath)
+    zautoloads=($zdir/*~_*(N.:t))
+    (( $#zautoloads > 0 )) && autoload -Uz $zautoloads
+  done
+}
+
+# Cache the results of an eval command
+function cached-eval {
+  emulate -L zsh
+  setopt local_options extended_glob
+  (( $# >= 2 )) || return 1
+
+  local cmdname=$1; shift
+  local cachefile=${XDG_CACHE_HOME:-$HOME/.cache}/zsh/cached-eval/${cmdname}.zsh
+  local -a cached=($cachefile(Nmh-20))
+  # If the file has no size (is empty), or is older than 20 hours re-gen the cache.
+  if [[ ! -s $cachefile ]] || (( ! ${#cached} )); then
+    mkdir -p ${cachefile:h}
+    "$@" >| $cachefile
+  fi
+  source $cachefile
+}
+
+# Make a directory from a variable name.
+function mkdirvar {
+  emulate -L zsh
+  local zdirvar
+  for zdirvar in $@; do
+    [[ -n "$dirvar" ]] && [[ -n "${(P)dirvar}" ]] || continue
+    [[ -d "${(P)zdirvar}" ]] || mkdir -p "$(P){zdirvar}"
+  done
+}
+
+# Detects whether OMZ is orchestrating
+function is-omz {
+  (( $+functions[_omz_source] ))
+}
+
 # Check if a file can be autoloaded by trying to load it in a subshell.
 function is-autoloadable {
   ( unfunction "$1"; autoload -U +X "$1" ) &> /dev/null

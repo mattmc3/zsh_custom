@@ -8,7 +8,6 @@ zstyle ':zsh_custom:prompt' theme p10k mmc
 # Set plugins
 plugins=(
   p10k-instaprompt
-  editor
   repo
   xdg
 )
