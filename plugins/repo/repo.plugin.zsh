@@ -5,11 +5,8 @@
 # References
 # - https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/repo
 
-! zstyle -t ':zsh_custom:plugin:repo' loaded || return 1
-
-export REPO_HOME="${XDG_CACHE_HOME:-$HOME/.cache}/repos"
 function repo {
-  "$ZSH_CUSTOM/plugins/repo/bin/repo" "$@"
+  REPO_HOME=$ZSH_REPO_HOME zsh "$MY_ZSH_CUSTOM/bin/repo" "$@"
 }
 
 # Completions

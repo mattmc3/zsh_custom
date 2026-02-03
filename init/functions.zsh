@@ -3,10 +3,6 @@
 say()  { printf '%s\n' "$@"; }
 warn() { say "$@" >&2; }
 
-# Lazy-load (autoload) Zsh function files from a directory.
-fpath=($MY_ZSH_CUSTOM/functions $fpath)
-autoload -Uz $MY_ZSH_CUSTOM/functions/*(.:t)
-
 # Check if a file can be autoloaded by trying to load it in a subshell.
 function is-autoloadable {
   ( unfunction "$1"; autoload -U +X "$1" ) &> /dev/null

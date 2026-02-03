@@ -2,6 +2,12 @@
 
 0=${(%):-%N}
 MY_ZSH_CUSTOM=${0:a:h:h}
+ZSH_REPO_HOME=$MY_ZSH_CUSTOM/.external
+
+# Clone repos
+if [[ ! -d $ZSH_REPO_HOME ]]; then
+  REPO_HOME=$ZSH_REPO_HOME zsh $MY_ZSH_CUSTOM/bin/repo in < $MY_ZSH_CUSTOM/repos.txt
+fi
 
 # Set XDG base dirs.
 # https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
@@ -12,6 +18,10 @@ if zstyle -T ':zsh_custom:environment' use-xdg-basedirs; then
   export XDG_STATE_HOME=${XDG_STATE_HOME:-$HOME/.local/state}
   mkdir -p $XDG_CONFIG_HOME $XDG_CACHE_HOME $XDG_DATA_HOME $XDG_STATE_HOME
 fi
+
+# Lazy-load (autoload) Zsh function files from a directory.
+fpath=($MY_ZSH_CUSTOM/functions $fpath)
+autoload -Uz $MY_ZSH_CUSTOM/functions/*(.:t)
 
 # Ensure path arrays do not contain duplicates.
 typeset -gaU cdpath fpath mailpath path prepath
