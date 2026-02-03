@@ -2,7 +2,7 @@
 
 0=${(%):-%N}
 MY_ZSH_CUSTOM=${0:a:h:h}
-ZSH_REPO_HOME=$MY_ZSH_CUSTOM/.external
+ZSH_REPO_HOME=$MY_ZSH_CUSTOM/.repos
 
 # Clone repos
 if [[ ! -d $ZSH_REPO_HOME ]]; then

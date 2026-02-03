@@ -1,5 +1,6 @@
 ~*
 .external/
+.repos/
 .oh-my-zsh/
 ohmyzsh/
 *.zwc
