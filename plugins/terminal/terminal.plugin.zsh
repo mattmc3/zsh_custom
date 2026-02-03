@@ -18,6 +18,3 @@ set_terminal_var "TERM_CURRENT_SHELL" "zsh ${ZSH_PATCHLEVEL:-$ZSH_VERSION}"
 if [[ "$OSTYPE" == darwin* ]]; then
   export SHELL_SESSIONS_DISABLE=${SHELL_SESSIONS_DISABLE:-1}
 fi
-
-# Mark the plugin as loaded
-zstyle ':zsh_custom:plugin:terminal' loaded 'yes'

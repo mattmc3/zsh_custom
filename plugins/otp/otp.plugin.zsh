@@ -28,6 +28,3 @@ function __otp_keys {
 }
 
 compctl -K __otp_keys otp
-
-# Mark the plugin as loaded
-zstyle ':zsh_custom:plugin:otp' loaded 'yes'

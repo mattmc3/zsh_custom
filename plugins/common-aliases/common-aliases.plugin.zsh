@@ -72,6 +72,3 @@ alias print-functions='print -l ${(k)functions[(I)[^_]*]} | sort'
 
 # auto-orient images based on exif tags
 alias autorotate="jhead -autorot"
-
-# Mark the plugin as loaded
-zstyle ':zsh_custom:plugin:common-aliases' loaded 'yes'

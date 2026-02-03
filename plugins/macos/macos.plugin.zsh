@@ -13,6 +13,3 @@
 0=${(%):-%N}
 fpath=(${0:a:h}/functions $fpath)
 autoload -Uz ${0:a:h}/functions/*(.:t)
-
-# Mark the plugin as loaded.
-zstyle ':zsh_custom:plugin:macos' loaded 'yes'

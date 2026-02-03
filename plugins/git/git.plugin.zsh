@@ -50,6 +50,3 @@ fi
 if ! zstyle -t ':zsh_custom:plugin:git:functions' skip; then
   autoload-dir ${0:a:h}/functions
 fi
-
-# Mark the plugin as loaded
-zstyle ':zsh_custom:plugin:git' loaded 'yes'

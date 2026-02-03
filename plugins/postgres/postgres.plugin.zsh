@@ -6,6 +6,3 @@ export PSQLRC="${PSQLRC:-$XDG_CONFIG_HOME/pg/psqlrc}"
 export PSQL_HISTORY="${PSQL_HISTORY:-$XDG_CACHE_HOME/pg/psql_history}"
 export PGPASSFILE="${PGPASSFILE:-$XDG_CONFIG_HOME/pg/pgpass}"
 export PGSERVICEFILE="${PGSERVICEFILE:-$XDG_CONFIG_HOME/pg/pg_service.conf}"
-
-# Mark the plugin as loaded
-zstyle ':zsh_custom:plugin:postgres' loaded 'yes'

@@ -11,6 +11,3 @@ if [[ "$OSTYPE" == darwin* ]]; then
     cpan local::lib
   fi
 fi
-
-# Mark the plugin as loaded
-zstyle ':zsh_custom:plugin:perl' loaded 'yes'

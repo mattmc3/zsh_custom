@@ -104,6 +104,3 @@ if [[ -d "$_zfuncd" ]]; then
   autoload-dir $_zfuncd(N/) $_zfuncd/*(N/)
 fi
 unset _zfuncd
-
-# Mark the plugin as loaded.
-zstyle ':zsh_custom:plugin:zfunctions' loaded 'yes'

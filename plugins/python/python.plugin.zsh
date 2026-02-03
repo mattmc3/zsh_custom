@@ -122,6 +122,3 @@ function venv {
 function workon {
   venv -- "$@"
 }
-
-# Mark the plugin as loaded
-zstyle ':zsh_custom:plugin:python' loaded 'yes'

@@ -56,6 +56,3 @@ elif [[ $_zcompstyle != (off|none) ]]; then
   echo "completion: compstyle not found '${_zcompstyle}'." >&2
 fi
 unset _zcompstyle
-
-# Mark the plugin as loaded
-zstyle ':zsh_custom:plugin:completion' loaded 'yes'

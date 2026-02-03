@@ -13,6 +13,3 @@ if (( $+functions[cached-eval] )); then
 else
   source <(zoxide init zsh)
 fi
-
-# Mark the plugin as loaded
-zstyle ':zsh_custom:plugin:zoxide' loaded 'yes'

@@ -13,6 +13,3 @@ if (( $+functions[cached-eval] )); then
 else
   source <(fzf --zsh)
 fi
-
-# Mark the plugin as loaded
-zstyle ':zsh_custom:plugin:fzf' loaded 'yes'

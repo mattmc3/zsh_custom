@@ -241,6 +241,3 @@ fi
 #
 
 unset bind key{,_bindings} {vicmd,viins,global}_keybinds
-
-# Mark the plugin as loaded
-zstyle ':zsh_custom:plugin:editor' loaded 'yes'

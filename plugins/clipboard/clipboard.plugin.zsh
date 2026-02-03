@@ -52,6 +52,3 @@ zle -N copybuffer
 bindkey -M emacs "^O" copybuffer
 bindkey -M viins "^O" copybuffer
 bindkey -M vicmd "^O" copybuffer
-
-# Mark the plugin as loaded
-zstyle ':zsh_custom:plugin:clipboard' loaded 'yes'

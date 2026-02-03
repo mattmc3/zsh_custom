@@ -117,6 +117,3 @@ function zcompiledir {
     done
   fi
 }
-
-# Mark the plugin as loaded
-zstyle ':zsh_custom:plugin:common-functions' loaded 'yes'
