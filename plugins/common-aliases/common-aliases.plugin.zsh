@@ -70,22 +70,9 @@ alias print-fpath='for fp in $fpath; do echo $fp; done; unset fp'
 alias print-path='echo $PATH | tr ":" "\n"'
 alias print-functions='print -l ${(k)functions[(I)[^_]*]} | sort'
 
-# auto-orient images based on exif tags
-alias autorotate="jhead -autorot"
-
-# Set the initial working directory so we can easily return to it.
-: ${IWD:=$PWD}
-alias iwd='cd $IWD'
-
-# Dotfiles
-: ${DOTFILES:=$HOME/.dotfiles}
-alias dotf='cd "$DOTFILES"'
-alias dotfed='cd "$DOTFILES" && ${VISUAL:-${EDITOR:-vim}} .'
-alias dotfl="cd \$DOTFILES/local"
-alias fdot='cd ${XDG_CONFIG_HOME:-~/.config}/fish'
-alias fconf=fdot
-alias zdot='cd $ZDOTDIR'
-
 # todo-txt
 alias t="todo.sh"
 alias todos="$VISUAL $HOME/Desktop/todo.txt"
+
+# auto-orient images based on exif tags
+alias autorotate="jhead -autorot"
