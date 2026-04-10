@@ -7,7 +7,7 @@ if [[ -d $HOME/.dotnet/tools ]]; then
 fi
 
 # nuget
-export NUGET_PACKAGES="${NUGET_PACKAGES:-$XDG_CACHE_HOME/NuGetPackages}"
+export NUGET_PACKAGES="${NUGET_PACKAGES:-${XDG_CACHE_HOME:-$HOME/.cache}/NuGetPackages}"
 
 _dotnet_zsh_complete()
 {
