@@ -2,6 +2,6 @@
 # prj: The project jumper
 #
 
-! zstyle -t ':zsh_custom:plugin:prj' loaded || return 1
-
-eval "$("$ZSH_CUSTOM/plugins/prj/bin/prj" -i zsh)"
+if [[ -e /opt/homebrew/bin/prj ]]; then
+  eval "$(/opt/homebrew/bin/prj -i zsh)"
+fi
