@@ -4,6 +4,8 @@
 
 # workon
 export WORKON_HOME="${WORKON_HOME:-${XDG_DATA_HOME:-$HOME/.local/share}/venvs}"
+export IPYTHONDIR="${IPYTHONDIR:-${XDG_CONFIG_HOME:-$HOME/.config}/ipython}"
+export MPLCONFIGDIR="${MPLCONFIGDIR:-${XDG_CONFIG_HOME:-$HOME/.config}/matplotlib}"
 
 # python aliases
 alias py3='python3'
