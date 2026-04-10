@@ -117,3 +117,11 @@ function zcompiledir {
     done
   fi
 }
+
+##? Echo to stderror
+function echoerr {
+  echo >&2 "$@"
+}
+
+##? Pass thru for copy/paste markdown
+function $ { $@ }
