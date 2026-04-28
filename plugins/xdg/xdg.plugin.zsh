@@ -16,14 +16,6 @@ export LESSHISTFILE="${LESSHISTFILE:-$XDG_STATE_HOME/less/history}"
 # readline
 export INPUTRC="${INPUTRC:-$XDG_CONFIG_HOME/readline/inputrc}"
 
-# screen
-export SCREENRC="${SCREENRC:-$XDG_CONFIG_HOME/screen/screenrc}"
-
-# wget
-export WGETRC="${WGETRC:-$XDG_CONFIG_HOME/wget/wgetrc}"
-[[ -d $XDG_CACHE_HOME/wget ]] || mkdir -p $XDG_CACHE_HOME/wget
-alias wget="${aliases[wget]:-wget} --hsts-file=$XDG_CACHE_HOME/wget/wget-hsts"
-
 # app-specific XDG settings, loaded only when the command exists
 for _xdg_app in "${0:A:h}/apps"/*.zsh(N); do
   (( $+commands[${_xdg_app:t:r}] )) && source "$_xdg_app"

@@ -6,9 +6,6 @@ if [[ -d $HOME/.dotnet/tools ]]; then
   path+=($HOME/.dotnet/tools)
 fi
 
-# nuget
-export NUGET_PACKAGES="${NUGET_PACKAGES:-${XDG_CACHE_HOME:-$HOME/.cache}/NuGetPackages}"
-
 _dotnet_zsh_complete()
 {
   local completions=("$(dotnet complete "$words")")

@@ -4,9 +4,7 @@
 
 # export GLOBALGOPATH=$XDG_PROJECTS_DIR/golang
 
-export GOPATH="${GOPATH:-${XDG_DATA_HOME:-$HOME/.local/share}/go}"
-export GOMODCACHE="${GOMODCACHE:-${XDG_CACHE_HOME:-$HOME/.cache}/go/mod}"
-path+=($GOPATH/bin(N))
+path+=(${GOPATH:-${XDG_DATA_HOME:-$HOME/.local/share}/go}/bin(N))
 
 alias gob="go build"
 alias goc="go clean"
