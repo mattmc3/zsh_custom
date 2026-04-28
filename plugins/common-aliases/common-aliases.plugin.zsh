@@ -76,3 +76,12 @@ alias todos="$VISUAL $HOME/Desktop/todo.txt"
 
 # auto-orient images based on exif tags
 alias autorotate="jhead -autorot"
+
+# Directory aliases
+_dotdot=".."
+for _index in {1..9}; do
+  alias "$_index"="cd -${_index}"      # dirstack aliases (eg: "2"="cd -2")
+  alias -g "..${_index}"="${_dotdot}"  # backref aliases (eg: "..3"="../../..")
+  _dotdot+="/.."
+done
+unset _dotdot _index
