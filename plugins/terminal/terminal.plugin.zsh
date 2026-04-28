@@ -32,7 +32,9 @@ case "${TERM_PROGRAM:l}" in
     export SHELL_SESSIONS_DISABLE=${SHELL_SESSIONS_DISABLE:-1}
     ;;
   ghostty)
-    source ${GHOSTTY_RESOURCES_DIR}/shell-integration/zsh/ghostty-integration
+    if [[ -n $GHOSTTY_RESOURCES_DIR ]] && (( ! $+functions[_ghostty_deferred_init] )); then
+      source "$GHOSTTY_RESOURCES_DIR"/shell-integration/zsh/ghostty-integration
+    fi
     ;;
   vscode)
     # https://code.visualstudio.com/docs/terminal/shell-integration
