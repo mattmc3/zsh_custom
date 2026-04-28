@@ -41,10 +41,10 @@ copypath() {
 
 # copy a buffer
 copybuffer() {
-  if builtin which pbcopy &>/dev/null; then
-    printf "%s" "$BUFFER" | pbcopy && zle -M "Copied ${#BUFFER} chars to clipboard."
+  if (( $+commands[pbcopy] || $+aliases[pbcopy] || $+functions[pbcopy] )); then
+    printf "%s" "$BUFFER" | pbcopy
   else
-    zle -M "pbcopy not found."
+    zle -M "pbcopy not found. Please make sure it is available in your shell."
   fi
 }
 zle -N copybuffer
