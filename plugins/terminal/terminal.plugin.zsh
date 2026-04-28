@@ -3,7 +3,7 @@
 #
 
 0=${(%):-%N}
-MY_ZSH_CUSTOM=${0:a:h:h}
+MY_ZSH_CUSTOM=${0:a:h:h:h}
 
 # Emit an OSC 1337 sequence to set vars your terminal app (WezTerm) can use.
 function set_terminal_var() {
@@ -31,11 +31,11 @@ case "${TERM_PROGRAM:l}" in
   apple_terminal)
     export SHELL_SESSIONS_DISABLE=${SHELL_SESSIONS_DISABLE:-1}
     ;;
-  ghostty)
-    if [[ -n $GHOSTTY_RESOURCES_DIR ]] && (( ! $+functions[_ghostty_deferred_init] )); then
-      source "$GHOSTTY_RESOURCES_DIR"/shell-integration/zsh/ghostty-integration
-    fi
-    ;;
+  # ghostty)
+  #   if [[ -n $GHOSTTY_RESOURCES_DIR ]] && (( ! $+functions[_ghostty_deferred_init] )); then
+  #     source "$GHOSTTY_RESOURCES_DIR"/shell-integration/zsh/ghostty-integration
+  #   fi
+  #   ;;
   vscode)
     # https://code.visualstudio.com/docs/terminal/shell-integration
     MY_HISTFILE=${HISTFILE:-${XDG_DATA_HOME:-$HOME/.local/share}/zsh/zsh_history}
