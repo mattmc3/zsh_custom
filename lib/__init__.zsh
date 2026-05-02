@@ -6,6 +6,12 @@
 MY_ZSH_CUSTOM="${0:A:h:h}"
 
 #
+# Env
+#
+
+OMZ_SHA=e7aa0c56e68348afefdd6af4c5bdb314a2bd6640
+
+#
 # XDG
 #
 
@@ -16,17 +22,32 @@ export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
 mkdir -p "$XDG_CONFIG_HOME" "$XDG_CACHE_HOME" "$XDG_DATA_HOME" "$XDG_STATE_HOME"
 
 #
-# postzshrc
+# Requirements
 #
+
+if ! (( $+commands[antibody] )); then
+  echo >&2 "__init__: antibody command not found"
+  return 1
+fi
+source <(antibody init)
+
+#
+# Init
+#
+
+antibody bundle mattmc3/zshrc1
+
+#
+# Hooks
+#
+
+antibody bundle zsh-hooks/zsh-hooks
 
 # There's not really a postzshrc event, so we're going to fake one by adding a
 # function called run_postzshrc to the precmd event. That function only runs once,
 # and then unregisters itself after that first run. If the user wants to (or needs to
 # because it doesn't play well with a plugin), they can run it themselves manually at
 # the very end of their .zshrc, and then it unregisters the precmd event.
-
-(( $+functions[hooks-define-hook] )) ||
-  source "$MY_ZSH_CUSTOM/pkg/zsh-hooks.zsh"
 
 # Define our custom hook
 hooks-define-hook postzshrc
