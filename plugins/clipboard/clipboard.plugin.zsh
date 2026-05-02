@@ -2,53 +2,7 @@
 # clipboard: Add clipboard utils.
 #
 
-# Return if requirements are not met.
-[[ "$TERM" != 'dumb' ]] || return 1
-
-# copy a file
-copyfile() {
-  emulate -L zsh
-
-  if [[ -z "$1" ]]; then
-    echo "Usage: copyfile <file>"
-    return 1
-  fi
-
-  if [[ ! -f "$1" ]]; then
-    echo "Error: '$1' is not a valid file."
-    return 1
-  fi
-
-  cat "$1" | pbcopy
-  echo ${(%):-"%B$1%b copied to clipboard."}
-}
-
-# Copies the path of given directory or file to the system or X Windows clipboard.
-# Copy current directory if no parameter.
-copypath() {
-  # If no argument passed, use current directory
-  local file="${1:-.}"
-
-  # If argument is not an absolute path, prepend $PWD
-  [[ $file = /* ]] || file="$PWD/$file"
-
-  # Copy the absolute path without resolving symlinks
-  # If pbcopy fails, exit the function with an error
-  print -n "${file:a}" | pbcopy || return 1
-
-  echo ${(%):-"%B${file:a}%b copied to clipboard."}
-}
-
-# copy a buffer
-copybuffer() {
-  if (( $+commands[pbcopy] || $+aliases[pbcopy] || $+functions[pbcopy] )); then
-    printf "%s" "$BUFFER" | pbcopy
-  else
-    zle -M "pbcopy not found. Please make sure it is available in your shell."
-  fi
-}
-zle -N copybuffer
-
-bindkey -M emacs "^O" copybuffer
-bindkey -M viins "^O" copybuffer
-bindkey -M vicmd "^O" copybuffer
+antibody bundle ohmyzsh/ohmyzsh path:lib/clipboard.zsh pin:${OMZ_SHA}
+antibody bundle ohmyzsh/ohmyzsh path:plugins/copybuffer pin:${OMZ_SHA}
+antibody bundle ohmyzsh/ohmyzsh path:plugins/copyfile pin:${OMZ_SHA}
+antibody bundle ohmyzsh/ohmyzsh path:plugins/copypath pin:${OMZ_SHA}
