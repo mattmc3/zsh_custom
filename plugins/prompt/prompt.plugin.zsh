@@ -8,5 +8,5 @@ antibody bundle sindresorhus/pure kind:fpath
 
 autoload -Uz promptinit && promptinit
 if [[ -n "$ZSH_THEME" ]]; then
-  prompt $ZSH_THEME
+  prompt ${(z)ZSH_THEME}
 fi
