@@ -341,6 +341,16 @@ fi
 antibody bundle romkatv/zsh-no-ps2
 
 #
+# Built-ins
+#
+
+# Use built-in paste magic.
+autoload -Uz bracketed-paste-url-magic
+zle -N bracketed-paste bracketed-paste-url-magic
+autoload -Uz url-quote-magic
+zle -N self-insert url-quote-magic
+
+#
 # Clean up
 #
 
