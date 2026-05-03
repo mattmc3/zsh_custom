@@ -3,7 +3,9 @@
 #
 
 # Use the base OMZ functions.
-source $ZSH/lib/functions.zsh
+if [[ -e "${ZSH:-?}"/lib/functions.zsh ]]; then
+  source $ZSH/lib/functions.zsh
+fi
 
 # Lazy-load (autoload) Zsh function files from a directory.
 fpath=($MY_ZSH_CUSTOM/functions $fpath)
