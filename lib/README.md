@@ -1,4 +1,4 @@
 # lib
 
-The lib folder is for if we're using ZSH_CUSTOM with Oh-My-Zsh. If so, lib is loaded.
-If not, then inits are loaded.
+The lib folder is an Oh-My-Zsh convetions. If we're using ZSH_CUSTOM with Oh-My-Zsh
+the behavior is different.

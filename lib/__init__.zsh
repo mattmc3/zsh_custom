@@ -26,7 +26,7 @@ mkdir -p "$XDG_CONFIG_HOME" "$XDG_CACHE_HOME" "$XDG_DATA_HOME" "$XDG_STATE_HOME"
 #
 
 if ! (( $+commands[antibody] )); then
-  echo >&2 "__init__: antibody command not found"
+  echo >&2 "__init__: antibody command not found. many plugins will not work."
   return 1
 fi
 source <(antibody init)
@@ -41,6 +41,8 @@ antibody bundle mattmc3/zshrc1
 # Hooks
 #
 
+# https://github.com/rothgar/mastering-zsh/blob/master/docs/config/hooks.md
+# https://github.com/zsh-hooks/zsh-hooks
 antibody bundle zsh-hooks/zsh-hooks
 
 # There's not really a postzshrc event, so we're going to fake one by adding a
@@ -65,9 +67,5 @@ function run_postzshrc {
 # Attach our function to precmd.
 add-zsh-hook precmd run_postzshrc
 
-#
-# Post
-#
-
-# Mark this lib as loaded
-zstyle ':zsh_custom:lib:__init__' loaded 'yes'
+# Now you can add postzshrc commands with
+# add-zsh-hook postzshrc myfunc
