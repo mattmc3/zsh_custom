@@ -92,7 +92,7 @@ function update-cursor-style {
   local style
 
   # Try to get style for the current keymap, fallback to sensible defaults
-  zstyle -s ":zephyr:plugin:editor:$KEYMAP" cursor style
+  zstyle -s ":zsh_custom:plugin:editor:$KEYMAP" cursor style
   if [[ -z "$style" ]]; then
     case "$KEYMAP" in
       main|emacs|viins) style=line ;;
@@ -167,7 +167,7 @@ zle -N prepend-sudo
 # Expand aliases
 function glob-alias {
   local -a noexpand_aliases
-  zstyle -a ':zephyr:plugin:editor:glob-alias' 'noexpand' 'noexpand_aliases' \
+  zstyle -a ':zsh_custom:plugin:editor:glob-alias' 'noexpand' 'noexpand_aliases' \
     || noexpand_aliases=()
 
   # Get last word to the left of the cursor:
@@ -207,7 +207,7 @@ zle -N pound-toggle
 # Init
 #
 
-# https://github.com/mattmc3/zephyr/issues/40
+# https://github.com/mattmc3/zsh_custom/issues/40
 # Reset to default key bindings if we aren't using zsh-defer
 if (( ! $+zsh_defer_options )); then
   bindkey -d
@@ -283,7 +283,7 @@ _zph_opt_out_keybinds=(
 
 # Opt-in features (disabled by default)
 for _zph_feature _zph_key in ${(kv)_zph_opt_in_keybinds}; do
-  if zstyle -t ':zephyr:plugin:editor' "$_zph_feature"; then
+  if zstyle -t ':zsh_custom:plugin:editor' "$_zph_feature"; then
     for _zph_keymap in 'emacs' 'viins'; do
       bindkey -M "$_zph_keymap" "$_zph_key" "$_zph_feature"
     done
@@ -292,7 +292,7 @@ done
 
 # Opt-out features (enabled by default)
 for _zph_feature _zph_key in ${(kv)_zph_opt_out_keybinds}; do
-  if zstyle -T ':zephyr:plugin:editor' "$_zph_feature"; then
+  if zstyle -T ':zsh_custom:plugin:editor' "$_zph_feature"; then
     for _zph_keymap in 'emacs' 'viins'; do
       bindkey -M "$_zph_keymap" "$_zph_key" "$_zph_feature"
     done
@@ -300,19 +300,19 @@ for _zph_feature _zph_key in ${(kv)_zph_opt_out_keybinds}; do
 done
 
 # Do not expand .... to ../.. during incremental search.
-if zstyle -t ':zephyr:plugin:editor' dot-expansion; then
+if zstyle -t ':zsh_custom:plugin:editor' dot-expansion; then
   bindkey -M isearch . self-insert 2> /dev/null
 fi
 
 # Expand aliases with space automatically (opt-in, overrides glob-alias)
-if zstyle -t ':zephyr:plugin:editor' automatic-glob-alias; then
+if zstyle -t ':zsh_custom:plugin:editor' automatic-glob-alias; then
   for _zph_keymap in 'emacs' 'viins'; do
     bindkey -M "$_zph_keymap" " " glob-alias
     bindkey -M "$_zph_keymap" "^ " magic-space
   done
   bindkey -M isearch " " magic-space
 # Expand aliases with ctrl-space (opt-out, enabled by default)
-elif zstyle -T ':zephyr:plugin:editor' glob-alias; then
+elif zstyle -T ':zsh_custom:plugin:editor' glob-alias; then
   for _zph_keymap in 'emacs' 'viins'; do
     bindkey -M "$_zph_keymap" "^ " glob-alias
     bindkey -M "$_zph_keymap" " " magic-space
@@ -325,7 +325,7 @@ fi
 #
 
 # Set the key layout.
-zstyle -s ':zephyr:plugin:editor' key-bindings '_zph_key_bindings'
+zstyle -s ':zsh_custom:plugin:editor' key-bindings '_zph_key_bindings'
 if [[ "$_zph_key_bindings" == (emacs|) ]]; then
   bindkey -e
 elif [[ "$_zph_key_bindings" == vi ]]; then
@@ -346,4 +346,4 @@ antibody bundle romkatv/zsh-no-ps2
 
 unset _zph_{bind,key{,_bindings},keymap,feature}
 unset _zph_{opt_in,opt_out}_keybinds _zph_{vicmd,viins,global}_keybinds
-zstyle ':zephyr:plugin:editor' loaded 'yes'
+zstyle ':zsh_custom:plugin:editor' loaded 'yes'
