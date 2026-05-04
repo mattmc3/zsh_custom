@@ -11,7 +11,7 @@ function update_git_completions {
   emulate -L zsh
   # Download the git scripts
   local giturl=https://raw.githubusercontent.com/git/git/master/contrib/completion
-  local dest=${1:-$ZSH_CUSTOM/plugins/git/completions}
+  local dest=${1:-${MY_ZSH_CUSTOM:-?}/plugins/git/completions}
   [[ -d $dest ]] || mkdir -p $dest
   curl -fsSL $giturl/git-completion.bash -o $dest/git-completion.bash
   curl -fsSL $giturl/git-completion.zsh -o $dest/_git
