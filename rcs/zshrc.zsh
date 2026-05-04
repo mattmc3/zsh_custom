@@ -53,7 +53,7 @@ plugins=(
   symmetric-ctrl-z
   #terminal
   utility
-  #xdg
+  xdg-apps
   #zfunctions
   zoxide
   zsh-bench
