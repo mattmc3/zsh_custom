@@ -22,31 +22,19 @@ fpath=(${0:a:h}/completions $fpath)
 [[ -f ${fpath[1]}/_git ]] || update_git_completions
 zstyle ':completion:*:*:git:*' script ${fpath[1]}/git-completion.bash
 
-# Aliases
-if ! zstyle -t ':zsh_custom:plugin:git:alias' skip; then
-  alias gad="git add"
-  alias gbn="git rev-parse --abbrev-ref HEAD"
-  alias gcd1="git clone --depth 1 https://github.com/"
-  alias gcl="git clean"
-  alias gclone="git clone git@github.com:mattmc3/"
-  alias gcmt="git commit -am "
-  alias gco="git checkout"
-  alias gcob="git checkout -b "
-  alias gcod="git checkout develop"
-  alias gcom="git checkout main"
-  alias get="git"
-  alias glg="git log"
-  alias glog="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset' --date=short"
-  alias gpll="git pull"
-  alias gpristine="git reset --hard && git clean -fdx"
-  alias gpsh="git push"
-  alias gpsuo="git push --set-upstream origin (git rev-parse --abbrev-ref HEAD)"
-  alias grv="git remote -v"
-  alias gsh="git stash"
-  alias gst="git status -sb"
-fi
+# Normalize single-dash to double-dash so 'git clone -<TAB>' works
+_git_with_dash_fix() {
+  if [[ ${words[CURRENT]} == - ]]; then
+    words[CURRENT]='--'
+    if (( CURRENT == 2 )); then
+      _git "$@"
+      compadd -o nosort -- '-C' '-c'
+      return
+    fi
+  fi
+  _git "$@"
+}
+compdef _git_with_dash_fix git gitk
 
 # Functions
-if ! zstyle -t ':zsh_custom:plugin:git:functions' skip; then
-  autoload-dir ${0:a:h}/functions
-fi
+autoload-dir ${0:a:h}/functions
