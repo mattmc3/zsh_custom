@@ -83,68 +83,6 @@ function bindkey-all {
   done
 }
 
-function update-cursor-style {
-  # We currently only support the xterm family of terminals
-  if ! is-term-family xterm && ! is-term-family rxvt && ! is-tmux; then
-    return
-  fi
-
-  local style
-
-  # Try to get style for the current keymap, fallback to sensible defaults
-  zstyle -s ":zsh_custom:plugin:editor:$KEYMAP" cursor style
-  if [[ -z "$style" ]]; then
-    case "$KEYMAP" in
-      main|emacs|viins) style=line ;;
-      *)                style=block ;;
-    esac
-  fi
-
-  # Print the cursor style, or do nothing and use the default.
-  case $style in
-    block)      printf '\e[2 q' ;;
-    underscore) printf '\e[4 q' ;;
-    line)       printf '\e[6 q' ;;
-  esac
-}
-zle -N update-cursor-style
-
-# Enables terminal application mode
-function zle-line-init {
-  # The terminal must be in application mode when ZLE is active for $terminfo
-  # values to be valid.
-  if (( $+terminfo[smkx] )); then
-    # Enable terminal application mode.
-    echoti smkx
-  fi
-
-  # Ensure we have the correct cursor. We could probably do this less
-  # frequently, but this does what we need and shouldn't incur that much
-  # overhead.
-  zle update-cursor-style
-}
-zle -N zle-line-init
-
-# Disables terminal application mode
-function zle-line-finish {
-  # The terminal must be in application mode when ZLE is active for $terminfo
-  # values to be valid.
-  if (( $+terminfo[rmkx] )); then
-    # Disable terminal application mode.
-    echoti rmkx
-  fi
-}
-zle -N zle-line-finish
-
-# Resets the prompt when the keymap changes
-function zle-keymap-select {
-  zle update-cursor-style
-
-  zle reset-prompt
-  zle -R
-}
-zle -N zle-keymap-select
-
 # Expands .... to ../..
 function dot-expansion {
   if [[ $LBUFFER = *.. ]]; then
@@ -278,16 +216,6 @@ fi
 
 # disable PS2
 antibody bundle romkatv/zsh-no-ps2
-
-#
-# Built-ins
-#
-
-# Use built-in paste magic.
-autoload -Uz bracketed-paste-url-magic
-zle -N bracketed-paste bracketed-paste-url-magic
-autoload -Uz url-quote-magic
-zle -N self-insert url-quote-magic
 
 #
 # Clean up

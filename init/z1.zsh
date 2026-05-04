@@ -208,6 +208,10 @@ setopt auto_param_slash        # If completed parameter is a directory, add a tr
 setopt complete_in_word        # Complete from both ends of a word.
 setopt path_dirs               # Perform path search even on command names with slashes.
 setopt NO_menu_complete        # Do not autoselect the first completion entry.
+setopt NO_list_beep            # Do not beep on ambiguous completion
+
+# Load modules
+zmodload zsh/complist
 
 # Lazy-load my completions
 fpath=($ZSH_CONFIG_DIR/completions(-/FN) $fpath)
@@ -310,15 +314,6 @@ if [[ -r ${TTY:-} && -w ${TTY:-} && $+commands[stty] == 1 ]]; then
   stty -ixon <"$TTY" >"$TTY"
 fi
 
-# Run bindkey across every keymap. With no args, prints mappings per keymap.
-function bindkey-all {
-  local keymap=''
-  for keymap in $(bindkey -l); do
-    [[ "$#" -eq 0 ]] && printf "#### %s\n" "${keymap}" 1>&2
-    bindkey -M "${keymap}" "$@"
-  done
-}
-
 # Bind one widget to multiple key sequences; skip empties.
 function bindkey-multiple {
   local widget=$1 seq; shift
@@ -335,14 +330,21 @@ function update-cursor-style {
     *) [[ -z "$TMUX" ]] && return ;;
   esac
 
-  if bindkey -lL main | grep -q viins; then
+  local style
+  if [[ "${ZSH_BINDKEY:-}" == vi ]]; then
     case $KEYMAP in
-      vicmd) printf '\e[2 q' ;;
-      viins|main) printf '\e[6 q' ;;
+      vicmd)      style=block ;;
+      viins|main) style=line ;;
     esac
   else
-    printf '\e[6 q'
+    style=line
   fi
+
+  case $style in
+    block)      printf '\e[2 q' ;;
+    underscore) printf '\e[4 q' ;;
+    line)       printf '\e[6 q' ;;
+  esac
 }
 zle -N update-cursor-style
 
@@ -365,28 +367,6 @@ function zle-keymap-select {
 }
 zle -N zle-keymap-select
 
-# Insert 'sudo ' at the beginning of the line.
-function prepend-sudo {
-  if [[ "$BUFFER" != su(do|)\ * ]]; then
-    BUFFER="sudo $BUFFER"
-    (( CURSOR += 5 ))
-  fi
-}
-zle -N prepend-sudo
-
-# Toggle a leading '#' on the current line. Workaround for buggy pound-insert
-# in emacs mode; vi mode uses the built-in vi-pound-insert.
-function pound-toggle {
-  if [[ "$BUFFER" = '#'* ]]; then
-    [[ $CURSOR != $#BUFFER ]] && (( CURSOR -= 1 ))
-    BUFFER="${BUFFER:1}"
-  else
-    BUFFER="#$BUFFER"
-    (( CURSOR += 1 ))
-  fi
-}
-zle -N pound-toggle
-
 # Edit current command in $EDITOR.
 autoload -Uz edit-command-line
 zle -N edit-command-line
@@ -398,11 +378,13 @@ autoload -Uz url-quote-magic
 zle -N self-insert url-quote-magic
 
 # Common terminal key fixes: terminfo first, xterm CSI fallbacks second.
-bindkey-multiple beginning-of-line "${terminfo[khome]-}" '^[[H'
-bindkey-multiple end-of-line       "${terminfo[kend]-}"  '^[[F'
-bindkey-multiple delete-char       "${terminfo[kdch1]-}" '^[[3~'
-bindkey-multiple backward-word     '^[[1;3D' '^[[1;5D'   # Alt/Ctrl + Left
-bindkey-multiple forward-word      '^[[1;3C' '^[[1;5C'   # Alt/Ctrl + Right
+bindkey-multiple beginning-of-line                 "${terminfo[khome]-}" '^[[H'
+bindkey-multiple end-of-line                       "${terminfo[kend]-}"  '^[[F'
+bindkey-multiple delete-char                       "${terminfo[kdch1]-}" '^[[3~'
+bindkey-multiple history-beginning-search-backward "${terminfo[kcuu1]-}" '^[[A'
+bindkey-multiple history-beginning-search-forward  "${terminfo[kcud1]-}" '^[[B'
+bindkey-multiple backward-word                     '^[[1;3D' '^[[1;5D'   # Alt/Ctrl + Left
+bindkey-multiple forward-word                      '^[[1;3C' '^[[1;5C'   # Alt/Ctrl + Right
 
 # Backspace and word deletion.
 bindkey '^?' backward-delete-char
@@ -411,13 +393,8 @@ bindkey '^W' backward-kill-word
 # Edit command in $EDITOR.
 bindkey '^X^E' edit-command-line
 
-# Toggle comment at start of line. Alt-; in emacs, # in vi cmd mode.
-bindkey -M emacs '^[;' pound-toggle
+# Toggle comment in vi cmd mode.
 bindkey -M vicmd '#' vi-pound-insert
-
-# Prepend sudo with Alt-s.
-bindkey -M emacs '^[s' prepend-sudo
-bindkey -M viins '^[s' prepend-sudo
 
 #
 # Utility
