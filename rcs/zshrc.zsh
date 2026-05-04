@@ -50,7 +50,7 @@ plugins=(
   ruby
   rust
   #secrets
-  #terminal
+  terminal
   utility
   xdg-apps
   #zfunctions

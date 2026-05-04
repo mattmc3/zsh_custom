@@ -40,6 +40,7 @@ function update_wezterm_shell_integration() {
 case "${TERM_PROGRAM:l}" in
   apple_terminal)
     export SHELL_SESSIONS_DISABLE=${SHELL_SESSIONS_DISABLE:-1}
+    function _terminal_precmd_title { printf '\e]7;%s\a' "file://$HOST$PWD" }
     ;;
   # ghostty)
   #   if [[ -n $GHOSTTY_RESOURCES_DIR ]] && (( ! $+functions[_ghostty_deferred_init] )); then
