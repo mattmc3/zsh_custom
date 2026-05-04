@@ -32,6 +32,7 @@ plugins=(
   git
   git-cmds
   golang
+  history-aux
   homebrew
   iwd
   java
