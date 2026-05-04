@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+##? grab: Quickly grab a git repo.
+#
+# Usage:
+#   git grab <user/repo|url> [dest]
+#
+# Git config:
+#   [grab]
+#       clonePath = ~/Projects
+#       gitUser = mattmc3
+#       gitDomain = github.com
+#       gitProtocol = git
+#       cloneFlags = --recurse-submodules
+#
+# Env (overrides git config):
+#   GIT_GRAB_DEFAULT_USER      default owner for bare repo names
+#   GIT_GRAB_DEFAULT_PATH      root directory for clones
+#   GIT_GRAB_DEFAULT_PROTOCOL  protocol: https or git/ssh
+
+gcfg() { git config "grab.$1" 2>/dev/null; }
+
+: "${GIT_GRAB_DEFAULT_USER:=$(gcfg gitUser || git config user.name 2>/dev/null || whoami)}"
+: "${GIT_GRAB_DEFAULT_PATH:=$(gcfg clonePath || printf '%s/Projects' "$HOME")}"
+: "${GIT_GRAB_DEFAULT_PROTOCOL:=$(gcfg gitProtocol || printf 'git')}"
+GIT_GRAB_DEFAULT_PATH="${GIT_GRAB_DEFAULT_PATH/#\~/$HOME}"
+domain="$(gcfg gitDomain || printf 'github.com')"
+read -ra clone_flags <<< "$(gcfg cloneFlags)"
+
+repo="${1:?Usage: git grab <user/repo|url> [dest]}"
+
+case $GIT_GRAB_DEFAULT_PROTOCOL in
+  ssh|git) url_prefix="git@${domain}:" ;;
+  *)       url_prefix="${GIT_GRAB_DEFAULT_PROTOCOL}://${domain}/" ;;
+esac
+
+case $repo in
+  https://*|git@*) url="$repo" ;;
+  */*)             url="${url_prefix}${repo}" ;;
+  *)               url="${url_prefix}${GIT_GRAB_DEFAULT_USER}/$repo" ;;
+esac
+
+path="${url#*://*/}"; path="${path#*:}"; path="${path%.git}"
+dest="${2:-${GIT_GRAB_DEFAULT_PATH}/$path}"
+
+if [[ -d "$dest" ]]; then
+  printf 'grab: already cloned %s\n' "$dest" >&2
+else
+  git clone "${clone_flags[@]}" "$url" "$dest" || exit
+fi
+_tty=$(tty 2>/dev/null) && {
+  mkdir -p "${XDG_CACHE_HOME:-$HOME/.cache}/termcd"
+  printf '%s' "$dest" > "${XDG_CACHE_HOME:-$HOME/.cache}/termcd/${_tty##*/}"
+}
+printf '%s\n' "$dest"

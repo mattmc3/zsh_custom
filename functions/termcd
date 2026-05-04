@@ -1,0 +1,7 @@
+#!/bin/zsh
+# Queue a directory to cd to, picked up by the next precmd hook.
+local dir="${1:?termcd: directory required}"
+[[ -d "$dir" ]] || { print -u2 "termcd: not a directory: $dir"; return 1; }
+local f="${XDG_CACHE_HOME:-$HOME/.cache}/termcd/${TTY##*/}"
+mkdir -p "${f:h}"
+printf '%s' "$dir" > "$f"

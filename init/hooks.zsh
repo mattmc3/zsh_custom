@@ -25,3 +25,16 @@ add-zsh-hook precmd run_postzshrc
 
 # Now you can add postzshrc commands with
 # hooks-add-hook postzshrc_hook myfunc
+
+# termcd: cd to a queued directory written to cache by termcd or any subprocess.
+zmodload zsh/datetime
+function _termcd_precmd {
+  local f="${XDG_CACHE_HOME:-$HOME/.cache}/termcd/${TTY##*/}"
+  local dir mtime
+  [[ -f "$f" ]] && dir=$(<"$f") || return
+  mtime=$(stat -f %m "$f" 2>/dev/null)
+  rm -f "$f"
+  [[ -n "$mtime" ]] && (( EPOCHSECONDS - mtime > 5 )) && return
+  [[ -d "$dir" ]] && cd -- "$dir"
+}
+add-zsh-hook precmd _termcd_precmd
