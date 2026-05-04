@@ -15,7 +15,6 @@ plugins=(
   # regular
   azure
   clipboard
-  #colors
   common-aliases
   common-functions
   completions
