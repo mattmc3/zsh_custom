@@ -27,7 +27,7 @@ plugins=(
   editor
   emacs
   #extract
-  #fancy-ctrl-z
+  fancy-ctrl-z
   fzf
   git
   git-cmds
@@ -49,7 +49,6 @@ plugins=(
   ruby
   rust
   #secrets
-  symmetric-ctrl-z
   #terminal
   utility
   xdg-apps
