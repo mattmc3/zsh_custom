@@ -35,7 +35,7 @@ source <(antibody init)
 # Init
 #
 
-antibody bundle mattmc3/zshrc1
+source $MY_ZSH_CUSTOM/pkg/z1.zsh
 
 #
 # Hooks
