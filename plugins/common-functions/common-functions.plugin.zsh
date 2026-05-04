@@ -6,41 +6,13 @@ die()  { warn "$@"; exit "${ERR:-1}"; }
 say()  { printf '%s\n' "$@"; }
 warn() { say "$@" >&2; }
 
-# Autoload function files in directory
-function autoload-dir {
-  local zdir
-  local -a zautoloads
-  for zdir in "$@"; do
-    [[ -d "$zdir" ]] || continue
-    fpath=("$zdir" $fpath)
-    zautoloads=($zdir/*~_*(N.:t))
-    (( $#zautoloads > 0 )) && autoload -Uz $zautoloads
-  done
-}
-
 # Make a directory from a variable name.
 function mkdirvar {
   emulate -L zsh
   local zdirvar
   for zdirvar in $@; do
-    [[ -d "${(P)zdirvar}" ]] || mkdir -p "$(P){zdirvar}"
+    [[ -d "${(P)zdirvar}" ]] || mkdir -p "${(P)zdirvar}"
   done
-}
-
-# Cache the results of an eval command
-function cached-eval {
-  emulate -L zsh; setopt local_options extended_glob
-  (( $# >= 2 )) || return 1
-
-  local cmdname=$1; shift
-  local cachefile=${XDG_CACHE_HOME:-$HOME/.cache}/zsh}/cached-eval/${cmdname}.zsh
-  local -a cached=($cachefile(Nmh-20))
-  # If the file has no size (is empty), or is older than 20 hours re-gen the cache.
-  if [[ ! -s $cachefile ]] || (( ! ${#cached} )); then
-    mkdir -p ${cachefile:h}
-    "$@" >| $cachefile
-  fi
-  source $cachefile
 }
 
 # Check if a file can be autoloaded by trying to load it in a subshell.
@@ -73,35 +45,6 @@ function is-term-family {
 # Check if tmux.
 function is-tmux {
   is-term-family tmux || [[ -n "$TMUX" ]]
-}
-
-# Generate a UUID v7 (time-ordered). Result is stored in REPLY.
-function gen-uuid7 {
-  emulate -L zsh
-  zmodload zsh/datetime 2>/dev/null
-
-  local uuid7
-  local now sec frac ms ts_hex rand_hex
-  local g1 g2 g3 g4 g5
-
-  now="$EPOCHREALTIME"
-  sec="${now%%.*}"
-  frac="${now#*.}"
-  [[ "$frac" == "$now" ]] && frac=0
-  frac="${frac}000000"
-  ms=$(( 10#${sec} * 1000 + 10#${frac[1,3]} ))
-  ts_hex="$(printf '%012x' "$ms")"
-
-  rand_hex=$(od -An -N10 -tx1 /dev/urandom | tr -d ' \n')
-
-  g1="${ts_hex[1,8]}"
-  g2="${ts_hex[9,12]}"
-  g3="7${rand_hex[1,3]}"
-  g4="$(printf '%x' $(( (16#${rand_hex[4]} & 3) | 8 )))${rand_hex[5,7]}"
-  g5="${rand_hex[8,19]}"
-
-  typeset -g REPLY="${g1}-${g2}-${g3}-${g4}-${g5}"
-  print -- "$REPLY"
 }
 
 ##? Show all extensions in current folder structure.
@@ -218,6 +161,13 @@ function zcompiledir {
       echo "compiling $f" && zrecompile -pq "$f"
     done
   fi
+}
+
+##? Print terminal color swatches.
+function colormap() {
+  for i in {0..255}; do
+    print -Pn "%K{$i}  %k%F{$i}${(l:3::0:)i}%f " ${${(M)$((i%6)):#3}:+$'\n'}
+  done
 }
 
 ##? Quickly go up any number of directories.
