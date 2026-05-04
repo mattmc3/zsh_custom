@@ -32,7 +32,7 @@ plugins=(
   git
   git-cmds
   golang
-  #homebrew
+  homebrew
   iwd
   java
   jupyter
