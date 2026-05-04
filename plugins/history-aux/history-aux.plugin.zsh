@@ -175,3 +175,49 @@ _history_aux_json_init() {
 
 gen-uuid7 >/dev/null
 _history_aux_state[session]="$REPLY"
+
+histdb() {
+  emulate -L zsh
+  local db="${HISTDBFILE:-${XDG_DATA_HOME:-$HOME/.local/share}/zsh/zsh_history.db}"
+  [[ -f "$db" ]] || { print "histdb: no database at $db" >&2; return 1 }
+  (( $+commands[sqlite3] )) || { print "histdb: sqlite3 not found" >&2; return 1 }
+
+  local -a o_help o_here o_fail o_success o_session o_limit o_reverse
+  zparseopts -D -E -- \
+    {h,-help}=o_help \
+    {d,-here}=o_here \
+    {f,-fail}=o_fail \
+    {r,-reverse}=o_reverse \
+    {s,-success}=o_success \
+    {S,-session}=o_session \
+    {n,-limit}:=o_limit \
+    || { print "usage: histdb [-d] [-f] [-s] [-S] [-r] [-n N] [pattern]" >&2; return 1 }
+
+  if (( $#o_help )); then
+    print "usage: histdb [-d] [-f] [-s] [-S] [-r] [-n N] [pattern]" >&2
+    return 0
+  fi
+
+  local limit=${o_limit[-1]:-50} pattern=${1:-''} order=ASC
+  (( $#o_reverse )) && order=DESC
+  local -a where
+
+  local q="'"
+  (( $#o_here ))    && where+=("cwd = '${PWD//$q/$q$q}'")
+  (( $#o_session )) && where+=("sid = '${_history_aux_state[session]//$q/$q$q}'")
+  (( $#o_fail ))    && where+=("ret != 0")
+  (( $#o_success )) && where+=("ret = 0")
+  [[ -n $pattern ]] && where+=("cmd LIKE '%${pattern//$q/$q$q}%'")
+
+  local sql="
+    SELECT datetime(start_ts, 'unixepoch', 'localtime') AS time,
+           printf('%.2f', end_ts - start_ts)             AS secs,
+           ret,
+           replace(cwd, '$HOME', '~')                    AS dir,
+           cmd
+    FROM zsh_history"
+  (( $#where )) && sql+=" WHERE ${(j: AND :)where}"
+  sql+=" ORDER BY start_ts $order LIMIT $limit;"
+
+  sqlite3 -column -header "$db" "$sql"
+}
