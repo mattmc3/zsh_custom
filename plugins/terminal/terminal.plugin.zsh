@@ -5,18 +5,28 @@
 0=${(%):-%N}
 MY_ZSH_CUSTOM=${0:a:h:h:h}
 
+[[ "$TERM" == dumb ]] && return
+
+autoload -Uz add-zsh-hook
+
+# Set terminal title: directory in precmd, running command in preexec.
+function _terminal_precmd_title  { print -Pn '\e]0;%~\a' }
+function _terminal_preexec_title { print -n "\e]0;${(V)1}\a" }
+add-zsh-hook precmd  _terminal_precmd_title
+add-zsh-hook preexec _terminal_preexec_title
+
 # Emit an OSC 1337 sequence to set vars your terminal app (WezTerm) can use.
 function set_terminal_var() {
-  hash base64 2>/dev/null || return 1
-  local val
-  val="$(echo -n "$2" | base64)"
+  (( $+commands[base64] )) || return 1
+  local name=$1 val
+  val="$(printf '%s' "$2" | base64)"
 
   # https://github.com/tmux/tmux/wiki/FAQ#what-is-the-passthrough-escape-sequence-and-how-do-i-use-it
   # Note that you ALSO need to add "set -g allow-passthrough on" to your tmux.conf
-  if [[ -n "${TMUX}" ]] ; then
-    printf "\033Ptmux;\033\033]1337;SetUserVar=%s=%s\007\033\\" "$1" "$val"
+  if [[ -n "$TMUX" ]]; then
+    printf "\033Ptmux;\033\033]1337;SetUserVar=%s=%s\007\033\\" "$name" "$val"
   else
-    printf "\033]1337;SetUserVar=%s=%s\007" "$1" "$val"
+    printf "\033]1337;SetUserVar=%s=%s\007" "$name" "$val"
   fi
 }
 set_terminal_var "TERM_CURRENT_SHELL" "zsh ${ZSH_PATCHLEVEL:-$ZSH_VERSION}"
@@ -38,10 +48,12 @@ case "${TERM_PROGRAM:l}" in
   #   ;;
   vscode)
     # https://code.visualstudio.com/docs/terminal/shell-integration
-    MY_HISTFILE=${HISTFILE:-${XDG_DATA_HOME:-$HOME/.local/share}/zsh/zsh_history}
-    source "$(code --locate-shell-integration-path zsh)"
-    HISTFILE=$MY_HISTFILE
-    #unset MY_HISTFILE
+    if (( $+commands[code] )); then
+      MY_HISTFILE=${HISTFILE:-${XDG_DATA_HOME:-$HOME/.local/share}/zsh/zsh_history}
+      source "$(code --locate-shell-integration-path zsh)"
+      HISTFILE=$MY_HISTFILE
+      #unset MY_HISTFILE
+    fi
     ;;
   wezterm)
     source "$MY_ZSH_CUSTOM/pkg/wezterm-shell-integration.sh"
@@ -49,7 +61,6 @@ case "${TERM_PROGRAM:l}" in
       __wezterm_set_user_var "TERM_CURRENT_SHELL" "zsh ${${ZSH_PATCHLEVEL:-$ZSH_VERSION}#zsh-}"
     }
     set_current_shell
-    autoload -Uz add-zsh-hook
     add-zsh-hook precmd set_current_shell
     ;;
 esac
