@@ -31,6 +31,7 @@ plugins=(
   fzf
   git
   git-cmds
+  globalias
   golang
   history-aux
   homebrew
