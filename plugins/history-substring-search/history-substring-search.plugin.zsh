@@ -18,6 +18,8 @@ bindkey -M vicmd "j" history-substring-search-down
 # Up and down
 local keymap
 for keymap in 'main' 'emacs' 'viins'; do
-  bindkey -M "$keymap" "$terminfo[kcuu1]" history-substring-search-up
-  bindkey -M "$keymap" "$terminfo[kcud1]" history-substring-search-down
+  bindkey -M "$keymap" "${terminfo[kcuu1]}" history-substring-search-up
+  bindkey -M "$keymap" "${terminfo[kcud1]}" history-substring-search-down
+  bindkey -M "$keymap" '^[[A' history-substring-search-up
+  bindkey -M "$keymap" '^[[B' history-substring-search-down
 done
