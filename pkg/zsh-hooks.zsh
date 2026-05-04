@@ -110,5 +110,19 @@ hooks-define-hook(){
 #-hooks-define-zle-hook zle-history-line-set
 -hooks-define-zle-hook zle-keymap-select
 
+# define a passthrough hook
+-hooks-define-zle-hook-passthrough(){
+    local hname="${1//-/_}"
+    eval "
+        hooks-define-hook ${hname}_hook
+        ${1}(){
+            hooks-run-hook ${hname}_hook
+            zle .${1} -- \"\$@\"
+        }
+        zle -N ${1}
+    "
+}
+-hooks-define-zle-hook-passthrough accept-line
+
 # load the official hooks as well
 autoload -U add-zsh-hook
