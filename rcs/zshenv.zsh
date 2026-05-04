@@ -1,3 +1,4 @@
+#!/bin/zsh
 #
 # .zshenv - Define Zsh environment variables.
 #
