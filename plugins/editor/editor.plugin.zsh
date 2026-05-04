@@ -277,7 +277,7 @@ _zph_opt_in_keybinds=(
   dot-expansion "."
 )
 _zph_opt_out_keybinds=(
-  symmetric-ctrl-z '^Z'
+  #symmetric-ctrl-z '^Z'
   prepend-sudo     '^X^S'
 )
 
