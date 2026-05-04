@@ -1,5 +1,11 @@
 0=${(%):-%N}
 
+zstyle -s ':zsh_custom:plugin:history-aux:sqlite' histfile 'HISTDBFILE' \
+  || HISTDBFILE="${XDG_DATA_HOME:-$HOME/.local/share}/zsh/zsh_history.db"
+
+zstyle -s ':zsh_custom:plugin:history-aux:json' histfile 'HISTJSFILE' \
+  || HISTJSFILE="${XDG_DATA_HOME:-$HOME/.local/share}/zsh/zsh_history.json"
+
 zmodload zsh/datetime 2>/dev/null
 typeset -gA _history_aux_state
 if [[ -n "${_history_aux_state[loaded]:-}" ]]; then
@@ -66,7 +72,7 @@ _history_aux_precmd() {
   local ret="${_ps[-1]}"
   [[ -z "${_history_aux_state[cmd]:-}" ]] && return 0
 
-  local end_ts start_ts cmd cwd sid f
+  local end_ts start_ts cmd cwd sid
   cmd="${_history_aux_state[cmd]}"
 
   if [[ ( "$_ignore_dups" == on || "$_ignore_all_dups" == on ) \
@@ -82,9 +88,6 @@ _history_aux_precmd() {
   sid="${_history_aux_state[session]}"
 
   if zstyle -T ':zsh_custom:plugin:history-aux:sqlite' enable; then
-    zstyle -s ':zsh_custom:plugin:history-aux:sqlite' histfile 'f' \
-      || f="${XDG_DATA_HOME:-$HOME/.local/share}/zsh/zsh_history.db"
-    HISTDBFILE=${f:-$HISTDBFILE}
     if [[ "${_history_aux_state[sqlite_init]}" != "$HISTDBFILE" ]]; then
       _history_aux_sqlite_init "$HISTDBFILE" && _history_aux_state[sqlite_init]="$HISTDBFILE"
     fi
@@ -93,9 +96,6 @@ _history_aux_precmd() {
   fi
 
   if zstyle -T ':zsh_custom:plugin:history-aux:json' enable; then
-    zstyle -s ':zsh_custom:plugin:history-aux:json' histfile 'f' \
-      || f="${XDG_DATA_HOME:-$HOME/.local/share}/zsh/zsh_history.json"
-    HISTJSFILE=${f:-$HISTJSFILE}
     if [[ "${_history_aux_state[json_init]}" != "$HISTJSFILE" ]]; then
       _history_aux_json_init "$HISTJSFILE" && _history_aux_state[json_init]="$HISTJSFILE"
     fi
