@@ -4,30 +4,26 @@
 # - https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/brew
 # - https://github.com/sorin-ionescu/prezto/tree/master/modules/homebrew
 
-# Where is brew?
-# Setup homebrew if it exists on the system.
-typeset -aU _brewcmd=(
-  $commands[brew]
-  $HOME/.homebrew/bin/brew(N)
-  $HOME/.linuxbrew/bin/brew(N)
-  /opt/homebrew/bin/brew(N)
-  /usr/local/bin/brew(N)
-  # /home/linuxbrew/.linuxbrew/bin/brew(N)
-)
-(( ${#_brewcmd} )) || return 1
 
-# Ensure path arrays contain no duplicates.
-typeset -gU cdpath fpath path
+# Homebrew is often set up early, so this plugin only sets it up if it hasn't been
+if [[ -z "$HOMEBREW_PREFIX" ]]; then
+  # Where is brew?
+  # Setup homebrew if it exists on the system.
+  typeset -aU _brewcmd=(
+    $commands[brew]
+    $HOME/.homebrew/bin/brew(N)
+    $HOME/.linuxbrew/bin/brew(N)
+    /opt/homebrew/bin/brew(N)
+    /usr/local/bin/brew(N)
+  )
+  (( ${#_brewcmd} )) || return 1
 
-# brew shellenv
-source <($_brewcmd[1] shellenv)
+  # brew shellenv
+  source <($_brewcmd[1] shellenv)
 
-# Ensure user bins preceed homebrew in path.
-prepath=(
-    $HOME/{,s}bin(N)
-    $HOME/.local/{,s}bin(N)
-)
-path=($prepath $path)
+  # Ensure prepath
+  path=($prepath $path)
+fi
 
 # Default to no tracking.
 HOMEBREW_NO_ANALYTICS="${HOMEBREW_NO_ANALYTICS:-1}"
@@ -45,11 +41,10 @@ for _keg in $_kegonly; do
 done
 unset _keg{,only}
 
-# Set aliases.
+# Set brew aliases and functions.
 alias brewup="brew update && brew upgrade && brew cleanup"
 alias brewinfo="brew leaves | xargs brew desc --eval-all"
-
-brewdeps() {
+function brewdeps() {
   emulate -L zsh; setopt local_options
   local bluify_deps='
     BEGIN { blue = "\033[34m"; reset = "\033[0m" }
