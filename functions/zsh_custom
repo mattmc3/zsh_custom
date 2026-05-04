@@ -19,6 +19,20 @@ elif [[ "$subcmd" == loaded ]]; then
     fi
     printf '%-25s %s\n' $plugin $loaded
   done
+elif [[ "$subcmd" == zprof ]]; then
+  zstyle -L \
+  | awk '
+    $1 == "zstyle" && $3 == "load_time" {
+      ctx = $2
+      time = $4
+
+      n = split(ctx, parts, ":")
+      name = parts[n]
+
+      printf "%-30s %s\n", name, time
+    }
+  ' \
+  | sort -k2,2gr
 else
   echo "Unrecognized subcommand '$subcmd'." >&2
   return 1
