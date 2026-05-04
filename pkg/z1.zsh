@@ -205,6 +205,10 @@ zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:
 zstyle ':completion:*' squeeze-slashes true
 zstyle ':completion:*' special-dirs ..
 
+
+export ZSH_COMPDUMP=${ZSH_COMPDUMP:-$ZSH_CACHE_DIR/zcompdump}
+mkdir -p $ZSH_COMPDUMP:h
+
 # Queue compdef calls until the real compinit runs at the end of .zshrc.
 typeset -gHa __compdef_queue=()
 function compdef {
@@ -231,10 +235,6 @@ function compinit {
 function compinit-fast {
   emulate -L zsh
   setopt local_options extended_glob
-
-  typeset -gx ZSH_COMPDUMP
-  : ${ZSH_COMPDUMP:=$ZSH_CACHE_DIR/zcompdump}
-  mkdir -p $ZSH_COMPDUMP:h
 
   # -C skips the function check (and implies -i, the security check skip).
   if [[ -n $ZSH_COMPDUMP(#qNmh-20) ]]; then
