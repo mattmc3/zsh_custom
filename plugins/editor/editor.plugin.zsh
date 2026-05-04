@@ -330,6 +330,7 @@ if [[ "$_zph_key_bindings" == (emacs|) ]]; then
   bindkey -e
 elif [[ "$_zph_key_bindings" == vi ]]; then
   bindkey -v
+  antibody bundle jeffreytse/zsh-vi-mode
 else
   print "editor: invalid key bindings: $_zph_key_bindings" >&2
 fi
