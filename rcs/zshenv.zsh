@@ -24,6 +24,7 @@ export ZDOTDIR="${ZDOTDIR:-$HOME/.config/zsh}"
 export DOTFILES="$HOME/.dotfiles"
 
 # Use .zprofile for remaining environment.
-if [[ ( "$SHLVL" -eq 1 && ! -o LOGIN ) && -s "${ZDOTDIR:-$HOME}/.zprofile" ]]; then
+if [[ -o interactive && -s "${ZDOTDIR:-$HOME}/.zprofile" && ${ZPROFILE_LOADED:-0} -eq 0 ]]; then
+  export ZPROFILE_LOADED=1
   source "${ZDOTDIR:-$HOME}/.zprofile"
 fi

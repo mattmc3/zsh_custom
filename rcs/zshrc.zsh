@@ -7,41 +7,65 @@
 [[ "$ZPROFRC" -ne 1 ]] || zmodload zsh/zprof
 alias zprofrc="ZPROFRC=1 zsh"
 
-# Run this early so we can P10k instant prompt if we need it.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
+# Set variables
+ZSH_THEME="p10k mmc"
 
-# Set Zsh location vars.
-ZSH_CONFIG_DIR="${ZDOTDIR:-${XDG_CONFIG_HOME:-$HOME/.config}/zsh}"
-ZSH_DATA_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/zsh"
-ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
-mkdir -p $ZSH_CONFIG_DIR $ZSH_DATA_DIR $ZSH_CACHE_DIR
+# Add plugins
+plugins=(
+  # pre
+  p10k-instaprompt
 
-# Set zstyle configs
-[[ -r $ZSH_CONFIG_DIR/.zstyles ]] && source $ZSH_CONFIG_DIR/.zstyles
+  # regular
+  azure
+  clipboard
+  #colors
+  common-aliases
+  common-functions
+  #confd
+  direnv
+  dotfiles
+  dotnet
+  editor
+  emacs
+  #extract
+  #fancy-ctrl-z
+  fzf
+  git
+  git-cmds
+  golang
+  #homebrew
+  iwd
+  java
+  jupyter
+  macos
+  #magic-enter
+  nim
+  node
+  #otp
+  perl
+  postgres
+  #prj
+  python
+  #rapid-prompt
+  ruby
+  rust
+  #secrets
+  #symmetric-ctrl-z
+  #terminal
+  utility
+  #xdg
+  #zfunctions
+  zoxide
+  zsh-bench
 
-# Initialize Zsh features.
-fpath+=($ZSH_CONFIG_DIR/inits)
-autoload -Uz optinit && optinit
-autoload -Uz envinit && envinit --use-xdg-base-dirs
-autoload -Uz histinit && histinit
-autoload -Uz colorinit && colorinit
-autoload -Uz toolinit && toolinit
-autoload -Uz funcinit && funcinit
-autoload -Uz confdinit && confdinit
+  # final
+  prompt
+  autosuggestions
+  history-substring-search
+)
 
-# Initialize prompt.
-autoload -Uz promptinit && promptinit
-prompt powerlevel10k mmc
-
-# Initialize completions.
-autoload -Uz compstyleinit && compstyleinit
-compstyle zshzoo
-fpath+=($ZSH_CONFIG_DIR/completions(N))
-autoload -Uz compinit
-ZSH_COMPDUMP=$ZSH_CACHE_DIR/zcompdump
-compinit -d "$ZSH_COMPDUMP"
+# use zsh_custom
+source $ZDOTDIR/.custom/zsh_custom.zsh
 
 # Never start an interactive session in the root file system.
 [[ "$PWD" != "/" ]] || cd
