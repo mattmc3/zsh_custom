@@ -1,13 +1,13 @@
 0=${(%):-%N}
 
 zmodload zsh/datetime 2>/dev/null
-typeset -gA _zsh_aux_hist_state
-if [[ -n "${_zsh_aux_hist_state[loaded]:-}" ]]; then
+typeset -gA _history_aux_state
+if [[ -n "${_history_aux_state[loaded]:-}" ]]; then
   return 0
 fi
-_zsh_aux_hist_state[loaded]=1
+_history_aux_state[loaded]=1
 
-_zsh_aux_hist_sqlite_insert() {
+_history_aux_sqlite_insert() {
   emulate -L zsh
   setopt local_options
   local db="$1"
@@ -22,7 +22,7 @@ _zsh_aux_hist_sqlite_insert() {
     >/dev/null 2>&1
 }
 
-_zsh_aux_hist_json_insert() {
+_history_aux_json_insert() {
   emulate -L zsh
   setopt local_options
   jq -cn \
@@ -37,7 +37,7 @@ _zsh_aux_hist_json_insert() {
     >> "$1"
 }
 
-_zsh_aux_hist_preexec() {
+_history_aux_preexec() {
   local _ignore_space=$options[hist_ignore_space]
   local _reduce_blanks=$options[hist_reduce_blanks]
   emulate -L zsh
@@ -51,11 +51,11 @@ _zsh_aux_hist_preexec() {
     cmd="${${${cmd//[[:blank:]][[:blank:]]##/ }##[[:blank:]]##}%%[[:blank:]]##}"
   fi
 
-  _zsh_aux_hist_state[cmd]="$cmd"
-  _zsh_aux_hist_state[start_ts]="$EPOCHREALTIME"
+  _history_aux_state[cmd]="$cmd"
+  _history_aux_state[start_ts]="$EPOCHREALTIME"
 }
 
-_zsh_aux_hist_precmd() {
+_history_aux_precmd() {
   local -a _ps=("${pipestatus[@]}")
   local _ignore_dups=$options[hist_ignore_dups]
   local _ignore_all_dups=$options[hist_ignore_all_dups]
@@ -64,56 +64,58 @@ _zsh_aux_hist_precmd() {
 
   local my_pipestatus="${(j:,:)_ps}"
   local ret="${_ps[-1]}"
-  [[ -z "${_zsh_aux_hist_state[cmd]:-}" ]] && return 0
+  [[ -z "${_history_aux_state[cmd]:-}" ]] && return 0
 
   local end_ts start_ts cmd cwd sid f
-  cmd="${_zsh_aux_hist_state[cmd]}"
+  cmd="${_history_aux_state[cmd]}"
 
   if [[ ( "$_ignore_dups" == on || "$_ignore_all_dups" == on ) \
-        && "$cmd" == "${_zsh_aux_hist_state[last_cmd]:-}" ]]; then
-    unset '_zsh_aux_hist_state[cmd]'
-    unset '_zsh_aux_hist_state[start_ts]'
+        && "$cmd" == "${_history_aux_state[last_cmd]:-}" ]]; then
+    unset '_history_aux_state[cmd]'
+    unset '_history_aux_state[start_ts]'
     return 0
   fi
 
   end_ts="$EPOCHREALTIME"
-  start_ts="${_zsh_aux_hist_state[start_ts]:-0}"
+  start_ts="${_history_aux_state[start_ts]:-0}"
   cwd="$PWD"
-  sid="${_zsh_aux_hist_state[session]}"
+  sid="${_history_aux_state[session]}"
 
-  if zstyle -t ':zsh_custom:plugin:history-aux:sqlite' enable; then
+  if zstyle -T ':zsh_custom:plugin:history-aux:sqlite' enable; then
     zstyle -s ':zsh_custom:plugin:history-aux:sqlite' histfile 'f' \
       || f="${XDG_DATA_HOME:-$HOME/.local/share}/zsh/zsh_history.db"
-    if [[ "${_zsh_aux_hist_state[sqlite_init]}" != "$f" ]]; then
-      _zsh_aux_hist_sqlite_init "$f" && _zsh_aux_hist_state[sqlite_init]="$f"
+    HISTDBFILE=${f:-$HISTDBFILE}
+    if [[ "${_history_aux_state[sqlite_init]}" != "$HISTDBFILE" ]]; then
+      _history_aux_sqlite_init "$HISTDBFILE" && _history_aux_state[sqlite_init]="$HISTDBFILE"
     fi
-    [[ "${_zsh_aux_hist_state[sqlite_init]}" == "$f" ]] && \
-      _zsh_aux_hist_sqlite_insert "$f" "$sid" "$cwd" "$cmd" "$ret" "$my_pipestatus" "$start_ts" "$end_ts" &|
+    [[ "${_history_aux_state[sqlite_init]}" == "$HISTDBFILE" ]] && \
+      _history_aux_sqlite_insert "$HISTDBFILE" "$sid" "$cwd" "$cmd" "$ret" "$my_pipestatus" "$start_ts" "$end_ts" &|
   fi
 
-  if zstyle -t ':zsh_custom:plugin:history-aux:json' enable; then
+  if zstyle -T ':zsh_custom:plugin:history-aux:json' enable; then
     zstyle -s ':zsh_custom:plugin:history-aux:json' histfile 'f' \
       || f="${XDG_DATA_HOME:-$HOME/.local/share}/zsh/zsh_history.json"
-    if [[ "${_zsh_aux_hist_state[json_init]}" != "$f" ]]; then
-      _zsh_aux_hist_json_init "$f" && _zsh_aux_hist_state[json_init]="$f"
+    HISTJSFILE=${f:-$HISTJSFILE}
+    if [[ "${_history_aux_state[json_init]}" != "$HISTJSFILE" ]]; then
+      _history_aux_json_init "$HISTJSFILE" && _history_aux_state[json_init]="$HISTJSFILE"
     fi
-    [[ "${_zsh_aux_hist_state[json_init]}" == "$f" ]] && \
-      _zsh_aux_hist_json_insert "$f" "$sid" "$cwd" "$cmd" "$ret" "$my_pipestatus" "$start_ts" "$end_ts" &|
+    [[ "${_history_aux_state[json_init]}" == "$HISTJSFILE" ]] && \
+      _history_aux_json_insert "$HISTJSFILE" "$sid" "$cwd" "$cmd" "$ret" "$my_pipestatus" "$start_ts" "$end_ts" &|
   fi
 
-  _zsh_aux_hist_state[last_cmd]="$cmd"
-  unset '_zsh_aux_hist_state[cmd]'
-  unset '_zsh_aux_hist_state[start_ts]'
+  _history_aux_state[last_cmd]="$cmd"
+  unset '_history_aux_state[cmd]'
+  unset '_history_aux_state[start_ts]'
 }
 
 autoload -Uz add-zsh-hook
-add-zsh-hook preexec _zsh_aux_hist_preexec
-add-zsh-hook precmd _zsh_aux_hist_precmd
+add-zsh-hook preexec _history_aux_preexec
+add-zsh-hook precmd _history_aux_precmd
 
 # Run first so pipestatus isn't clobbered by other precmd hooks.
-precmd_functions=(_zsh_aux_hist_precmd ${precmd_functions:#_zsh_aux_hist_precmd})
+precmd_functions=(_history_aux_precmd ${precmd_functions:#_history_aux_precmd})
 
-_zsh_aux_hist_sqlite_migration_0() {
+_history_aux_sqlite_migration_0() {
   emulate -L zsh
   setopt local_options
   local db="$1"
@@ -133,7 +135,7 @@ CREATE INDEX IF NOT EXISTS idx_zsh_history_cmd      ON zsh_history(cmd);
 SQL
 }
 
-_zsh_aux_hist_sqlite_init() {
+_history_aux_sqlite_init() {
   emulate -L zsh
   setopt local_options
   local db="$1" current_ver i
@@ -151,13 +153,13 @@ _zsh_aux_hist_sqlite_init() {
 
   for i in {0..10}; do
     (( i < current_ver )) && continue
-    declare -f "_zsh_aux_hist_sqlite_migration_$i" >/dev/null || break
-    "_zsh_aux_hist_sqlite_migration_$i" "$db" || return 1
+    (( $+functions[_history_aux_sqlite_migration_$i] )) || break
+    "_history_aux_sqlite_migration_$i" "$db" || return 1
     sqlite3 "$db" "PRAGMA user_version = $(( i + 1 ));" >/dev/null 2>&1 || return 1
   done
 }
 
-_zsh_aux_hist_json_init() {
+_history_aux_json_init() {
   emulate -L zsh
   setopt local_options
   local f="$1"
@@ -172,4 +174,4 @@ _zsh_aux_hist_json_init() {
 }
 
 gen-uuid7 >/dev/null
-_zsh_aux_hist_state[session]="$REPLY"
+_history_aux_state[session]="$REPLY"
