@@ -38,15 +38,17 @@ path=(
   $path
 )
 
+# re-path will reset the path order
+function re-path() {
+  path=($prepath $path)
+}
+
 #
 # Homebrew
 #
 
 # Setup homebrew if it exists on the system.
 if (( $+commands[brew] )); then
-  # Default to no tracking.
-  HOMEBREW_NO_ANALYTICS="${HOMEBREW_NO_ANALYTICS:-1}"
-
   # Initialize homebrew.
   source <(brew shellenv)
 
@@ -174,21 +176,10 @@ setopt pushd_to_home           # Push to home directory when no argument is give
 alias -- -='cd -'
 alias dirh='dirs -v'
 
-#
-# Completion
-#
 
-# 16.2.2 Completion
-setopt always_to_end           # Move cursor to the end of a completed word.
-setopt auto_list               # Automatically list choices on ambiguous completion.
-setopt auto_menu               # Show completion menu on a successive tab press.
-setopt auto_param_slash        # If completed parameter is a directory, add a trailing slash.
-setopt complete_in_word        # Complete from both ends of a word.
-setopt path_dirs               # Perform path search even on command names with slashes.
-setopt NO_menu_complete        # Do not autoselect the first completion entry.
-
-# Lazy-load my completions
-fpath=($ZSH_CONFIG_DIR/completions(-/FN) $fpath)
+#
+# Compstyles
+#
 
 # Display: menu select, grouped output, descriptions and warnings highlighted.
 zstyle ':completion:*' menu select
@@ -205,7 +196,23 @@ zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:
 zstyle ':completion:*' squeeze-slashes true
 zstyle ':completion:*' special-dirs ..
 
+#
+# Completion
+#
 
+# 16.2.2 Completion
+setopt always_to_end           # Move cursor to the end of a completed word.
+setopt auto_list               # Automatically list choices on ambiguous completion.
+setopt auto_menu               # Show completion menu on a successive tab press.
+setopt auto_param_slash        # If completed parameter is a directory, add a trailing slash.
+setopt complete_in_word        # Complete from both ends of a word.
+setopt path_dirs               # Perform path search even on command names with slashes.
+setopt NO_menu_complete        # Do not autoselect the first completion entry.
+
+# Lazy-load my completions
+fpath=($ZSH_CONFIG_DIR/completions(-/FN) $fpath)
+
+# Location of completion file
 export ZSH_COMPDUMP=${ZSH_COMPDUMP:-$ZSH_CACHE_DIR/zcompdump}
 mkdir -p $ZSH_COMPDUMP:h
 

@@ -1,71 +1,16 @@
 #
-# Pre
+# Setup
 #
 
 0=${(%):-%N}
 MY_ZSH_CUSTOM="${0:A:h:h}"
 
 #
-# Env
+# Inits
 #
 
-OMZ_SHA=e7aa0c56e68348afefdd6af4c5bdb314a2bd6640
-
-#
-# XDG
-#
-
-export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
-export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
-export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
-export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
-mkdir -p "$XDG_CONFIG_HOME" "$XDG_CACHE_HOME" "$XDG_DATA_HOME" "$XDG_STATE_HOME"
-
-#
-# Requirements
-#
-
-if ! (( $+commands[antibody] )); then
-  echo >&2 "__init__: antibody command not found. many plugins will not work."
-  return 1
-fi
-source <(antibody init)
-
-#
-# Init
-#
-
-source $MY_ZSH_CUSTOM/pkg/z1.zsh
-
-#
-# Hooks
-#
-
-# https://github.com/rothgar/mastering-zsh/blob/master/docs/config/hooks.md
-# https://github.com/zsh-hooks/zsh-hooks
-antibody bundle zsh-hooks/zsh-hooks
-
-# There's not really a postzshrc event, so we're going to fake one by adding a
-# function called run_postzshrc to the precmd event. That function only runs once,
-# and then unregisters itself after that first run. If the user wants to (or needs to
-# because it doesn't play well with a plugin), they can run it themselves manually at
-# the very end of their .zshrc, and then it unregisters the precmd event.
-
-# Define our custom hook
-hooks-define-hook postzshrc
-
-# Define a function to run our custom hook that gets attached to the first precmd.
-function run_postzshrc {
-  # Run anything attached to the postzshrc hook
-  hooks-run-hook postzshrc_hook
-
-  # Now detach the precmd hook and unfunction this so that it only runs once.
-  add-zsh-hook -d precmd run_postzshrc
-  unfunction -- run_postzshrc
-}
-
-# Attach our function to precmd.
-add-zsh-hook precmd run_postzshrc
-
-# Now you can add postzshrc commands with
-# add-zsh-hook postzshrc myfunc
+source $MY_ZSH_CUSTOM/init/xdg.zsh
+source $MY_ZSH_CUSTOM/init/p10k-instaprompt.zsh
+source $MY_ZSH_CUSTOM/init/antibody.zsh
+source $MY_ZSH_CUSTOM/init/z1.zsh
+source $MY_ZSH_CUSTOM/init/hooks.zsh

@@ -12,9 +12,6 @@ ZSH_THEME="p10k mmc"
 
 # Add plugins
 plugins=(
-  # pre
-  p10k-instaprompt
-
   # regular
   azure
   clipboard
