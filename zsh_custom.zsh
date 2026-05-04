@@ -17,19 +17,27 @@ zmodload zsh/datetime
 
 # Load plugins
 () {
-  local zplugin zplugin_init loaded start_ts end_ts
+  local zplugin zplugin_name zplugin_init loaded start_ts
   for zplugin in $plugins; do
     start_ts=$EPOCHREALTIME
-    fpath+=("$MY_ZSH_CUSTOM/plugins/${zplugin:t}"(N))
-    zplugin_init=$MY_ZSH_CUSTOM/plugins/${zplugin:t}/${zplugin:t}.plugin.zsh
-    if [[ ! -e "$zplugin_init" ]]; then
-      echo >&2 "Plugin not found: $zplugin_init"
-      continue
+    zplugin_name=${zplugin:t}
+    loaded=no
+
+    if [[ -d "$MY_ZSH_CUSTOM/plugins/${zplugin_name}" ]]; then
+      zplugin_init=$MY_ZSH_CUSTOM/plugins/${zplugin_name}/${zplugin_name}.plugin.zsh
+      if [[ -e "$zplugin_init" ]]; then
+        fpath+=("$MY_ZSH_CUSTOM/plugins/$zplugin_name")
+        source $zplugin_init && loaded=yes
+      else
+        echo >&2 "Plugin not found: $zplugin_init"
+      fi
+    elif [[ "$zplugin" == */* ]]; then
+      antibody bundle $zplugin && loaded=yes
     else
-      source $zplugin_init && loaded=yes || loaded=no
-      end_ts=$EPOCHREALTIME
-      zstyle ":zsh_custom:plugin:${zplugin:t}" loaded $loaded
-      zstyle ":zsh_custom:plugin:${zplugin:t}" load_time $(( end_ts - start_ts ))
+      echo >&2 "Unknown plugin: $zplugin"
     fi
+
+    zstyle ":zsh_custom:plugin:$zplugin_name" loaded $loaded
+    zstyle ":zsh_custom:plugin:$zplugin_name" load_time $(( EPOCHREALTIME - start_ts ))
   done
 }
