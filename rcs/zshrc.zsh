@@ -50,7 +50,7 @@ plugins=(
   ruby
   rust
   #secrets
-  #symmetric-ctrl-z
+  symmetric-ctrl-z
   #terminal
   utility
   #xdg
@@ -60,8 +60,11 @@ plugins=(
 
   # final
   prompt
+  mattmc3/zman
+  completions
   autosuggestions
   history-substring-search
+  zdharma-continuum/fast-syntax-highlighting
 )
 
 # use zsh_custom
