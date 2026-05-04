@@ -18,6 +18,8 @@ plugins=(
   #colors
   common-aliases
   common-functions
+  completions
+  compstyle
   #confd
   direnv
   dotfiles
@@ -35,13 +37,13 @@ plugins=(
   java
   jupyter
   macos
-  #magic-enter
+  magic-enter
   nim
   node
   #otp
   perl
   postgres
-  #prj
+  prj
   python
   #rapid-prompt
   ruby
@@ -58,7 +60,6 @@ plugins=(
   # final
   prompt
   mattmc3/zman
-  completions
   autosuggestions
   history-substring-search
   zdharma-continuum/fast-syntax-highlighting
