@@ -295,6 +295,7 @@ setopt NO_flow_control         # Allow ^Q/^S in zsh.
 WORDCHARS='*?_-.[]~&;!#$%^(){}<>'
 
 # Optional keymap override: set ZSH_BINDKEY to vi or emacs.
+bindkey -d
 case "${ZSH_BINDKEY:-}" in
   vi)    bindkey -v ;;
   emacs) bindkey -e ;;

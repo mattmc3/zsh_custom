@@ -164,24 +164,6 @@ function prepend-sudo {
 }
 zle -N prepend-sudo
 
-# Expand aliases
-function glob-alias {
-  local -a noexpand_aliases
-  zstyle -a ':zsh_custom:plugin:editor:glob-alias' 'noexpand' 'noexpand_aliases' \
-    || noexpand_aliases=()
-
-  # Get last word to the left of the cursor:
-  # (A) makes it an array even if there's only one element
-  # (z) splits into words using shell parsing
-  local word=${${(Az)LBUFFER}[-1]}
-  if [[ $noexpand_aliases[(Ie)$word] -eq 0 ]]; then
-    zle _expand_alias
-    # zle expand-word
-  fi
-  zle self-insert
-}
-zle -N glob-alias
-
 # Toggle the comment character at the start of the line. This is meant to work
 # around a buggy implementation of pound-insert in zsh.
 #
@@ -204,66 +186,49 @@ function pound-toggle {
 zle -N pound-toggle
 
 #
-# Init
-#
-
-# https://github.com/mattmc3/zsh_custom/issues/40
-# Reset to default key bindings if we aren't using zsh-defer
-if (( ! $+zsh_defer_options )); then
-  bindkey -d
-fi
-
-#
 # Keybinds
 #
 
 # Global keybinds
-typeset -gA _zph_global_keybinds
-_zph_global_keybinds=(
+typeset -A _zglobal_keybinds=(
   "$key_info[Home]"   beginning-of-line
   "$key_info[End]"    end-of-line
   "$key_info[Delete]" delete-char
 )
 
 # emacs and vi insert mode keybinds
-typeset -gA _zph_viins_keybinds
-_zph_viins_keybinds=(
+typeset -A _zviins_keybinds=(
   "$key_info[Backspace]" backward-delete-char
   "$key_info[Control]W"  backward-kill-word
 )
 
 # vi command mode keybinds
-typeset -gA _zph_vicmd_keybinds
-_zph_vicmd_keybinds=(
+typeset -A _zvicmd_keybinds=(
   "$key_info[Delete]" delete-char
 )
 
-# Special case for ControlLeft and ControlRight because they have multiple
-# possible binds.
-for _zph_key in "${(s: :)key_info[ControlLeft]}" "${(s: :)key_info[AltLeft]}"; do
-  bindkey -M emacs "$_zph_key" emacs-backward-word
-  bindkey -M viins "$_zph_key" vi-backward-word
-  bindkey -M vicmd "$_zph_key" vi-backward-word
-done
-for _zph_key in "${(s: :)key_info[ControlRight]}" "${(s: :)key_info[AltRight]}"; do
-  bindkey -M emacs "$_zph_key" emacs-forward-word
-  bindkey -M viins "$_zph_key" vi-forward-word
-  bindkey -M vicmd "$_zph_key" vi-forward-word
-done
-
-# Bind all global and viins keys to the emacs keymap
-for _zph_key _zph_bind in ${(kv)_zph_global_keybinds} ${(kv)_zph_viins_keybinds}; do
-  bindkey -M emacs "$_zph_key" "$_zph_bind"
+# Word navigation — Ctrl/Alt + Left/Right each have multiple escape sequences.
+for _zkey_name _zdir in \
+  ControlLeft  backward-word \
+  AltLeft      backward-word \
+  ControlRight forward-word  \
+  AltRight     forward-word
+do
+  for _zkey in "${(s: :)key_info[$_zkey_name]}"; do
+    bindkey -M emacs "$_zkey" emacs-$_zdir
+    bindkey -M viins "$_zkey" vi-$_zdir
+    bindkey -M vicmd "$_zkey" vi-$_zdir
+  done
 done
 
-# Bind all global, vi, and viins keys to the viins keymap
-for _zph_key _zph_bind in ${(kv)_zph_global_keybinds} ${(kv)_zph_viins_keybinds}; do
-  bindkey -M viins "$_zph_key" "$_zph_bind"
+# Bind global + insert keys to emacs and viins; global + vicmd keys to vicmd.
+for _zkeymap in emacs viins; do
+  for _zkey _zbind in ${(kv)_zglobal_keybinds} ${(kv)_zviins_keybinds}; do
+    bindkey -M "$_zkeymap" "$_zkey" "$_zbind"
+  done
 done
-
-# Bind all global, vi, and vicmd keys to the vicmd keymap
-for _zph_key _zph_bind in ${(kv)_zph_global_keybinds} ${(kv)_zph_vicmd_keybinds}; do
-  bindkey -M vicmd "$_zph_key" "$_zph_bind"
+for _zkey _zbind in ${(kv)_zglobal_keybinds} ${(kv)_zvicmd_keybinds}; do
+  bindkey -M vicmd "$_zkey" "$_zbind"
 done
 
 # Toggle comment at the start of the line. Note that we use pound-toggle for emacs
@@ -272,29 +237,29 @@ bindkey -M emacs "$key_info[Escape];" pound-toggle
 bindkey -M vicmd "#" vi-pound-insert
 
 # Optional keybindings for emacs and viins keymaps
-typeset -A _zph_opt_in_keybinds _zph_opt_out_keybinds
-_zph_opt_in_keybinds=(
+typeset -A _zopt_in_keybinds _zopt_out_keybinds
+_zopt_in_keybinds=(
   dot-expansion "."
 )
-_zph_opt_out_keybinds=(
+_zopt_out_keybinds=(
   #symmetric-ctrl-z '^Z'
   prepend-sudo     '^X^S'
 )
 
 # Opt-in features (disabled by default)
-for _zph_feature _zph_key in ${(kv)_zph_opt_in_keybinds}; do
-  if zstyle -t ':zsh_custom:plugin:editor' "$_zph_feature"; then
-    for _zph_keymap in 'emacs' 'viins'; do
-      bindkey -M "$_zph_keymap" "$_zph_key" "$_zph_feature"
+for _zfeature _zkey in ${(kv)_zopt_in_keybinds}; do
+  if zstyle -t ':zsh_custom:plugin:editor' "$_zfeature"; then
+    for _zkeymap in 'emacs' 'viins'; do
+      bindkey -M "$_zkeymap" "$_zkey" "$_zfeature"
     done
   fi
 done
 
 # Opt-out features (enabled by default)
-for _zph_feature _zph_key in ${(kv)_zph_opt_out_keybinds}; do
-  if zstyle -T ':zsh_custom:plugin:editor' "$_zph_feature"; then
-    for _zph_keymap in 'emacs' 'viins'; do
-      bindkey -M "$_zph_keymap" "$_zph_key" "$_zph_feature"
+for _zfeature _zkey in ${(kv)_zopt_out_keybinds}; do
+  if zstyle -T ':zsh_custom:plugin:editor' "$_zfeature"; then
+    for _zkeymap in 'emacs' 'viins'; do
+      bindkey -M "$_zkeymap" "$_zkey" "$_zfeature"
     done
   fi
 done
@@ -304,41 +269,14 @@ if zstyle -t ':zsh_custom:plugin:editor' dot-expansion; then
   bindkey -M isearch . self-insert 2> /dev/null
 fi
 
-# Expand aliases with space automatically (opt-in, overrides glob-alias)
-if zstyle -t ':zsh_custom:plugin:editor' automatic-glob-alias; then
-  for _zph_keymap in 'emacs' 'viins'; do
-    bindkey -M "$_zph_keymap" " " glob-alias
-    bindkey -M "$_zph_keymap" "^ " magic-space
-  done
-  bindkey -M isearch " " magic-space
-# Expand aliases with ctrl-space (opt-out, enabled by default)
-elif zstyle -T ':zsh_custom:plugin:editor' glob-alias; then
-  for _zph_keymap in 'emacs' 'viins'; do
-    bindkey -M "$_zph_keymap" "^ " glob-alias
-    bindkey -M "$_zph_keymap" " " magic-space
-  done
-  bindkey -M isearch " " magic-space
-fi
-
 #
-# Layout
+# Plugins
 #
 
-# Set the key layout.
-zstyle -s ':zsh_custom:plugin:editor' key-bindings '_zph_key_bindings'
-if [[ "$_zph_key_bindings" == (emacs|) ]]; then
-  bindkey -e
-elif [[ "$_zph_key_bindings" == vi ]]; then
-  bindkey -v
-  antibody bundle jeffreytse/zsh-vi-mode
-else
-  print "editor: invalid key bindings: $_zph_key_bindings" >&2
-fi
+# vi layout
+[[ "${ZSH_BINDKEY:-}" == vi ]] && antibody bundle jeffreytse/zsh-vi-mode
 
-#
-# PS2
-#
-
+# disable PS2
 antibody bundle romkatv/zsh-no-ps2
 
 #
@@ -355,6 +293,5 @@ zle -N self-insert url-quote-magic
 # Clean up
 #
 
-unset _zph_{bind,key{,_bindings},keymap,feature}
-unset _zph_{opt_in,opt_out}_keybinds _zph_{vicmd,viins,global}_keybinds
-zstyle ':zsh_custom:plugin:editor' loaded 'yes'
+unset _z{bind,key,keymap,feature}
+unset _z{opt_in,opt_out}_keybinds _z{vicmd,viins,global}_keybinds
