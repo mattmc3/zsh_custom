@@ -9,6 +9,7 @@ alias zprofrc="ZPROFRC=1 zsh"
 
 # Set variables
 ZSH_THEME="p10k mmc"
+#ZSH_THEME="pure"
 
 # Add plugins
 plugins=(
@@ -25,7 +26,7 @@ plugins=(
   dotnet
   editor
   emacs
-  #extract
+  extract
   fancy-ctrl-z
   fzf
   git
