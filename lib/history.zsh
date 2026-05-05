@@ -6,7 +6,7 @@ if [[ -e "${ZSH:-?}"/lib/history.zsh ]]; then
   source $ZSH/lib/history.zsh
 fi
 
-# Fix bad Zsh defaults
+# Fix bad Oh My Zsh defaults
 HISTFILE="${XDG_DATA_HOME:-$HOME/.local/share}"/zsh/zsh_history
 [[ -d "${HISTFILE:h}" ]] || mkdir -p "${HISTFILE:h}"
 [[ "$SAVEHIST" -gt 100000 ]] || SAVEHIST=100000

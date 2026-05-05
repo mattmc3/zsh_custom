@@ -1,5 +1,5 @@
 #!/bin/zsh
-# zshrc1 - the first thing you run for modern Zsh
+# z1 - the first thing to run for a modern Zsh config
 
 #
 # Init
@@ -118,8 +118,8 @@ setopt NO_share_history        # Don't share history between all sessions.
 
 # Set the path to the default history file.
 HISTFILE="$ZSH_DATA_DIR/zsh_history"
-SAVEHIST=100000  # Set history file size.
-HISTSIZE=20000   # Set session history size.
+[[ "$SAVEHIST" -gt 100000 ]] || SAVEHIST=100000  # Set history file size.
+[[ "$SAVEHIST" -gt  50000 ]] || HISTSIZE=50000   # Set session history size.
 
 # Use a better history command.
 alias history='fc -li'
@@ -175,7 +175,6 @@ setopt pushd_to_home           # Push to home directory when no argument is give
 # Set directory aliases.
 alias -- -='cd -'
 alias dirh='dirs -v'
-
 
 #
 # Compstyles
@@ -282,9 +281,6 @@ setopt prompt_subst            # Expand parameters in prompt variables
 # Set 2 space indent for each new level in a multi-line script. This can then be
 # overridden by a prompt or plugin, but is a better default than Zsh's.
 PS2='${${${(%):-%_}//[^ ]}// /  }    '
-
-# Add prompts
-fpath+=("${0:a:h}"/prompts(/N))
 
 #
 # Editor

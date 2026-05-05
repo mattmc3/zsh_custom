@@ -1,3 +1,7 @@
+#
+# hooks: Zsh events
+#
+
 # Use zsh-hooks package
 source $MY_ZSH_CUSTOM/pkg/zsh-hooks.zsh
 

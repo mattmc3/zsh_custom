@@ -6,7 +6,7 @@ MY_ZSH_CUSTOM=${0:a:h}
 zmodload zsh/datetime
 
 # Load libs
-for _zlib in "$MY_ZSH_CUSTOM"/lib/*.zsh; do
+for _zlib in "$MY_ZSH_CUSTOM"/init/*.zsh; do
   source $_zlib && _zloaded=yes || _zloaded=no
   zstyle ":zsh_custom:lib:${_zlib:t}" loaded $_zloaded
 done
