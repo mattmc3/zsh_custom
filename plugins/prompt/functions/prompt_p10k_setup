@@ -1,4 +1,5 @@
 #!/bin/zsh
+antibody bundle romkatv/powerlevel10k
 if [[ -n "$1" ]]; then
   local -a configs=(
     ${ZDOTDIR:-$HOME/.config/zsh}/themes/$1.p10k.zsh(N)
@@ -6,4 +7,3 @@ if [[ -n "$1" ]]; then
   )
   (( $#configs )) && source $configs[1]
 fi
-source $(antibody path romkatv/powerlevel10k)/powerlevel10k.zsh-theme
