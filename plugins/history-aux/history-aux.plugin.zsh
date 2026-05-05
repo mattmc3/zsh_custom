@@ -173,8 +173,7 @@ _history_aux_json_init() {
   [[ -f "$f" ]] || touch "$f"
 }
 
-gen-uuid7 >/dev/null
-_history_aux_state[session]="$REPLY"
+_history_aux_state[session]="${EPOCHREALTIME}-${RANDOM}-${RANDOM}-${TTY##*/}"
 
 histdb() {
   emulate -L zsh
