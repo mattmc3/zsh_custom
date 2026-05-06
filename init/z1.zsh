@@ -296,7 +296,7 @@ WORDCHARS='*?_-.[]~&;!#$%^(){}<>'
 
 # Optional keymap override: set ZSH_BINDKEY to vi or emacs.
 bindkey -d
-case "${ZSH_BINDKEY:-}" in
+case "${ZSH_BINDKEY:-emacs}" in
   vi)    bindkey -v ;;
   emacs) bindkey -e ;;
   *)                ;;
