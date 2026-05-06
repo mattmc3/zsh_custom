@@ -6,12 +6,12 @@
 (( $+functions[magic-enter-cmd] )) ||
 function magic-enter-cmd {
   local cmd
-  zstyle -s ':zsh_custom:plugin:editor:magic-enter' command 'cmd' ||
-    cmd="ls ."
+  zstyle -s ':zsh_custom:plugin:magic-enter' command cmd ||
+    cmd="${MAGIC_ENTER_OTHER_COMMAND:-ls}"
 
   if command git rev-parse --is-inside-work-tree &>/dev/null; then
-    zstyle -s ':zsh_custom:plugin:editor:magic-enter' git-command 'cmd' ||
-      cmd="git status -sb ."
+    zstyle -s ':zsh_custom:plugin:magic-enter' git-command cmd ||
+      cmd="${MAGIC_ENTER_GIT_COMMAND:-git status -sb}"
   fi
   echo $cmd
 }
@@ -27,22 +27,3 @@ function magic-enter {
 
 # Add magic-enter as an accept line hook
 hooks-add-hook accept_line_hook magic-enter
-
-# # Wrapper for the accept-line zle widget (run when pressing Enter)
-# # If the wrapper already exists don't redefine it
-# if (( ! ${+functions[_magic-enter_accept-line]} )); then
-#   case "$widgets[accept-line]" in
-#     # Override the current accept-line widget, calling the old one
-#     user:*) zle -N _magic-enter_orig_accept-line "${widgets[accept-line]#user:}"
-#       function _magic-enter_accept-line {
-#         magic-enter
-#         zle _magic-enter_orig_accept-line -- "$@"
-#       } ;;
-#     # If no user widget defined, call the original accept-line widget
-#     builtin) function _magic-enter_accept-line {
-#         magic-enter
-#         zle .accept-line
-#       } ;;
-#   esac
-#   zle -N accept-line _magic-enter_accept-line
-# fi
