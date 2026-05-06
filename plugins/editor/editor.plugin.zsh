@@ -180,7 +180,6 @@ _zopt_in_keybinds=(
   dot-expansion "."
 )
 _zopt_out_keybinds=(
-  #symmetric-ctrl-z '^Z'
   prepend-sudo     '^X^S'
 )
 
