@@ -1,0 +1,38 @@
+#!/bin/sh
+# https-to-ssh: Convert an https remote URL to git@host:path
+
+target_dir=${1:-.}
+remote_name=${2:-origin}
+
+if [ ! -d "$target_dir" ]; then
+  echo "git https-to-ssh: directory not found: $target_dir" >&2
+  exit 1
+fi
+
+if ! git -C "$target_dir" rev-parse --git-dir >/dev/null 2>&1; then
+  echo "git https-to-ssh: not a git repository: $target_dir" >&2
+  exit 1
+fi
+
+remote_url=$(git -C "$target_dir" remote get-url "$remote_name" 2>/dev/null)
+if [ -z "$remote_url" ]; then
+  echo "git https-to-ssh: remote '$remote_name' not found in $target_dir" >&2
+  exit 1
+fi
+
+case "$remote_url" in
+  https://*)
+    host=${remote_url#https://}
+    host=${host%%/*}
+    path=${remote_url#https://}
+    path=${path#*/}
+    ssh_url="git@${host}:${path}"
+    git -C "$target_dir" remote set-url "$remote_name" "$ssh_url" || exit 1
+    echo "git https-to-ssh: updated '$remote_name'"
+    echo "  from: $remote_url"
+    echo "    to: $ssh_url"
+    ;;
+  *)
+    echo "git https-to-ssh: '$remote_name' is already non-https: $remote_url"
+    ;;
+esac
