@@ -7,6 +7,9 @@
 [[ "$ZPROFRC" -ne 1 ]] || zmodload zsh/zprof
 alias zprofrc="ZPROFRC=1 zsh"
 
+0=${(%):-%N}
+MY_ZSH_CUSTOM=${0:A:h:h}
+
 # Set variables
 ZSH_THEME="p10k mmc"
 #ZSH_THEME="pure"
@@ -67,7 +70,7 @@ plugins=(
 )
 
 # use zsh_custom
-source $ZDOTDIR/.custom/zsh_custom.zsh
+source $MY_ZSH_CUSTOM/zsh_custom.zsh
 
 # Never start an interactive session in the root file system.
 [[ "$PWD" != "/" ]] || cd
