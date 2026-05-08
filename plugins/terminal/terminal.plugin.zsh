@@ -46,6 +46,9 @@ case "${TERM_PROGRAM:l}" in
   #     source "$GHOSTTY_RESOURCES_DIR"/shell-integration/zsh/ghostty-integration
   #   fi
   #   ;;
+  iterm.app)
+    source "$MY_ZSH_CUSTOM/pkg/iterm2_shell_integration.zsh"
+    ;;
   vscode)
     # https://code.visualstudio.com/docs/terminal/shell-integration
     if (( $+commands[code] )); then
