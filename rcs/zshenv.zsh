@@ -29,3 +29,6 @@ if [[ -o interactive && -s "${ZDOTDIR:-$HOME}/.zprofile" && ${ZPROFILE_LOADED:-0
   export ZPROFILE_LOADED=1
   source "${ZDOTDIR:-$HOME}/.zprofile"
 fi
+
+# Make Apple Terminal behave.
+export SHELL_SESSIONS_DISABLE=1

@@ -50,3 +50,4 @@ fi
 #
 
 export SHELL_SESSIONS_DISABLE=1
+export KEYTIMEOUT=1
