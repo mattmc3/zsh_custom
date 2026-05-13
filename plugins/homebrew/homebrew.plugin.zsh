@@ -33,10 +33,11 @@ if [[ -d "$HOMEBREW_PREFIX/share/zsh/site-functions" ]]; then
   fpath+=("$HOMEBREW_PREFIX/share/zsh/site-functions")
 fi
 
-# Add keg-only completions to fpath
+# Add keg-only completions to path/fpath
 zstyle -a ':zsh_custom:plugin:brew' 'keg-only-brews' '_kegonly' \
-  || _kegonly=(curl ruby sqlite)
+  || _kegonly=(curl ruby sqlite string-cli)
 for _keg in $_kegonly; do
+  path=($HOMEBREW_PREFIX/opt/${_keg}/bin(/N) $path)
   fpath=($HOMEBREW_PREFIX/opt/${_keg}/share/zsh/site-functions(/N) $fpath)
 done
 unset _keg{,only}
