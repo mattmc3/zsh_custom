@@ -216,7 +216,7 @@ zmodload zsh/complist
 fpath=($ZSH_CONFIG_DIR/completions(-/FN) $fpath)
 
 # Location of completion file
-export ZSH_COMPDUMP=${ZSH_COMPDUMP:-$ZSH_CACHE_DIR/zcompdump}
+ZSH_COMPDUMP=${ZSH_COMPDUMP:-$ZSH_CACHE_DIR/zcompdump-${ZSH_VERSION}}
 mkdir -p $ZSH_COMPDUMP:h
 
 # Queue compdef calls until the real compinit runs at the end of .zshrc.
