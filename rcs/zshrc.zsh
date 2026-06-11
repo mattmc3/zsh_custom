@@ -18,6 +18,7 @@ ZSH_THEME="p10k mmc"
 plugins=(
   # regular
   azure
+  carapace
   clipboard
   common-aliases
   common-functions
