@@ -38,8 +38,8 @@ path=(
   $path
 )
 
-# re-path will reset the path order
-function re-path() {
+# repath will reset the path order
+function repath() {
   path=($prepath $path)
 }
 
@@ -119,7 +119,7 @@ setopt NO_share_history        # Don't share history between all sessions.
 # Set the path to the default history file.
 HISTFILE="$ZSH_DATA_DIR/zsh_history"
 [[ "$SAVEHIST" -gt 100000 ]] || SAVEHIST=100000  # Set history file size.
-[[ "$SAVEHIST" -gt  50000 ]] || HISTSIZE=50000   # Set session history size.
+[[ "$HISTSIZE" -gt  50000 ]] || HISTSIZE=50000   # Set session history size.
 
 # Use a better history command.
 alias history='fc -li'
@@ -215,10 +215,6 @@ zmodload zsh/complist
 # Lazy-load my completions
 fpath=($ZSH_CONFIG_DIR/completions(-/FN) $fpath)
 
-# Location of completion file
-ZSH_COMPDUMP=${ZSH_COMPDUMP:-$ZSH_CACHE_DIR/zcompdump-${ZSH_VERSION}}
-mkdir -p $ZSH_COMPDUMP:h
-
 # Queue compdef calls until the real compinit runs at the end of .zshrc.
 typeset -gHa __compdef_queue=()
 function compdef {
@@ -245,6 +241,11 @@ function compinit {
 function compinit-fast {
   emulate -L zsh
   setopt local_options extended_glob
+
+  # Location of completion file
+  typeset -g ZSH_COMPDUMP
+  : ${ZSH_COMPDUMP:=$ZSH_CACHE_DIR/ZSH_COMPDUMP-${ZSH_VERSION}}
+  mkdir -p $ZSH_COMPDUMP:h
 
   # -C skips the function check (and implies -i, the security check skip).
   if [[ -n $ZSH_COMPDUMP(#qNmh-20) ]]; then
@@ -310,6 +311,15 @@ if [[ -r ${TTY:-} && -w ${TTY:-} && $+commands[stty] == 1 ]]; then
   stty -ixon <"$TTY" >"$TTY"
 fi
 
+# Run bindkey across every keymap. With no args, prints mappings per keymap.
+function bindkey-all {
+  local keymap=''
+  for keymap in $(bindkey -l); do
+    [[ "$#" -eq 0 ]] && printf "#### %s\n" "${keymap}" 1>&2
+    bindkey -M "${keymap}" "$@"
+  done
+}
+
 # Bind one widget to multiple key sequences; skip empties.
 function bindkey-multiple {
   local widget=$1 seq; shift
@@ -363,6 +373,28 @@ function zle-keymap-select {
 }
 zle -N zle-keymap-select
 
+# Insert 'sudo ' at the beginning of the line.
+function prepend-sudo {
+  if [[ "$BUFFER" != su(do|)\ * ]]; then
+    BUFFER="sudo $BUFFER"
+    (( CURSOR += 5 ))
+  fi
+}
+zle -N prepend-sudo
+
+# Toggle a leading '#' on the current line. Workaround for buggy pound-insert
+# in emacs mode; vi mode uses the built-in vi-pound-insert.
+function pound-toggle {
+  if [[ "$BUFFER" = '#'* ]]; then
+    [[ $CURSOR != $#BUFFER ]] && (( CURSOR -= 1 ))
+    BUFFER="${BUFFER:1}"
+  else
+    BUFFER="#$BUFFER"
+    (( CURSOR += 1 ))
+  fi
+}
+zle -N pound-toggle
+
 # Edit current command in $EDITOR.
 autoload -Uz edit-command-line
 zle -N edit-command-line
@@ -389,8 +421,13 @@ bindkey '^W' backward-kill-word
 # Edit command in $EDITOR.
 bindkey '^X^E' edit-command-line
 
-# Toggle comment in vi cmd mode.
+# Toggle comment at start of line. Alt-; in emacs, # in vi cmd mode.
+bindkey -M emacs '^[;' pound-toggle
 bindkey -M vicmd '#' vi-pound-insert
+
+# Prepend sudo with Alt-s.
+bindkey -M emacs '^[s' prepend-sudo
+bindkey -M viins '^[s' prepend-sudo
 
 #
 # Utility
