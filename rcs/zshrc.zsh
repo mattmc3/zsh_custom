@@ -55,6 +55,7 @@ plugins=(
   ruby
   rust
   #secrets
+  string
   #terminal
   utility
   xdg-apps
