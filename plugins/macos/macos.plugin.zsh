@@ -9,7 +9,17 @@
 # Return if requirements are not met.
 [[ "$OSTYPE" == darwin* ]] || return 1
 
-# Load plugin functions.
-0=${(%):-%N}
-fpath=(${0:a:h}/functions $fpath)
-autoload -Uz ${0:a:h}/functions/*(.:t)
+function cdf() {
+  # Change to the current Finder directory.
+  cd "$(pfd)"
+}
+
+function pushdf() {
+  # Push the current Finder directory to the dirstack.
+  pushd "$(pfd)"
+}
+
+function rmdsstore() {
+  # Remove .DS_Store files recursively in a directory.
+  find "${@:-.}" -type f -name .DS_Store -delete
+}
