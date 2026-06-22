@@ -6,3 +6,4 @@ alias dotfl="cd \$DOTFILES/local"
 alias fdot='cd ${XDG_CONFIG_HOME:-$HOME/.config}/fish'
 alias fconf=fdot
 alias zdot='cd $ZDOTDIR'
+alias zcust='cd ${MY_ZSH_CUSTOM:-$ZSH_CUSTOM}'
