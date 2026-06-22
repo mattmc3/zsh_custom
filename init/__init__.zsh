@@ -11,7 +11,11 @@ export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
-mkdir -p "$XDG_CONFIG_HOME" "$XDG_CACHE_HOME" "$XDG_DATA_HOME" "$XDG_STATE_HOME"
+if [[ -z "$XDG_RUNTIME_DIR" ]]; then
+  export XDG_RUNTIME_DIR="${${TMPDIR%/}:-/tmp}/xdg-runtime-$(id -u)"
+fi
+mkdir -p $XDG_CONFIG_HOME $XDG_CACHE_HOME $XDG_DATA_HOME $XDG_STATE_HOME $XDG_RUNTIME_DIR
+chmod 700 $XDG_RUNTIME_DIR 2>/dev/null
 
 # Run this early so we can P10k instant prompt if we need it.
 if [[ "$ZSH_THEME" == p10k* ]] || [[ "$ZSH_THEME" == powerlevel10k* ]]; then
