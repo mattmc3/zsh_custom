@@ -152,5 +152,18 @@ function up {
   cd $dotdot
 }
 
+##? Fuzzy find a directory
+fdir() {
+  local dir
+  dir=$(fd -t d -H -I "${1:-}" | fzf --query="${1:-}" --select-1 --exit-0) && cd "$dir"
+}
+
+##? Prj: Project jumper
+prj() {
+  local dir
+  : ${XDG_PROJECTS_DIR:="${HOME}/Projects"}
+  dir=$(fd -t d -H -I '^\.git$' "$XDG_PROJECTS_DIR" | sed 's|/\.git/$||' | fzf --query="${1:-}" --select-1 --exit-0) && cd "$dir"
+}
+
 ##? Pass thru for copy/paste markdown
 function $ { $@ }
