@@ -21,3 +21,6 @@ if (( $+functions[zvm_version] )); then
 else
   init_fzf
 fi
+
+# Use fzf for tab completions
+antibody bundle aloxaf/fzf-tab
