@@ -9,7 +9,7 @@
 
 export OTP_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/otp"
 function otp {
-  "$ZSH_CUSTOM/plugins/otp/bin/otp" "$@"
+  "$MY_ZSH_CUSTOM/plugins/otp/bin/otp" "$@"
 }
 
 # Completions

@@ -46,7 +46,7 @@ plugins=(
   magic-enter
   nim
   node
-  #otp
+  otp
   perl
   postgres
   prj
@@ -54,7 +54,6 @@ plugins=(
   #rapid-prompt
   ruby
   rust
-  #secrets
   string
   #terminal
   utility
