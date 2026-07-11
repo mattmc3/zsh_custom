@@ -16,7 +16,8 @@ usage() {
       "  -a, --add <key>     Add a new OTP key" \
       "  -r, --remove <key>  Remove an OTP key" \
       "      --rekey         Re-encrypt all OTP keys to current recipients" \
-      "      --list-pubkeys  List GPG recipient pubkeys"
+      "      --list-pubkeys  List GPG recipient pubkeys" \
+      "      --recipients    Show which recipients each OTP key is encrypted to"
 }
 
 # Check dependencies
@@ -43,6 +44,7 @@ flag_add=0
 flag_remove=0
 flag_rekey=0
 flag_list_pubkeys=0
+flag_recipients=0
 key=""
 
 while [ $# -gt 0 ]; do
@@ -53,6 +55,7 @@ while [ $# -gt 0 ]; do
     -r|--remove)    flag_remove=1 ;;
     --rekey)        flag_rekey=1 ;;
     --list-pubkeys) flag_list_pubkeys=1 ;;
+    --recipients)   flag_recipients=1 ;;
     *)              key="$1" ;;
   esac
   shift
@@ -71,6 +74,22 @@ elif [ "$flag_list_pubkeys" -eq 1 ]; then
     [ -f "$pubkey" ] || continue
     say "$(basename "$pubkey"):"
     gpg --show-keys "$pubkey" 2>/dev/null | sed 's/^/  /'
+  done
+  exit 0
+elif [ "$flag_recipients" -eq 1 ]; then
+  for file in "$OTP_HOME"/*.otp.asc; do
+    [ -f "$file" ] || continue
+    say "$(basename "$file" .otp.asc):"
+    gpg --list-only -v --decrypt "$file" 2>&1 |
+      awk '/public key is/ {print $NF}' |
+      while read -r keyid; do
+        uid=$(gpg --list-keys --with-colons "$keyid" 2>/dev/null | awk -F: '/^uid/ {print $10; exit}')
+        if [ -n "$uid" ]; then
+          say "  $keyid  $uid"
+        else
+          say "  $keyid  (not in keyring)"
+        fi
+      done
   done
   exit 0
 elif [ "$flag_rekey" -eq 1 ]; then
