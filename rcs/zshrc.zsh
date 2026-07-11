@@ -54,6 +54,7 @@ plugins=(
   #rapid-prompt
   ruby
   rust
+  secrets
   string
   #terminal
   utility
