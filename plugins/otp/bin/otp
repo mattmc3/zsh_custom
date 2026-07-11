@@ -73,31 +73,10 @@ elif [ "$flag_list_pubkeys" -eq 1 ]; then
     gpg --show-keys "$pubkey" 2>/dev/null | sed 's/^/  /'
   done
   exit 0
-elif [ -z "$key" ]; then
-  die "otp: Expecting <key> argument. Run 'otp -h' for usage."
-elif [ "$flag_remove" -eq 1 ]; then
-  if [ -z "$key" ]; then
-    die "otp: Please specify a key to remove."
-  fi
-  if [ -f "$OTP_HOME/$key.otp.asc" ]; then
-    rm -f "$OTP_HOME/$key.otp.asc"
-    say "otp: Removed key '$key'."
-    exit 0
-  else
-    die "otp: Key '$key' not found."
-  fi
-elif [ "$flag_add" -eq 1 ]; then
-  say "The 'otp' utility uses gpg to encrypt your OTP key."
-  printf "Enter the OTP secret for '%s': " "$key"
-  stty -echo
-  read -r otp_secret
-  stty echo
-  say
-  rm -f -- "${OTP_HOME:?}/$key.otp.asc"
-  # shellcheck disable=SC2086
-  say "$otp_secret" | gpg $RECIPIENTS --armor --encrypt --output "$OTP_HOME/$key.otp.asc"
-  exit 0
 elif [ "$flag_rekey" -eq 1 ]; then
+  if [ -z "$RECIPIENTS" ]; then
+    die "otp: no recipient pubkeys found in $OTP_HOME/pubkeys."
+  fi
   for file in "$OTP_HOME"/*.otp.asc; do
     [ -f "$file" ] || continue
     totpkey=$(gpg --quiet --decrypt "$file" 2>/dev/null)
@@ -112,6 +91,43 @@ elif [ "$flag_rekey" -eq 1 ]; then
       die "otp: failed to rekey $file"
     fi
   done
+  exit 0
+elif [ -z "$key" ]; then
+  die "otp: Expecting <key> argument. Run 'otp -h' for usage."
+elif [ "$flag_remove" -eq 1 ]; then
+  if [ -z "$key" ]; then
+    die "otp: Please specify a key to remove."
+  fi
+  if [ -f "$OTP_HOME/$key.otp.asc" ]; then
+    rm -f "$OTP_HOME/$key.otp.asc"
+    say "otp: Removed key '$key'."
+    exit 0
+  else
+    die "otp: Key '$key' not found."
+  fi
+elif [ "$flag_add" -eq 1 ]; then
+  if [ -z "$RECIPIENTS" ]; then
+    die "otp: no recipient pubkeys found in $OTP_HOME/pubkeys."
+  fi
+  say "The 'otp' utility uses gpg to encrypt your OTP key."
+  printf "Enter the OTP secret for '%s': " "$key"
+  trap 'stty echo' EXIT INT TERM
+  stty -echo
+  read -r otp_secret
+  stty echo
+  trap - EXIT INT TERM
+  say
+  if [ -z "$otp_secret" ]; then
+    die "otp: no secret entered."
+  fi
+  file="$OTP_HOME/$key.otp.asc"
+  # shellcheck disable=SC2086
+  if say "$otp_secret" | gpg $RECIPIENTS --armor --encrypt --output "$file.new"; then
+    mv -f "$file.new" "$file"
+  else
+    rm -f "$file.new"
+    die "otp: failed to encrypt secret for '$key'."
+  fi
   exit 0
 elif [ ! -f "$OTP_HOME/$key.otp.asc" ]; then
   die "otp: missing key '$key'. Run 'otp --add <key>' to add a new one-time password."
