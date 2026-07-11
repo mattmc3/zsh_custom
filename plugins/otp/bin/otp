@@ -9,18 +9,14 @@ warn() { say "$@" >&2; }
 OTP_HOME="${OTP_HOME:-${XDG_DATA_HOME:-$HOME/.local/share}/otp}"
 [ -d "$OTP_HOME" ] || mkdir -p "$OTP_HOME"
 
-# Set GPG home directory
-if [ -z "$GPG_HOME" ]; then
-  GPG_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/gnupg"
-fi
-
 usage() {
-  say "usage: otp [-h|--help] [-l|--list] [-a|--add] [-r|--remove] [--rekey] <key>" \
-      "  -h, --help         Show help" \
-      "  -l, --list         List keys" \
-      "  -a, --add <key>    Add a new OTP key" \
-      "  -r, --remove <key> Remove an OTP key" \
-      "      --rekey        Re-encrypt all OTP keys to current recipients"
+  say "usage: otp [-h|--help] [-l|--list] [-a|--add] [-r|--remove] [--rekey] [--list-pubkeys] <key>" \
+      "  -h, --help          Show help" \
+      "  -l, --list          List OTP keys" \
+      "  -a, --add <key>     Add a new OTP key" \
+      "  -r, --remove <key>  Remove an OTP key" \
+      "      --rekey         Re-encrypt all OTP keys to current recipients" \
+      "      --list-pubkeys  List GPG recipient pubkeys"
 }
 
 # Check dependencies
@@ -36,7 +32,7 @@ fi
 RECIPIENTS=""
 for pubkey in "$OTP_HOME"/pubkeys/*.asc; do
   [ -f "$pubkey" ] || continue
-  keyid=$(gpg --homedir "$GPG_HOME" --show-keys --with-colons "$pubkey" 2>/dev/null | awk -F: '/^pub/ {print $5}')
+  keyid=$(gpg --show-keys --with-colons "$pubkey" 2>/dev/null | awk -F: '/^pub/ {print $5}')
   [ -n "$keyid" ] && RECIPIENTS="$RECIPIENTS --recipient $keyid"
 done
 
@@ -46,16 +42,18 @@ flag_list=0
 flag_add=0
 flag_remove=0
 flag_rekey=0
+flag_list_pubkeys=0
 key=""
 
 while [ $# -gt 0 ]; do
   case "$1" in
-    -h|--help)   flag_help=1 ;;
-    -l|--list)   flag_list=1 ;;
-    -a|--add)    flag_add=1 ;;
-    -r|--remove) flag_remove=1 ;;
-    --rekey)     flag_rekey=1 ;;
-    *)           key="$1" ;;
+    -h|--help)      flag_help=1 ;;
+    -l|--list)      flag_list=1 ;;
+    -a|--add)       flag_add=1 ;;
+    -r|--remove)    flag_remove=1 ;;
+    --rekey)        flag_rekey=1 ;;
+    --list-pubkeys) flag_list_pubkeys=1 ;;
+    *)              key="$1" ;;
   esac
   shift
 done
@@ -66,6 +64,13 @@ if [ "$flag_help" -eq 1 ]; then
 elif [ "$flag_list" -eq 1 ]; then
   for file in "$OTP_HOME"/*.otp.asc; do
     [ -f "$file" ] && basename "$file" .otp.asc
+  done
+  exit 0
+elif [ "$flag_list_pubkeys" -eq 1 ]; then
+  for pubkey in "$OTP_HOME"/pubkeys/*.asc; do
+    [ -f "$pubkey" ] || continue
+    say "$(basename "$pubkey"):"
+    gpg --show-keys "$pubkey" 2>/dev/null | sed 's/^/  /'
   done
   exit 0
 elif [ -z "$key" ]; then
@@ -90,17 +95,17 @@ elif [ "$flag_add" -eq 1 ]; then
   say
   rm -f -- "${OTP_HOME:?}/$key.otp.asc"
   # shellcheck disable=SC2086
-  say "$otp_secret" | gpg --homedir "$GPG_HOME" $RECIPIENTS --armor --encrypt --output "$OTP_HOME/$key.otp.asc"
+  say "$otp_secret" | gpg $RECIPIENTS --armor --encrypt --output "$OTP_HOME/$key.otp.asc"
   exit 0
 elif [ "$flag_rekey" -eq 1 ]; then
   for file in "$OTP_HOME"/*.otp.asc; do
     [ -f "$file" ] || continue
-    totpkey=$(gpg --homedir "$GPG_HOME" --quiet --decrypt "$file" 2>/dev/null)
+    totpkey=$(gpg --quiet --decrypt "$file" 2>/dev/null)
     if [ -z "$totpkey" ]; then
       die "otp: failed to decrypt $file"
     fi
     # shellcheck disable=SC2086
-    if say "$totpkey" | gpg --homedir "$GPG_HOME" $RECIPIENTS --armor --encrypt --output "$file.new"; then
+    if say "$totpkey" | gpg $RECIPIENTS --armor --encrypt --output "$file.new"; then
       mv -f "$file.new" "$file"
     else
       rm -f "$file.new"
@@ -111,7 +116,7 @@ elif [ "$flag_rekey" -eq 1 ]; then
 elif [ ! -f "$OTP_HOME/$key.otp.asc" ]; then
   die "otp: missing key '$key'. Run 'otp --add <key>' to add a new one-time password."
 else
-  totpkey=$(gpg --homedir "$GPG_HOME" --quiet --decrypt "$OTP_HOME/$key.otp.asc" 2>/dev/null)
+  totpkey=$(gpg --quiet --decrypt "$OTP_HOME/$key.otp.asc" 2>/dev/null)
   if [ -z "$totpkey" ]; then
     die "No OTP value or failed to decrypt key: $key"
   fi

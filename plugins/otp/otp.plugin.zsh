@@ -21,6 +21,7 @@ function __otp_keys {
     -a --add
     -r --remove
     --rekey
+    --list-pubkeys
   )
   local keys
   keys=($(find $OTP_HOME/ -name '*.otp.asc' | xargs -n1 basename | sed 's/\.otp\.asc$//'))
