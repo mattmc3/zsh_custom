@@ -38,3 +38,7 @@ compdef _git_with_dash_fix git gitk
 
 # Functions
 autoload-dir ${0:a:h}/functions
+
+if [ -e $ZSH/pluginst/git/git.plugin.zsh ]; then
+  source $ZSH/pluginst/git/git.plugin.zsh
+fi
