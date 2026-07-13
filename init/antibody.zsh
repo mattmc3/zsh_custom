@@ -12,5 +12,3 @@ if ! (( $+commands[antibody] )); then
   return 1
 fi
 source <(antibody init)
-
-OMZ_SHA=e7aa0c56e68348afefdd6af4c5bdb314a2bd6640

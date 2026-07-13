@@ -1,5 +1,5 @@
 #
-# __init__: Source this to init everything
+# __init__: Init stuff that needs to run first
 #
 
 # Initialize

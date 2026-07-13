@@ -9,4 +9,6 @@ MY_ZSH_CUSTOM=${0:A:h:h}
 source $MY_ZSH_CUSTOM/init/antibody.zsh
 source $MY_ZSH_CUSTOM/init/functions.zsh
 source $MY_ZSH_CUSTOM/init/hooks.zsh
+
+# Load OMZ's bzr now.
 source $ZSH/lib/bzr.zsh
