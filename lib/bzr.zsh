@@ -6,20 +6,7 @@
 MY_ZSH_CUSTOM=${0:A:h:h}
 
 # Initialize
-for _zinit in $MY_ZSH_CUSTOM/init/*.zsh(N); do
-  source $_zinit
-done
-unset _zinit
-
+source $MY_ZSH_CUSTOM/init/antibody.zsh
+source $MY_ZSH_CUSTOM/init/functions.zsh
+source $MY_ZSH_CUSTOM/init/hooks.zsh
 source $ZSH/lib/bzr.zsh
-
-function autoload-dir {
-  local zdir
-  local -a zautoloads
-  for zdir in "$@"; do
-    [[ -d "$zdir" ]] || continue
-    fpath=("$zdir" $fpath)
-    zautoloads=($zdir/*~_*(N.:t))
-    (( $#zautoloads > 0 )) && autoload -Uz $zautoloads
-  done
-}
