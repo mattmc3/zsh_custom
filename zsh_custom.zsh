@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 0=${(%):-%N}
-MY_ZSH_CUSTOM=${0:a:h}
+MY_ZSH_CUSTOM=${0:A:h}
 
 zmodload zsh/datetime
 setopt EXTENDED_GLOB INTERACTIVE_COMMENTS
