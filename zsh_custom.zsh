@@ -3,6 +3,9 @@
 0=${(%):-%N}
 MY_ZSH_CUSTOM=${0:A:h}
 
+# Don't run this in Oh-My-Zsh
+(( ! $+functions[omz] )) || return 0
+
 zmodload zsh/datetime
 setopt EXTENDED_GLOB INTERACTIVE_COMMENTS
 
