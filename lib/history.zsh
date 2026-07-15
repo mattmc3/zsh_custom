@@ -7,9 +7,7 @@ if [[ -e "${ZSH:-?}"/lib/history.zsh ]]; then
 fi
 
 # Fix bad Oh-My-Zsh defaults
-if [[ ${FIX_OMZ:-0} -eq 1 ]]; then
-  HISTFILE="${XDG_DATA_HOME:-$HOME/.local/share}"/zsh/zsh_history
-  [[ -d "${HISTFILE:h}" ]] || mkdir -p "${HISTFILE:h}"
-  [[ "$SAVEHIST" -gt 100000 ]] || SAVEHIST=100000
-  [[ "$HISTSIZE" -gt 50000 ]]  || HISTSIZE=50000
-fi
+HISTFILE="${XDG_DATA_HOME:-$HOME/.local/share}"/zsh/zsh_history
+[[ -d "${HISTFILE:h}" ]] || mkdir -p "${HISTFILE:h}"
+[[ "$SAVEHIST" -gt 100000 ]] || SAVEHIST=100000
+[[ "$HISTSIZE" -gt 50000 ]]  || HISTSIZE=50000
