@@ -1,9 +1,13 @@
+#!/bin/zsh
 # Enable Powerlevel10k instant prompt. Should stay close to the top of .zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
+
+# Zsh vars
+typeset -gaU path fpath
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
@@ -141,13 +145,24 @@ plugins=(
   zdharma-continuum/fast-syntax-highlighting
 )
 
+# OMZ PLUS! gives us some important OMZ goodies.
 export OMZ_PLUS=${ZDOTDIR:-$HOME}/omz-plus
 [ -d "$OMZ_PLUS" ] || git clone https://github.com/mattmc3/omz-plus $OMZ_PLUS
 source $OMZ_PLUS/omz-plus.sh
 
+# Load Oh-My-Zsh
 source $ZSH/oh-my-zsh.sh
 
+########################################################################################
 # User configuration
+prepath=(~/bin(N) ~/.local/bin(N))
+path=($prepath $path)
+
+# Fix bad Oh-My-Zsh history defaults
+HISTFILE="${XDG_DATA_HOME:-$HOME/.local/share}"/zsh/zsh_history
+[[ -d "${HISTFILE:h}" ]] || mkdir -p "${HISTFILE:h}"
+[[ "$SAVEHIST" -gt 100000 ]] || SAVEHIST=100000
+[[ "$HISTSIZE" -gt 50000 ]]  || HISTSIZE=50000
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -176,5 +191,5 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-# To customize prompt, run `p10k configure` or edit ~/.zsh/.p10k.zsh.
-[[ ! -f ~/.zsh/.p10k.zsh ]] || source ~/.zsh/.p10k.zsh
+# To customize prompt, run `p10k configure` or edit ${ZDOTDIR:-$HOME}/.p10k.zsh.
+[[ ! -f ${ZDOTDIR:-$HOME}/.p10k.zsh ]] || source ${ZDOTDIR:-$HOME}/.p10k.zsh
