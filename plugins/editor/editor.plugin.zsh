@@ -211,10 +211,10 @@ fi
 #
 
 # vi layout
-[[ "${ZSH_BINDKEY:-}" == vi ]] && antibody bundle jeffreytse/zsh-vi-mode
+[[ "${ZSH_BINDKEY:-}" == vi ]] && antidote bundle jeffreytse/zsh-vi-mode
 
 # disable PS2
-antibody bundle romkatv/zsh-no-ps2
+antidote bundle romkatv/zsh-no-ps2
 
 #
 # Clean up

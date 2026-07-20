@@ -2,7 +2,7 @@
 # history-substring-search: Fish-like history search
 #
 
-antibody bundle zsh-users/zsh-history-substring-search
+antidote bundle zsh-users/zsh-history-substring-search
 
 # Add keybinds
 zmodload zsh/terminfo

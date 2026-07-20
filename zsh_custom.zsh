@@ -23,8 +23,8 @@ done
 
 # Make sure oh-my-zsh plugins are available
 : ${OMZ_SHA:=e7aa0c56e68348afefdd6af4c5bdb314a2bd6640}
-antibody bundle ohmyzsh/ohmyzsh kind:clone pin:$OMZ_SHA
-[[ -n "$ZSH" ]] || ZSH=$(antibody path ohmyzsh/ohmyzsh)
+antidote bundle ohmyzsh/ohmyzsh kind:clone pin:$OMZ_SHA
+[[ -n "$ZSH" ]] || ZSH=$(antidote path ohmyzsh/ohmyzsh)
 
 # Load plugins
 #local _zplugin _zplugin_name _zplugin_init loaded _zstart_ts
@@ -34,7 +34,7 @@ for _zplugin in $plugins; do
   _zloaded=no
 
   if [[ "$_zplugin" == */* ]]; then
-    antibody bundle $_zplugin && _zloaded=yes
+    antidote bundle $_zplugin && _zloaded=yes
   else
     if [[ -d "$MY_ZSH_CUSTOM/plugins/${_zplugin_name}" ]]; then
       _zplugin_init=$MY_ZSH_CUSTOM/plugins/${_zplugin_name}/${_zplugin_name}.plugin.zsh

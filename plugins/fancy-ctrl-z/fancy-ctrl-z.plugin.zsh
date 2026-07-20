@@ -4,7 +4,7 @@
 
 # https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/fancy-ctrl-z/fancy-ctrl-z.plugin.zsh
 # https://sheerun.net/2014/03/21/how-to-boost-your-vim-productivity/
-# antibody bundle ohmyzsh/ohmyzsh path:plugins/fancy-ctrl-z pin:${OMZ_SHA}
+# antidote bundle ohmyzsh/ohmyzsh path:plugins/fancy-ctrl-z pin:${OMZ_SHA}
 function fancy-ctrl-z {
   if [[ $#BUFFER -eq 0 ]]; then
     BUFFER="fg"

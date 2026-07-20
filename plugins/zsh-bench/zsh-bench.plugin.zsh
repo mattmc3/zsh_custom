@@ -1,1 +1,1 @@
-antibody bundle romkatv/zsh-bench kind:path
+antidote bundle romkatv/zsh-bench kind:path

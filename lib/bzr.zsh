@@ -6,7 +6,7 @@
 MY_ZSH_CUSTOM=${0:A:h:h}
 
 # Initialize
-source $MY_ZSH_CUSTOM/init/antibody.zsh
+source $MY_ZSH_CUSTOM/init/antidote.zsh
 source $MY_ZSH_CUSTOM/init/functions.zsh
 source $MY_ZSH_CUSTOM/init/hooks.zsh
 

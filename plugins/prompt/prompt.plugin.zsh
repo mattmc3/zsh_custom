@@ -18,8 +18,8 @@ case ${_zsh_theme[1]} in
     prompt_p10k_setup "${_zsh_theme[@][2,-1]}"
     ;;
   *)
-    antibody bundle romkatv/powerlevel10k kind:clone
-    antibody bundle sindresorhus/pure kind:fpath
+    antidote bundle romkatv/powerlevel10k kind:clone
+    antidote bundle sindresorhus/pure kind:fpath
 
     autoload -Uz promptinit && promptinit
     if (( $#_zsh_theme )); then
