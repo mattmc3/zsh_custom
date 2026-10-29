@@ -1,0 +1,4 @@
+# old: ~/.npmrc
+export NPM_CONFIG_USERCONFIG=${NPM_CONFIG_USERCONFIG:-$XDG_CONFIG_HOME/npm/npmrc}
+# old: ~/.npm
+export NPM_CONFIG_CACHE=${NPM_CONFIG_CACHE:-$XDG_CACHE_HOME/npm}

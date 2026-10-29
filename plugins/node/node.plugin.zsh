@@ -2,6 +2,4 @@
 # node
 #
 
-path+=(
-  /{opt/homebrew,usr/local}/share/npm/bin(N)
-)
+path+=($HOMEBREW_PREFIX/share/npm/bin(N))

@@ -1,0 +1,35 @@
+#!/usr/bin/env zsh
+
+##? clone - clone a git repo
+if [[ -z "$1" ]]; then
+  echo "What git repo do you want?" >&2
+  return 1
+fi
+local user repo
+if [[ "$1" = */* ]]; then
+  user=${1%/*}
+  repo=${1##*/}
+else
+  user=$(git config --get zsh-clone.user)
+  if [[ -z "$user" ]]; then
+    print -ru2 "clone: Missing git config zsh-clone.user."
+    print -ru2 "Add it with:"
+    print -ru2 "  git config --global zsh-clone.user <user>"
+    print -ru2 "  git config --global zsh-clone.url github.com"
+    return 1
+  fi
+  repo=$1
+fi
+
+local giturl
+giturl=$(git config --get zsh-clone.url)
+giturl=${giturl:-github.com}
+local dest=${XDG_PROJECTS_HOME:-~/Projects}/$user/$repo
+
+if [[ ! -d $dest ]]; then
+  git clone --recurse-submodules "git@${giturl}:${user}/${repo}.git" "$dest"
+else
+  echo "No need to clone, that directory already exists."
+  echo "Taking you there."
+fi
+cd $dest

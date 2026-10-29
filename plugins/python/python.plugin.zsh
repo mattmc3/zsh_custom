@@ -1,17 +1,10 @@
 #
-# python - Aliases and functions for python
+# Python aliases and functions
 #
 
-# workon
-export WORKON_HOME="${WORKON_HOME:-${XDG_DATA_HOME:-$HOME/.local/share}/venvs}"
-export IPYTHONDIR="${IPYTHONDIR:-${XDG_CONFIG_HOME:-$HOME/.config}/ipython}"
-export MPLCONFIGDIR="${MPLCONFIGDIR:-${XDG_CONFIG_HOME:-$HOME/.config}/matplotlib}"
-
-# python aliases
 alias py3='python3'
 alias py='python'
 alias pip3update="pip3 list --outdated | cut -d ' ' -f1 | xargs -n1 pip3 install -U"
-alias pipup="pip list --outdated | cut -d ' ' -f1 | xargs -n1 pip install -U"
 alias pyfind='find . -name "*.py"'
 alias pygrep='grep --include="*.py"'
 alias pyva="source .venv/bin/activate"
@@ -39,7 +32,6 @@ function venv {
     "       venv [-h|--help] [-l|--list]"
   )
 
-  # Parse arguments
   while (( $# )); do
     case $1 in
       --)
@@ -79,7 +71,6 @@ function venv {
 
   [[ -d "$workon_home" ]] || mkdir -p "$workon_home"
 
-  # --list
   if (( $#o_list )); then
     local venv
     for venv in $workon_home/*(-/FN); do
@@ -88,13 +79,11 @@ function venv {
     return
   fi
 
-  # Expecting <pyvenv>
   if (( $# == 0 )); then
     echo >&2 "usage: venv <pyvenv>"
     return 1
   fi
 
-  # --path
   if (( $#o_path )); then
     if [[ ! -d "$workon_home/$1" ]]; then
       echo >&2 "venv: venv not found '$1'."
@@ -104,7 +93,6 @@ function venv {
     return
   fi
 
-  # --remove
   if (( $#o_remove )); then
     if [[ ! -d "$workon_home/$1" ]]; then
       echo >&2 "venv: venv not found '$1'."
@@ -114,7 +102,6 @@ function venv {
     return
   fi
 
-  # Make venv if missing and activate
   if [[ ! -d "$workon_home/$1" ]]; then
     python3 -m venv "$workon_home/$1" || return 1
   fi
@@ -123,4 +110,29 @@ function venv {
 
 function workon {
   venv -- "$@"
+}
+
+# Jupyter
+function juno {
+  local workon_home="${WORKON_HOME:-$XDG_DATA_HOME/venvs}"
+  [[ -d "$workon_home" ]] || mkdir -p "$workon_home"
+
+  if [[ ! -d "$workon_home/juno" ]]; then
+    if (( $+commands[workon] )); then
+      workon juno
+    else
+      python3 -m venv "$workon_home/juno" || return 1
+      source "$workon_home/juno/bin/activate"
+    fi
+    pip install --upgrade pip
+    pip install jupyterlab pandas
+    deactivate
+  fi
+
+  local jupyter_prj=$XDG_PROJECTS_DIR/mattmc3/jupyter
+  if [[ ! -d $jupyter_prj ]]; then
+    git clone git@github.com:mattmc3/jupyter "$jupyter_prj"
+  fi
+
+  jupyter lab "${1:-$jupyter_prj}"
 }

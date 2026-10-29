@@ -1,5 +1,4 @@
 # lib
 
-The lib folder is an Oh-My-Zsh convetion. In order to allow you to use this project
-with OMZ, we include it. But it's only loaded when this is used with OMZ. Otherwise,
-use init.
+The lib folder is an Oh-My-Zsh convention. OMZ loads a custom lib file in place of
+the stock lib file with the same name. bzr.zsh uses that to run `__init__.zsh` early.

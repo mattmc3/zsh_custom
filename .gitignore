@@ -6,3 +6,5 @@ ohmyzsh/
 *.zwc
 *.zwc.old
 .zsh_history
+*.local
+*.local.zsh

@@ -1,120 +1,51 @@
 #
-# editor: Setup Zsh line editor behavior.
+# editor: Line editor behavior OMZ doesn't have.
 #
 
-# Return if requirements are not met.
 [[ "$TERM" != 'dumb' ]] || return 1
 
-#
-# Options
-#
-
-# Set Zsh editor options.
-setopt NO_beep                 # Do not beep on error in line editor.
-setopt NO_flow_control         # Allow the usage of ^Q/^S in the context of zsh.
-
-#
-# Variables
-#
-
 # Treat these characters as part of a word.
-[[ -n "$WORDCHARS" ]] || WORDCHARS='*?_-.[]~&;!#$%^(){}<>'
+WORDCHARS='*?_-.[]~&;!#$%^(){}<>'
 
-# Use human-friendly identifiers.
-zmodload zsh/terminfo
-typeset -gA key_info
+# True when $1 is a command ready to run. Compiling it as a function body is
+# the test, so there is no subshell and nothing runs.
+function command-is-complete {
+  setopt local_options no_err_return no_err_exit
+  local f=-editor-command-test
 
-# Modifiers
-key_info=(
-  'Control' '\C-'
-  'Escape'  '\e'
-  'Meta'    '\M-'
-)
+  # An odd number of trailing backslashes continues the line.
+  (( ${#${1##*[^\\]}} % 2 )) && return 1
 
-# Basic keys
-key_info+=(
-  'Backspace' "^?"
-  'Delete'    "^[[3~"
-  'F1'        "$terminfo[kf1]"
-  'F2'        "$terminfo[kf2]"
-  'F3'        "$terminfo[kf3]"
-  'F4'        "$terminfo[kf4]"
-  'F5'        "$terminfo[kf5]"
-  'F6'        "$terminfo[kf6]"
-  'F7'        "$terminfo[kf7]"
-  'F8'        "$terminfo[kf8]"
-  'F9'        "$terminfo[kf9]"
-  'F10'       "$terminfo[kf10]"
-  'F11'       "$terminfo[kf11]"
-  'F12'       "$terminfo[kf12]"
-  'Insert'    "$terminfo[kich1]"
-  'Home'      "$terminfo[khome]"
-  'PageUp'    "$terminfo[kpp]"
-  'End'       "$terminfo[kend]"
-  'PageDown'  "$terminfo[knp]"
-  'Up'        "$terminfo[kcuu1]"
-  'Left'      "$terminfo[kcub1]"
-  'Down'      "$terminfo[kcud1]"
-  'Right'     "$terminfo[kcuf1]"
-  'BackTab'   "$terminfo[kcbt]"
-)
+  unfunction -- $f 2>/dev/null
+  functions[$f]="$1" 2>/dev/null || return 1
+  [[ -v functions[$f] ]]         || return 1
+  unfunction -- $f
 
-# Mod plus another key
-key_info+=(
-  'AltLeft'         "${key_info[Escape]}${key_info[Left]} \e[1;3D"
-  'AltRight'        "${key_info[Escape]}${key_info[Right]} \e[1;3C"
-  'ControlLeft'     '\e[1;5D \e[5D \e\e[D \eOd'
-  'ControlRight'    '\e[1;5C \e[5C \e\e[C \eOc'
-  'ControlPageUp'   '\e[5;5~'
-  'ControlPageDown' '\e[6;5~'
-)
-
-#
-# Functions
-#
-
-# Runs bindkey but for all of the keymaps. Running it with no arguments will
-# print out the mappings for all of the keymaps.
-function bindkey-all {
-  local keymap=''
-  for keymap in $(bindkey -l); do
-    [[ "$#" -eq 0 ]] && printf "#### %s\n" "${keymap}" 1>&2
-    bindkey -M "${keymap}" "$@"
-  done
+  # `for x` and `cat <<END` are legal function bodies but unfinished commands.
+  # If do/done finishes them, the command was waiting for more.
+  functions[$f]="$1"$'\ndo\ndone' 2>/dev/null || return 0
+  [[ -v functions[$f] ]]                      || return 0
+  unfunction -- $f
+  return 1
 }
 
-# Expands .... to ../..
-function dot-expansion {
-  if [[ $LBUFFER = *.. ]]; then
-    LBUFFER+='/..'
+# Enter runs a finished command and opens a new line in an unfinished one, so a
+# multi-line command is edited in one buffer rather than at a PS2 prompt.
+function accept-line-or-newline {
+  if command-is-complete "$PREBUFFER$BUFFER"; then
+    zle accept-line
   else
-    LBUFFER+='.'
+    # self-insert-unmeta so zsh-autosuggestions sees the keypress.
+    zle self-insert-unmeta
   fi
 }
-zle -N dot-expansion
+zle -N accept-line-or-newline
 
-# Inserts 'sudo ' at the beginning of the line.
-function prepend-sudo {
-  if [[ "$BUFFER" != su(do|)\ * ]]; then
-    BUFFER="sudo $BUFFER"
-    (( CURSOR += 5 ))
-  fi
-}
-zle -N prepend-sudo
-
-# Toggle the comment character at the start of the line. This is meant to work
-# around a buggy implementation of pound-insert in zsh.
-#
-# This is currently only used for the emacs keys because vi-pound-insert has
-# been reported to work properly.
+# Toggle a leading '#' on the current line. Workaround for buggy pound-insert
+# in emacs mode; vi mode uses the built-in vi-pound-insert.
 function pound-toggle {
   if [[ "$BUFFER" = '#'* ]]; then
-    # Because of an oddity in how zsh handles the cursor when the buffer size
-    # changes, we need to make this check before we modify the buffer and let
-    # zsh handle moving the cursor back if it's past the end of the line.
-    if [[ $CURSOR != $#BUFFER ]]; then
-      (( CURSOR -= 1 ))
-    fi
+    [[ $CURSOR != $#BUFFER ]] && (( CURSOR -= 1 ))
     BUFFER="${BUFFER:1}"
   else
     BUFFER="#$BUFFER"
@@ -123,102 +54,17 @@ function pound-toggle {
 }
 zle -N pound-toggle
 
-#
-# Keybinds
-#
-
-# Global keybinds
-typeset -A _zglobal_keybinds=(
-  "$key_info[Home]"   beginning-of-line
-  "$key_info[End]"    end-of-line
-  "$key_info[Delete]" delete-char
-)
-
-# emacs and vi insert mode keybinds
-typeset -A _zviins_keybinds=(
-  "$key_info[Backspace]" backward-delete-char
-  "$key_info[Control]W"  backward-kill-word
-)
-
-# vi command mode keybinds
-typeset -A _zvicmd_keybinds=(
-  "$key_info[Delete]" delete-char
-)
-
-# Word navigation — Ctrl/Alt + Left/Right each have multiple escape sequences.
-for _zkey_name _zdir in \
-  ControlLeft  backward-word \
-  AltLeft      backward-word \
-  ControlRight forward-word  \
-  AltRight     forward-word
-do
-  for _zkey in "${(s: :)key_info[$_zkey_name]}"; do
-    bindkey -M emacs "$_zkey" emacs-$_zdir
-    bindkey -M viins "$_zkey" vi-$_zdir
-    bindkey -M vicmd "$_zkey" vi-$_zdir
-  done
+for _editor_keymap in emacs viins; do
+  bindkey -M $_editor_keymap '^M' accept-line-or-newline
+  bindkey -M $_editor_keymap '^J' accept-line-or-newline
 done
+unset _editor_keymap
 
-# Bind global + insert keys to emacs and viins; global + vicmd keys to vicmd.
-for _zkeymap in emacs viins; do
-  for _zkey _zbind in ${(kv)_zglobal_keybinds} ${(kv)_zviins_keybinds}; do
-    bindkey -M "$_zkeymap" "$_zkey" "$_zbind"
-  done
-done
-for _zkey _zbind in ${(kv)_zglobal_keybinds} ${(kv)_zvicmd_keybinds}; do
-  bindkey -M vicmd "$_zkey" "$_zbind"
-done
+bindkey -M emacs '^[;' pound-toggle
+bindkey -M vicmd '#' vi-pound-insert
 
-# Toggle comment at the start of the line. Note that we use pound-toggle for emacs
-# mode, which is similar to pound insert, but meant to work around some bugs.
-bindkey -M emacs "$key_info[Escape];" pound-toggle
-bindkey -M vicmd "#" vi-pound-insert
-
-# Optional keybindings for emacs and viins keymaps
-typeset -A _zopt_in_keybinds _zopt_out_keybinds
-_zopt_in_keybinds=(
-  dot-expansion "."
-)
-_zopt_out_keybinds=(
-  prepend-sudo     '^X^S'
-)
-
-# Opt-in features (disabled by default)
-for _zfeature _zkey in ${(kv)_zopt_in_keybinds}; do
-  if zstyle -t ':zsh_custom:plugin:editor' "$_zfeature"; then
-    for _zkeymap in 'emacs' 'viins'; do
-      bindkey -M "$_zkeymap" "$_zkey" "$_zfeature"
-    done
-  fi
-done
-
-# Opt-out features (enabled by default)
-for _zfeature _zkey in ${(kv)_zopt_out_keybinds}; do
-  if zstyle -T ':zsh_custom:plugin:editor' "$_zfeature"; then
-    for _zkeymap in 'emacs' 'viins'; do
-      bindkey -M "$_zkeymap" "$_zkey" "$_zfeature"
-    done
-  fi
-done
-
-# Do not expand .... to ../.. during incremental search.
-if zstyle -t ':zsh_custom:plugin:editor' dot-expansion; then
-  bindkey -M isearch . self-insert 2> /dev/null
+# Alt-s prepends sudo, on top of the sudo plugin's Esc-Esc.
+if (( $+widgets[sudo-command-line] )); then
+  bindkey -M emacs '^[s' sudo-command-line
+  bindkey -M viins '^[s' sudo-command-line
 fi
-
-#
-# Plugins
-#
-
-# vi layout
-[[ "${ZSH_BINDKEY:-}" == vi ]] && plugin bundle jeffreytse/zsh-vi-mode
-
-# disable PS2
-plugin bundle romkatv/zsh-no-ps2
-
-#
-# Clean up
-#
-
-unset _z{bind,key,keymap,feature}
-unset _z{opt_in,opt_out}_keybinds _z{vicmd,viins,global}_keybinds

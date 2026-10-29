@@ -1,85 +1,109 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 #
 # .zshrc - Zsh file loaded on interactive shell sessions.
 #
 
-# Setup profiling.
+# Profiling
 [[ "$ZPROFRC" -ne 1 ]] || zmodload zsh/zprof
 alias zprofrc="ZPROFRC=1 zsh"
 
-0=${(%):-%N}
-MY_ZSH_CUSTOM=${0:A:h:h}
+# Path to your Oh My Zsh installation.
+export ZSH="$ZDOTDIR/ohmyzsh"
+ZSH_THEME="starship"
 
-# Set variables
-ZSH_THEME="p10k mmc"
-#ZSH_THEME="pure"
+# Keep caches out of $ZDOTDIR.
+ZSH_CACHE_DIR=${XDG_CACHE_HOME:-$HOME/.cache}/zsh
+ZSH_COMPDUMP=$ZSH_CACHE_DIR/zcompdump-omz-$ZSH_VERSION
 
-# Add plugins
+# Plugins read their zstyles when they load.
+source $ZDOTDIR/custom/rcs/zstyles.zsh
+
+# Completions must be on fpath before OMZ runs compinit.
+fpath=($HOMEBREW_PREFIX/share/zsh/site-functions(N/) $fpath)
+
+# Symlink my custom plugins, themes, and lib files into $ZSH_CUSTOM.
+zsh_custom=($ZDOTDIR/custom)
+
 plugins=(
-  # regular
-  azure
+  # First, so the prompt draws before everything else loads.
+  starship-ftl
+
+  # Stock
+  colored-man-pages
+  dirhistory
+  direnv
+  gitignore
+  sudo
+  zoxide
+
+  # Custom. use-xdg-basedirs first: later plugins read CARGO_HOME, GOPATH, etc.
+  # myfunctions next: later plugins call cached-eval.
+  use-xdg-basedirs
+  myfunctions
+  myaliases
+  brew
   carapace
   clipboard
-  common-aliases
-  common-functions
-  completions
-  compstyle
-  #confd
-  direnv
-  dotfiles
-  dotnet
-  editor
-  emacs
-  extract
-  fancy-ctrl-z
-  fzf
   git
   git-cmds
-  globalias
+  histdb
+  prj
+  #wezterm
+  zsh-bench
+  zshrinkwrap
+
+  # Languages and dev tools
+  dotnet
+  emacs
   golang
-  history-aux
-  homebrew
-  iwd
   java
-  jupyter
-  macos
-  magic-enter
   nim
   node
-  otp
   perl
   postgres
-  prj
   python
-  #rapid-prompt
   ruby
   rust
-  secrets
-  string
-  #terminal
-  utility
-  xdg-apps
-  #zfunctions
-  zoxide
-  zsh-bench
 
-  # final
-  prompt
+  # Git repos via OMZ PLUS!
   mattmc3/zman
-  autosuggestions
+  zsh-users/zsh-completions
+
+  # fzf after fzf-tab, so fzf's ** completion falls back to fzf-tab.
+  aloxaf/fzf-tab
+  fzf
+
+  # globalias and magic-enter wrap accept-line; editor binds Enter.
+  globalias
+  magic-enter
+  editor
   history-substring-search
-  zdharma-continuum/fast-syntax-highlighting
+
+  # Last, since these wrap widgets.
+  zsh-patina
+  zsh-autosuggestions
 )
 
-# use zsh_custom
-source $MY_ZSH_CUSTOM/zsh_custom.zsh
+# Local settings, before OMZ loads so they can add plugins (eg: work ones).
+[[ -r $ZDOTDIR/.zshrc.local ]] \
+ && . $ZDOTDIR/.zshrc.local
 
-# Never start an interactive session in the root file system.
+# OMZ PLUS! gives us git-hosted plugins and multiple custom dirs.
+export OMZ_PLUS=${ZDOTDIR:-$HOME}/omz-plus
+[ -d "$OMZ_PLUS" ] || git clone git@github.com:mattmc3/omz-plus $OMZ_PLUS
+source $OMZ_PLUS/omz-plus.sh
+
+# OMZ only adds a plugin's own dir to fpath, and zsh-completions keeps its in src.
+fpath+=($ZSH/custom/plugins/zsh-completions/src(N/))
+
+source $ZSH/oh-my-zsh.sh
+
+# Never start in the root file system.
 [[ "$PWD" != "/" ]] || cd
 
 # Finish profiling by calling zprof.
 [[ "$ZPROFRC" -eq 1 ]] && zprof
-unset ZPROFRC
+[[ -v ZPROFRC ]] && unset ZPROFRC
 
-# Always return success.
+# Always return success
 true

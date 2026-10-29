@@ -27,16 +27,28 @@ globalias-space() {
 }
 zle -N globalias-space
 
-globalias-accept() {
-  _globalias_expand_word
-  zle accept-line
-}
-zle -N globalias-accept
+# Wrap the accept-line widget rather than binding Enter, so other Enter
+# features (magic-enter, accept-line-or-newline) chain instead of clobbering.
+if (( ! $+functions[_globalias_accept-line] )); then
+  case "$widgets[accept-line]" in
+    user:*)
+      zle -N _globalias_orig_accept-line "${widgets[accept-line]#user:}"
+      _globalias_accept-line() {
+        _globalias_expand_word
+        zle _globalias_orig_accept-line -- "$@"
+      } ;;
+    builtin)
+      _globalias_accept-line() {
+        _globalias_expand_word
+        zle .accept-line
+      } ;;
+  esac
+  zle -N accept-line _globalias_accept-line
+fi
 
 for _ga_keymap in emacs viins; do
   bindkey -M "$_ga_keymap" ' '  globalias-space
   bindkey -M "$_ga_keymap" '\e ' magic-space
-  bindkey -M "$_ga_keymap" '^M' globalias-accept
 done
 bindkey -M isearch ' ' magic-space
 unset _ga_keymap

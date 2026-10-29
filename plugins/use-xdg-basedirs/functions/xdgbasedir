@@ -1,0 +1,80 @@
+#!/bin/zsh
+#
+# xdgbasedir - report what use-xdg-basedirs has turned on, what is safe to turn
+# on, and what would shadow files still sitting in the home directory.
+#
+# App files are plain exports. The old location of each variable is recorded
+# next to it as a "# old:" comment, and everything below is derived from that.
+#
+
+emulate -L zsh
+
+local dir=${_XDG_BASEDIRS_DIR:-}
+if [[ -z $dir || ! -d $dir/apps ]]; then
+  print -u2 "xdgbasedir: use-xdg-basedirs is not loaded"
+  return 1
+fi
+
+local f app line old new var
+local -a vars moves on hiding move_first ready nocmd
+
+for f in $dir/apps/*.zsh(N); do
+  app=${f:t:r} old= vars=() moves=()
+
+  for line in ${(f)"$(<$f)"}; do
+    case $line in
+      '# old: '*) old=${~line#'# old: '} ;;
+      *export\ [A-Za-z_]*=*)
+        line=${line##*export }
+        var=${line%%=*}
+        # Trailing strip is for java, whose value is -Dsomething=<path>.
+        new=${${(e)line#*=}##*=}
+        vars+=($var)
+        [[ -n $old && -e $old && ! -e $new ]] &&
+          moves+=("${old/#$HOME/~} -> ${new/#$HOME/~}")
+        old=
+        ;;
+    esac
+  done
+
+  if zstyle -t ":use-xdg-basedirs:$app" enabled; then
+    (( $#moves )) && hiding+=("$app|${(j:, :)${(u)moves}}") ||
+      on+=("$app|${(j: :)vars}")
+  elif (( $#moves )); then
+    move_first+=("$app|${(j:, :)${(u)moves}}")
+  elif (( $+commands[$app] )); then
+    ready+=($app)
+  else
+    nocmd+=($app)
+  fi
+done
+
+print -P "%B%F{cyan}base directories%f%b"
+for var in XDG_{CONFIG,CACHE,DATA,STATE}_HOME XDG_RUNTIME_DIR; do
+  printf '  %-18s %s\n' $var "${${(P)var}/#$HOME/~}"
+done
+
+_xdgbasedir_rows() {
+  local title=$1 color=$2; shift 2
+  (( $# )) || return
+  print -P "\n%B%F{$color}$title ($#)%f%b"
+  local row
+  for row in $@; do printf '  %-11s %s\n' "${row%%\|*}" "${row#*\|}"; done
+}
+
+_xdgbasedir_rows "on" green $on
+_xdgbasedir_rows "on, hiding files you still have" red $hiding
+_xdgbasedir_rows "move these first, then turn on" yellow $move_first
+
+if (( $#ready )); then
+  print -P "\n%B%F{blue}safe to turn on, command found (${#ready})%f%b"
+  print "  ${(j: :)ready}"
+  print "  zstyle ':use-xdg-basedirs:(${(j:|:)ready})' enabled yes"
+fi
+if (( $#nocmd )); then
+  print -P "\n%B%F{242}off, no command found (${#nocmd})%f%b"
+  print "  ${(j: :)nocmd}"
+fi
+
+unfunction _xdgbasedir_rows
+return 0
