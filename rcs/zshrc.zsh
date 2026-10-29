@@ -48,7 +48,6 @@ plugins=(
   git-cmds
   histdb
   prj
-  #wezterm
   zsh-bench
   zshrinkwrap
 

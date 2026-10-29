@@ -3,6 +3,13 @@
 zstyle ':zsh_custom:plugin:git' default-user mattmc3
 
 #
+# Oh-My-Zsh
+#
+
+# Update by hand with `omz update`.
+zstyle ':omz:update' mode disabled
+
+#
 # Prompt
 #
 
