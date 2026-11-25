@@ -37,9 +37,7 @@ plugins=(
   zoxide
 
   # Custom. use-xdg-basedirs first: later plugins read CARGO_HOME, GOPATH, etc.
-  # myfunctions next: later plugins call cached-eval.
   use-xdg-basedirs
-  myfunctions
   myaliases
   brew
   carapace
