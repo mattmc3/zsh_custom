@@ -4,7 +4,7 @@
 
 # Initialize
 0=${(%):-%N}
-MY_ZSH_CUSTOM=${0:a:h:h}
+MY_ZSH_CUSTOM=${0:A:h:h}
 
 # Run this early so we can P10k instant prompt if we need it.
 if [[ "$ZSH_THEME" == p10k* ]] || [[ "$ZSH_THEME" == powerlevel10k* ]]; then

@@ -1,5 +1,5 @@
 #
-# myaliases
+# my aliases
 #
 
 # References

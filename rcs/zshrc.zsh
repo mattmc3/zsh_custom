@@ -38,7 +38,6 @@ plugins=(
 
   # Custom. use-xdg-basedirs first: later plugins read CARGO_HOME, GOPATH, etc.
   use-xdg-basedirs
-  myaliases
   brew
   carapace
   clipboard
